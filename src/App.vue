@@ -1,15 +1,13 @@
 <template>
   <div id="app">
-   <keep-alive>
-        <router-view class="view"></router-view>
-    </keep-alive>
+       <router-view></router-view>
   </div>
 </template>
 
 <script>
-export default {
-  name: 'app'
-}
+	export default {
+	    name: 'app'
+	}
 </script>
 
 <style lang="scss">
@@ -19,5 +17,9 @@ export default {
 
 /*公共样式*/
 @import './assets/style/_commom.scss';
+
+/* 模块样式*/
+@import './assets/style/module/module.css';
+
 
 </style>

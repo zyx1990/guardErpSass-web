@@ -7,43 +7,58 @@ Vue.use(Router);
 //前面最好把路由相关信息抽出来 避免new Router 过于庞大
 
 var router = new Router({
-  routes: [
-    {
-        path: '/',
-        redirect: '/login'
-    },
-    {
-        path: '/login',
-        component: resolve => require(['view/login.vue'], resolve)
-    }
-  ]
-},
-scrollBehavior(to, from, savedPosition) {
-    // 在按下 后退/前进 按钮时，就会像浏览器的原生表现那样
-    if (savedPosition) {
-        return savedPosition;
-    }
-    // 滚动到锚点
-    if (to.hash) {
+    routes: [
+        {
+            path: '/',
+            redirect: '/login'
+        }, {
+            path: '/desktop',
+            component: resolve => require(['view/index.vue'], resolve),
+            children: [
+                // {
+                //     path: '',
+                //     component: resolve => require(['../components/desktop.vue'], resolve),
+                // },
+                // {
+                //     path: '/system',
+                //     components: {
+                //         default: resolve => require(['../components/page/system.vue'], resolve)
+                //     }
+                // }
+            ]
+        }, {
+            path: '/login',
+            component: resolve => require(['view/login.vue'], resolve)
+        }
+    ],
+    scrollBehavior(to, from, savedPosition) {
+        // 在按下 后退/前进 按钮时，就会像浏览器的原生表现那样
+        if (savedPosition) {
+            return savedPosition;
+        }
+        // 滚动到锚点
+        if (to.hash) {
+            return {
+                selector: to.hash
+            };
+        }
+        // 让页面滚动到顶部
         return {
-            selector: to.hash
-        };
+            x: 0,
+            y: 0
+        }
     }
-    // 让页面滚动到顶部
-    return {
-        x: 0,
-        y: 0
-    };
+
 });
 
 
 
 //路由进入前后事件
 router.beforeEach((to, from, next) => {
-     next();
+    next();
 });
 
-router.afterEach((to, from, next) => { 
+router.afterEach((to, from, next) => {
 
 });
 

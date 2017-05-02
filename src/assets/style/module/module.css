@@ -1,0 +1,406 @@
+/* 
+* @Author: Moriarty
+* @Date:   2017-04-30 16:53:37
+ * @Last Modified by: mikey.zhaopeng
+ * @Last Modified time: 2017-05-02 17:18:57
+*/
+html, 
+body, 
+.layout-box {
+    width: 100%;
+    height: 100%;
+}
+#app {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+}
+.layout-box {
+    overflow: hidden;
+}
+
+/* 
+* 主内容区
+*/
+.layout-main {
+    float: left;
+    width: 100%;
+    height: 100%;
+    background: rgba(240,243,246,0.40);
+}
+.layout-main .layout-container {
+    position: relative;
+    height: 100%;
+    margin-left: 200px;
+}
+
+/* 
+* 面包削导航
+*/
+.layout-breadcrumb {
+    height: 68px;
+    padding: 24px;
+    line-height: 20px;
+}
+.ivu-breadcrumb a {
+    color: rgba(0,0,0,0.54);
+}
+.ivu-breadcrumb>span:last-child {
+    font-weight: normal;
+    color: rgba(0,0,0,0.87);
+}
+
+/* 
+* 左侧导航栏
+*/
+.layout-nav {
+    position: relative;
+    float: left;
+    width: 200px;
+    height: 100%;
+    margin-left: -100%;
+    background-color: #fff;
+    -webkit-box-shadow: 2px 0px 8px 0 #c2c8d3;
+    -moz-box-shadow: 2px 0px 8px 0 #c2c8d3;
+    -ms-box-shadow: 2px 0px 8px 0 #c2c8d3;
+    box-shadow: 2px 0px 8px 0 #c2c8d3;
+}
+.layout-nav .nav-hidden {
+    display: none;
+}
+
+/*导航栏展开*/
+.layout-nav .nav-show {
+    overflow: hidden;
+    width: 200px;
+    height: 100%;
+}
+.layout-nav .nav-title {
+    height: 50px;
+    padding: 0 7px 0 20px;
+    background-color: #4985f4;
+}
+.layout-nav .nav-title h2 {
+    float: left;
+    font-size: 16px;
+    line-height: 50px;
+    color: #fff;
+}
+.layout-nav .nav-title span {
+    float: right;
+    width: 50px;
+    height: 50px;
+    background: url('../../img/nav_tit_menu.png') center no-repeat;
+    cursor: pointer;
+}
+.layout-nav .admin-mes {
+    height: 100px;
+    padding-top: 25px;
+    -webkit-box-shadow: 0px -1px 0 0 rgba(65, 65, 65, 0.1) inset;
+    -moz-box-shadow: 0px -1px 0 0 rgba(65, 65, 65, 0.1) inset;
+    -ms-box-shadow: 0px -1px 0 0 rgba(65, 65, 65, 0.1) inset;
+    box-shadow: 0px -1px 0 0 rgba(65, 65, 65, 0.1) inset;
+}
+.layout-nav .admin-mes.nn {
+    box-shadow: none;
+}
+.layout-nav .admin-mes h2 {
+    padding-left: 30px;
+    font-size: 15px;
+    line-height: 25px;
+    color: rgba(0, 0, 0, 0.54);
+    background: url('../../img/down.png') 92% center no-repeat;
+    cursor: pointer;
+}
+.layout-nav .admin-mes span {
+    display: block;
+    height: 30px;
+    margin-top: 6px;
+    background: url('../../img/admin_mes.png') 30px center no-repeat;
+    cursor: pointer;
+}
+.layout-nav .nav-tree {
+    overflow-y: scroll;
+    overflow-x: hidden;
+    width: 220px;
+    height: 80%;
+    margin-right: -20px;
+}
+.layout-nav .nav-hidden-tree .nav-hidden-item, 
+.layout-nav .nav-tree .nav-item {
+    position: relative;
+}
+.layout-nav .nav-tree .nav-item {
+    width: 200px;
+}
+.layout-nav .nav-hidden-tree .nav-hidden-item em, 
+.layout-nav .nav-tree .nav-item em {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 5px;
+    height: 50px;
+    background-color: #4985F4;
+    display: none;
+}
+.layout-nav .nav-tree .nav-item:hover {
+    background: #F3F3F4;
+}
+.layout-nav .nav-hidden-tree .active em, 
+.layout-nav .nav-tree .active em {
+    display: block;
+}
+.layout-nav .nav-tree .active {
+    -webkit-box-shadow: 0px -1px 0 0 rgba(65, 65, 65, 0.1) inset,
+                0px 1px 0 0 rgba(65, 65, 65, 0.1) inset;
+    -moz-box-shadow: 0px -1px 0 0 rgba(65, 65, 65, 0.1) inset,
+                0px 1px 0 0 rgba(65, 65, 65, 0.1) inset;
+    -ms-box-shadow: 0px -1px 0 0 rgba(65, 65, 65, 0.1) inset,
+                0px 1px 0 0 rgba(65, 65, 65, 0.1) inset;
+    box-shadow: 0px -1px 0 0 rgba(65, 65, 65, 0.1) inset,
+                0px 1px 0 0 rgba(65, 65, 65, 0.1) inset;
+}
+.layout-nav .nav-tree .active h3 {
+    font-weight: bold;
+    color: rgba(0,0,0,0.87);
+}
+.layout-nav .nav-tree .drowdown {
+    background: url('../../img/right.png') 91% 21px no-repeat;
+}
+.layout-nav .nav-tree .drowdown:hover {
+    background: #F3F3F4 url('../../img/right.png') 91% 21px no-repeat;
+}
+.layout-nav .nav-tree .drowopen {
+    background: url('../../img/drowdown.png') 92% 23px no-repeat;
+}
+.layout-nav .nav-tree .drowopen:hover {
+    background: #fff url('../../img/drowdown.png') 92% 23px no-repeat;
+}
+.layout-nav .nav-tree .nav-item a {
+    display: block;
+    height: 50px;
+    padding: 0 28px 0 30px;
+}
+.layout-nav .nav-tree h3 {
+    padding-left: 36px;
+    font-size: 15px;
+    line-height: 50px;
+    color: rgba(0, 0, 0, 0.38);
+}
+.layout-nav .nav-tree .nav-item .drowmenu {
+    overflow: hidden;
+    height: 0;
+}
+.layout-nav .nav-tree .nav-item .drowmenu a {
+    display: block;
+    height: 40px;
+    padding: 0 0 0 80px;
+    font-size: 14px;
+    line-height: 40px;
+    color: rgba(0,0,0,0.38);
+}
+.layout-nav .nav-tree .nav-item .drowmenu .active {
+    box-shadow: none;
+}
+.layout-nav .nav-tree .nav-item .drowmenu .active a {
+    color: rgba(0, 0, 0, 0.87);
+    background: #F3F3F4;
+}
+.layout-nav .nav-tree .nav-item .drowmenu a:hover {
+    background: #F3F3F4;
+}
+
+/*导航栏缩小*/
+.layout-nav .nav-hidden-tit {
+    height: 50px;
+    background: #4985f4 url('../../img/nav_tit_menu.png') center no-repeat;
+    cursor: pointer;
+}
+.layout-nav .nav-hidden-mes {
+    -webkit-box-shadow: 0px -1px 0 0 rgba(65, 65, 65, 0.1) inset;
+    -moz-box-shadow: 0px -1px 0 0 rgba(65, 65, 65, 0.1) inset;
+    -ms-box-shadow: 0px -1px 0 0 rgba(65, 65, 65, 0.1) inset;
+    box-shadow: 0px -1px 0 0 rgba(65, 65, 65, 0.1) inset;
+}
+.layout-nav .nav-hidden-mes span, 
+.layout-nav .nav-hidden-mes em {
+    display: block;
+    height: 50px;
+}
+.layout-nav .nav-hidden-mes span {
+    background: url('../../img/logo.png') center no-repeat;
+}
+.layout-nav .nav-hidden-mes em {
+    background: url('../../img/admin_mes.png') center no-repeat;
+    cursor: pointer;
+}
+.layout-nav .nav-hidden-item:hover {
+    background-color: #F3F3F4;
+}
+.layout-nav .nav-hidden-item a {
+    display: block;
+    height: 50px;
+}
+.layout-nav .nav-hidden-item .drowmenu {
+    overflow: hidden;
+    position: absolute;
+    top: 0;
+    left: 50px;
+    width: 150px;
+    background-color: #fff;
+    display: none;
+    -webkit-box-shadow: 2px 0px 8px 0 #c2c8d3;
+    -moz-box-shadow: 2px 0px 8px 0 #c2c8d3;
+    -ms-box-shadow: 2px 0px 8px 0 #c2c8d3;
+    box-shadow: 2px 0px 8px 0 #c2c8d3;
+}
+.layout-nav .nav-hidden-item .drowmenu a {
+    font-size: 15px;
+    line-height: 50px;
+    color: rgba(0,0,0,0.38);
+    padding-left: 30px;
+}
+.layout-nav .nav-hidden-item .drowmenu .active a, 
+.layout-nav .nav-hidden-item .drowmenu a:hover {
+    color: rgba(0, 0, 0, 0.87);
+    background-color: #F3F3F4;
+}
+.layout-nav .nav-hidden-item .block {
+    display: block;
+}
+/*导航栏图标*/
+.layout-nav .nav-tree .desktop {
+    background: url('../../img/desktop.png') 0 center no-repeat;
+}
+.layout-nav .nav-tree .active .desktop {
+    background: url('../../img/desktop1.png') 0 center no-repeat;
+}
+.layout-nav .nav-tree .menu {
+    background: url('../../img/menu.png') 0 center no-repeat;
+}
+.layout-nav .nav-tree .active .menu {
+    background: url('../../img/menu1.png') 0 center no-repeat;
+}
+.layout-nav .nav-tree .report-form {
+    background: url('../../img/report-form.png') 0 center no-repeat;
+}
+.layout-nav .nav-tree .active .report-form {
+    background: url('../../img/report-form1.png') 0 center no-repeat;
+}
+.layout-nav .nav-tree .basis-info {
+    background: url('../../img/basis-info.png') 0 center no-repeat;
+}
+.layout-nav .nav-tree .active .basis-info {
+    background: url('../../img/basis-info1.png') 0 center no-repeat;
+}
+.layout-nav .nav-tree .system-setting {
+    background: url('../../img/system-setting.png') 0 center no-repeat;
+}
+.layout-nav .nav-tree .active .system-setting {
+    background: url('../../img/system-setting1.png') 0 center no-repeat;
+}
+.layout-nav .nav-tree .customer {
+    background: url('../../img/customer.png') 0 center no-repeat;
+}
+.layout-nav .nav-tree .active .customer {
+    background: url('../../img/customer1.png') 0 center no-repeat;
+}
+.layout-nav .nav-tree .hospital {
+    background: url('../../img/hospital.png') 0 center no-repeat;
+}
+.layout-nav .nav-tree .active .hospital {
+    background: url('../../img/hospital1.png') 0 center no-repeat;
+}
+.layout-nav .nav-tree .market {
+    background: url('../../img/market.png') 0 center no-repeat;
+}
+.layout-nav .nav-tree .active .market {
+    background: url('../../img/market1.png') 0 center no-repeat;
+}
+.layout-nav .nav-tree .stock {
+    background: url('../../img/stock.png') 0 center no-repeat;
+}
+.layout-nav .nav-tree .active .stock {
+    background: url('../../img/stock1.png') 0 center no-repeat;
+}
+.layout-nav .nav-tree .work {
+    background: url('../../img/work.png') 0 center no-repeat;
+}
+.layout-nav .nav-tree .active .work {
+    background: url('../../img/work1.png') 0 center no-repeat;
+}
+.layout-nav .nav-tree .weixin {
+    background: url('../../img/weixin.png') 0 center no-repeat;
+}
+.layout-nav .nav-tree .active .weixin {
+    background: url('../../img/weixin1.png') 0 center no-repeat;
+}
+
+.layout-nav .nav-hidden-tree .desktop {
+    background: url('../../img/desktop.png') center no-repeat;
+}
+.layout-nav .nav-hidden-tree .active .desktop {
+    background: url('../../img/desktop1.png') center no-repeat;
+}
+.layout-nav .nav-hidden-tree .menu {
+    background: url('../../img/menu.png') center no-repeat;
+}
+.layout-nav .nav-hidden-tree .active .menu {
+    background: url('../../img/menu1.png') center no-repeat;
+}
+.layout-nav .nav-hidden-tree .report-form {
+    background: url('../../img/report-form.png') center no-repeat;
+}
+.layout-nav .nav-hidden-tree .active .report-form {
+    background: url('../../img/report-form1.png') center no-repeat;
+}
+.layout-nav .nav-hidden-tree .basis-info {
+    background: url('../../img/basis-info.png') center no-repeat;
+}
+.layout-nav .nav-hidden-tree .active .basis-info {
+    background: url('../../img/basis-info1.png') center no-repeat;
+}
+.layout-nav .nav-hidden-tree .system-setting {
+    background: url('../../img/system-setting.png') center no-repeat;
+}
+.layout-nav .nav-hidden-tree .active .system-setting {
+    background: url('../../img/system-setting1.png') center no-repeat;
+}
+.layout-nav .nav-hidden-tree .customer {
+    background: url('../../img/customer.png') center no-repeat;
+}
+.layout-nav .nav-hidden-tree .active .customer {
+    background: url('../../img/customer1.png') center no-repeat;
+}
+.layout-nav .nav-hidden-tree .hospital {
+    background: url('../../img/hospital.png') center no-repeat;
+}
+.layout-nav .nav-hidden-tree .active .hospital {
+    background: url('../../img/hospital1.png') center no-repeat;
+}
+.layout-nav .nav-hidden-tree .market {
+    background: url('../../img/market.png') center no-repeat;
+}
+.layout-nav .nav-hidden-tree .active .market {
+    background: url('../../img/market1.png') center no-repeat;
+}
+.layout-nav .nav-hidden-tree .stock {
+    background: url('../../img/stock.png') center no-repeat;
+}
+.layout-nav .nav-hidden-tree .active .stock {
+    background: url('../../img/stock1.png') center no-repeat;
+}
+.layout-nav .nav-hidden-tree .work {
+    background: url('../../img/work.png') center no-repeat;
+}
+.layout-nav .nav-hidden-tree .active .work {
+    background: url('../../img/work1.png') center no-repeat;
+}
+.layout-nav .nav-hidden-tree .weixin {
+    background: url('../../img/weixin.png') center no-repeat;
+}
+.layout-nav .nav-hidden-tree .active .weixin {
+    background: url('../../img/weixin1.png') center no-repeat;
+}
