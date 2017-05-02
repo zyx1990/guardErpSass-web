@@ -53,6 +53,7 @@ export default {
                     console.log(valid)
                     if (valid) {
                         this.$Message.success('提交成功!');
+                        window.sessionStorage.setItem('userAccount', this.formInline.user)
                         this.$router.push('/desktop');
                     } else {
                         this.$Message.error('表单验证失败!');
