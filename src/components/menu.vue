@@ -12,37 +12,37 @@
             </div>
             <ul class="nav-tree">
                 <!-- -->
-                <li class="nav-item js-nav-item" v-for="(firsts, index1) in navLinks" :class="{drowdown: firsts.child.length > 0}" @click="childMeunToggle">
+                <li class="nav-item js-nav-item" v-for="(firsts, index1) in navLinks" :class="{drowdown: firsts.child.length > 0}" @click="childMeunToggle" :data-url="firsts.url" :data-name="firsts.name">
                     <em></em>
                     <span>
-                        <h3 :class="firsts.imgClass" :data-url="firsts.url">{{firsts.name}}</h3>
+                        <h3 :class="firsts.imgClass" >{{firsts.name}}</h3>
                     </span>
-                    <ol class="drowmenu" v-if="firsts.child.length > 0">
+                    <ul class="drowmenu" v-if="firsts.child.length > 0">
                         <li v-for="(seconds,index2) in firsts.child" :data-url="seconds.url" @click="routerLinkTo">     <span>{{seconds.name}}</span>
                         </li>
-                    </ol>
+                    </ul>
                 </li>                   
             </ul>
         </div>
         <!-- 菜单显示字情况结束-->
         
         <!-- 菜单显示图标 开始-->
-        <div class="nav-hidden" v-show="!istoggle">
+        <div class="nav-hidden js-nav-hidden" v-show="!istoggle">
             <div class="nav-hidden-tit" @click="meunToogle"></div>
             <div class="nav-hidden-mes">
                 <span></span>
                 <em></em>
             </div>
             <ul class="nav-hidden-tree">
-                <li class="nav-hidden-item js-nav-hidden-item" v-for="(firsts, index1) in navLinks" @click="childMeunToggle">
+                <li class="nav-hidden-item js-nav-hidden-item" v-for="(firsts, index1) in navLinks" @click="childMeunToggle" :data-url="firsts.url" :data-name="firsts.name">
                     <em></em>
                     <span>
-                        <h3 :class="firsts.imgClass" :data-url="firsts.url" :data-name="firsts.name"></h3>
+                        <h3 :class="firsts.imgClass" ></h3>
                     </span>                  
-                    <ol class="drowmenu" v-if="firsts.child.length > 0">
-                        <li v-for="(seconds,index2) in firsts.child" :data-url="seconds.url" @click="routerLinkTo">     <span>{{seconds.name}}</span>
+                    <ul class="drowmenu" v-if="firsts.child.length > 0">
+                        <li v-for="(seconds,index2) in firsts.child" :data-url="seconds.url" :data-name="seconds.name" @click="routerLinkTo">     <span>{{seconds.name}}</span>
                         </li>
-                    </ol>
+                    </ul>
                 </li>
             </ul>
         </div>
@@ -51,7 +51,6 @@
 </template>
 
 <script>
-    import $ from 'jquery'
     export default {
         name: 'menu',
         data() {
@@ -68,7 +67,20 @@
             this.$nextTick( () => {
                 var $dom = $(this.$refs.menu);
                 this.$dom = $dom;
-                
+
+
+                var path = this.$route.path;
+                var $currentLi = null;
+                if(this.istoggle){
+                    $currentLi = $dom.find('.js-nav-show').find('[data-url="'+path+'"]');
+                }else{
+                    $currentLi = $dom.find('.js-nav-hidden').find('[data-url="'+path+'"]');
+                }
+                //TODO 临时这么写
+                $currentLi.trigger('click');
+
+                var breadData =  this.getBreadData($currentLi, []).reverse();
+                this.$store.dispatch('setBreadData', breadData);
             });
         },
         methods: {
@@ -138,8 +150,12 @@
                     }
                 }
                 index == 0 ? $adminMes .addClass('nn') : $adminMes .removeClass('nn');
-                
-                //url && _vm.$router.push(url);
+
+                if(url){
+                    var breadData =  _vm.getBreadData($this, []).reverse();
+                    this.$store.dispatch('setBreadData', breadData);
+                    //_vm.$router.push(url)
+                }
             },
             routerLinkTo: function($event){
                 var _vm = this;
@@ -149,7 +165,22 @@
                 $event.stopPropagation()
                 $dom.find('.drowmenu li').removeClass('active');
                 $this.addClass('active');
-                //url && _vm.$router.push(url);
+                if(url){
+                    var breadData =  _vm.getBreadData($this, []).reverse();
+                    this.$store.dispatch('setBreadData', breadData);
+                    //_vm.$router.push(url);
+                }
+            },
+            getBreadData: function($currentLi, breadData){
+                breadData.push({
+                        url: $currentLi.data('url') || '',
+                        text: $currentLi.data('name') || ''
+                    });
+                var $li = $currentLi.closest('ul').closest('li');
+                if($li.length){
+                    this.getNavbar($li, breadData);
+                }
+                return breadData;
             }
         }
     }

@@ -2,7 +2,7 @@
     <div class="layout-box" ref="layoutBox">
   		<div class="layout-main">
   			<div class="layout-container js-layout-container">
-  				<cmptNavBar class="layout-breadcrumb"></cmptNavBar>
+  				<cmptBreadcrumb class="layout-breadcrumb"></cmptBreadcrumb>
   				<div class="container-wrap">
   					 <router-view class="view"></router-view>
   				</div>
@@ -13,7 +13,7 @@
 </template>
 
 <script>
-	import cmptNavBar from 'components/nav-bar.vue';
+	import cmptBreadcrumb from 'components/breadcrumb.vue';
 	import cmptMeun from 'components/menu.vue';
 
     export default {
@@ -23,7 +23,7 @@
             }
         },
         components: {
-            cmptNavBar,
+            cmptBreadcrumb,
             cmptMeun
         },
         methods: {

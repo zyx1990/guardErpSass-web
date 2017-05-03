@@ -2,7 +2,7 @@ const state = {
     navLinks: [
         {
             name: "桌面",
-            url: "desktop",
+            url: "/desktop",
             imgClass: "desktop",
             child: []
         },

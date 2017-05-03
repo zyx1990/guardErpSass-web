@@ -56,17 +56,19 @@ var router = new Router({
 router.beforeEach((to, from, next) => {
     //防止没有登录直接登录主页面
     var user = window.sessionStorage.getItem('userAccount');
+
     if(!user){
         if(to.path !== '/login'){
             return next({ path: '/login' });
         }else{
-            window.sessionStorage.removeItem('userAccount');
             next();
         }       
     }else{
-         next();
+        if(to.path == '/login'){
+            window.sessionStorage.removeItem('userAccount');
+        }
+        next();
     }
-   
 });
 
 router.afterEach((to, from, next) => {
