@@ -68,7 +68,7 @@ body,
     box-shadow: 2px 0px 8px 0 #c2c8d3;
 }
 .layout-nav .nav-hidden {
-    display: none;
+    /*display: none;*/
 }
 
 /*导航栏展开*/
@@ -131,9 +131,11 @@ body,
 .layout-nav .nav-hidden-tree .nav-hidden-item, 
 .layout-nav .nav-tree .nav-item {
     position: relative;
+    cursor: pointer;
 }
 .layout-nav .nav-tree .nav-item {
     width: 200px;
+    padding: 0 28px 0 30px;
 }
 .layout-nav .nav-hidden-tree .nav-hidden-item em, 
 .layout-nav .nav-tree .nav-item em {
@@ -178,11 +180,11 @@ body,
 .layout-nav .nav-tree .drowopen:hover {
     background: #fff url('../../img/drowdown.png') 92% 23px no-repeat;
 }
-.layout-nav .nav-tree .nav-item a {
+/*.layout-nav .nav-tree .nav-item a {
     display: block;
     height: 50px;
     padding: 0 28px 0 30px;
-}
+}*/
 .layout-nav .nav-tree h3 {
     padding-left: 36px;
     font-size: 15px;
@@ -193,10 +195,10 @@ body,
     overflow: hidden;
     height: 0;
 }
-.layout-nav .nav-tree .nav-item .drowmenu a {
+.layout-nav .nav-tree .nav-item .drowmenu li {
     display: block;
     height: 40px;
-    padding: 0 0 0 80px;
+    padding: 0 0 0 40px;
     font-size: 14px;
     line-height: 40px;
     color: rgba(0,0,0,0.38);
@@ -204,11 +206,11 @@ body,
 .layout-nav .nav-tree .nav-item .drowmenu .active {
     box-shadow: none;
 }
-.layout-nav .nav-tree .nav-item .drowmenu .active a {
+.layout-nav .nav-tree .nav-item .drowmenu li.active{
     color: rgba(0, 0, 0, 0.87);
     background: #F3F3F4;
 }
-.layout-nav .nav-tree .nav-item .drowmenu a:hover {
+.layout-nav .nav-tree .nav-item .drowmenu li:hover {
     background: #F3F3F4;
 }
 
@@ -239,7 +241,7 @@ body,
 .layout-nav .nav-hidden-item:hover {
     background-color: #F3F3F4;
 }
-.layout-nav .nav-hidden-item a {
+.layout-nav .nav-hidden-item h3 {
     display: block;
     height: 50px;
 }
@@ -256,14 +258,14 @@ body,
     -ms-box-shadow: 2px 0px 8px 0 #c2c8d3;
     box-shadow: 2px 0px 8px 0 #c2c8d3;
 }
-.layout-nav .nav-hidden-item .drowmenu a {
+.layout-nav .nav-hidden-item .drowmenu li {
     font-size: 15px;
     line-height: 50px;
     color: rgba(0,0,0,0.38);
     padding-left: 30px;
 }
-.layout-nav .nav-hidden-item .drowmenu .active a, 
-.layout-nav .nav-hidden-item .drowmenu a:hover {
+.layout-nav .nav-hidden-item .drowmenu li.active, 
+.layout-nav .nav-hidden-item .drowmenu li:hover {
     color: rgba(0, 0, 0, 0.87);
     background-color: #F3F3F4;
 }
