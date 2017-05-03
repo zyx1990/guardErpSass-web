@@ -15,16 +15,22 @@ var router = new Router({
             path: '/desktop',
             component: resolve => require(['view/index.vue'], resolve),
             children: [
-                // {
-                //     path: '',
-                //     component: resolve => require(['../components/desktop.vue'], resolve),
-                // },
-                // {
-                //     path: '/system',
-                //     components: {
-                //         default: resolve => require(['../components/page/system.vue'], resolve)
-                //     }
-                // }
+                {
+                    path: '',
+                    component(resolve) {
+                        require.ensure(['view/desktop'], () => {
+                            resolve(require('view/desktop'));
+                        });
+                    }
+                },                
+                {
+                    path: '/customermange',
+                    component(resolve) {
+                        require.ensure(['view/customermange'], () => {
+                            resolve(require('view/customermange'));
+                        });
+                    }
+                }
             ]
         }, {
             path: '/login',

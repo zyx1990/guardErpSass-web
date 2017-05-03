@@ -18,7 +18,7 @@
                         <h3 :class="firsts.imgClass" >{{firsts.name}}</h3>
                     </span>
                     <ul class="drowmenu" v-if="firsts.child.length > 0">
-                        <li v-for="(seconds,index2) in firsts.child" :data-url="seconds.url" @click="routerLinkTo">     <span>{{seconds.name}}</span>
+                        <li v-for="(seconds,index2) in firsts.child" :data-url="seconds.url" :data-name="seconds.name" @click="routerLinkTo">     <span>{{seconds.name}}</span>
                         </li>
                     </ul>
                 </li>                   
@@ -115,6 +115,7 @@
                 url = $this.data('url');
                 //展开模式
                 $this.addClass('active').siblings().removeClass('active');
+
                 if(_vm.istoggle){
                     $navHiddenItem.eq(index).addClass('active').siblings().removeClass('active');
                     $navItem.find('.drowmenu').stop(true).animate({'height' : '0'}, 200);
@@ -130,6 +131,8 @@
                             $this.addClass('drowopen').siblings().removeClass('drowopen');
                             $this.find('.drowmenu').stop(true).animate({'height' : num * 40}, 200)
                         }
+                    }else{
+                       $navItem.removeClass('drowopen');
                     }
                 }else{
                     $navItem.eq(index).addClass('active').siblings().removeClass('active');
@@ -154,7 +157,7 @@
                 if(url){
                     var breadData =  _vm.getBreadData($this, []).reverse();
                     this.$store.dispatch('setBreadData', breadData);
-                    //_vm.$router.push(url)
+                    _vm.$router.push(url)
                 }
             },
             routerLinkTo: function($event){
@@ -168,7 +171,7 @@
                 if(url){
                     var breadData =  _vm.getBreadData($this, []).reverse();
                     this.$store.dispatch('setBreadData', breadData);
-                    //_vm.$router.push(url);
+                    _vm.$router.push(url);
                 }
             },
             getBreadData: function($currentLi, breadData){
@@ -176,9 +179,11 @@
                         url: $currentLi.data('url') || '',
                         text: $currentLi.data('name') || ''
                     });
-                var $li = $currentLi.closest('ul').closest('li');
-                if($li.length){
-                    this.getNavbar($li, breadData);
+                if($currentLi.data('url') != '/desktop'){
+                    breadData.push({
+                        url: '/desktop',
+                        text: '桌面'
+                    });
                 }
                 return breadData;
             }

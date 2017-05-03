@@ -7,12 +7,6 @@ const state = {
             child: []
         },
         {
-            name: "功能列表",
-            url: "",
-            imgClass: "menu",
-            child: []
-        },
-        {
             name: "报表中心",
             url: "",
             imgClass: "report-form",
@@ -88,30 +82,36 @@ const state = {
             imgClass: "customer",
             child: [{
                 name: "客户管理",
+                url: "/customermange",
+                imgClass: "",
+                child: []
+            },
+            {
+                name: "投诉记录",
                 url: "",
                 imgClass: "",
                 child: []
             },
             {
-                name: "客户管理",
-                url: "",
-                imgClass: "",
-                child: []
-            },
-            {
-                name: "客户管理",
+                name: "客户组管理",
                 url: "",
                 imgClass: "",
                 child: [] 
             },
             {
-                name: "客户管理",
+                name: "客户选择器",
                 url: "",
                 imgClass: "",
                 child: []
             },
             {
-                name: "客户管理",
+                name: "客户归属权变更",
+                url: "",
+                imgClass: "",
+                child: []
+            },
+            {
+                name: "生日提醒",
                 url: "",
                 imgClass: "",
                 child: []
