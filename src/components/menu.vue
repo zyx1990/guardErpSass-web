@@ -14,10 +14,12 @@
                 <!-- -->
                 <li class="nav-item js-nav-item" v-for="(firsts, index1) in navLinks" :class="{drowdown: firsts.child.length > 0}" @click="childMeunToggle">
                     <em></em>
-                    <h3 :class="firsts.imgClass" :data-url="firsts.url">{{firsts.name}}</h3>
-
+                    <span>
+                        <h3 :class="firsts.imgClass" :data-url="firsts.url">{{firsts.name}}</h3>
+                    </span>
                     <ol class="drowmenu" v-if="firsts.child.length > 0">
-                        <li v-for="(seconds,index2) in firsts.child" :data-url="seconds.url" @click="routerLinkTo">{{seconds.name}}</li>
+                        <li v-for="(seconds,index2) in firsts.child" :data-url="seconds.url" @click="routerLinkTo">     <span>{{seconds.name}}</span>
+                        </li>
                     </ol>
                 </li>                   
             </ul>
@@ -34,10 +36,12 @@
             <ul class="nav-hidden-tree">
                 <li class="nav-hidden-item js-nav-hidden-item" v-for="(firsts, index1) in navLinks" @click="childMeunToggle">
                     <em></em>
-                    <h3 :class="firsts.imgClass" :data-url="firsts.url" :data-name="firsts.name"></h3>
-
+                    <span>
+                        <h3 :class="firsts.imgClass" :data-url="firsts.url" :data-name="firsts.name"></h3>
+                    </span>                  
                     <ol class="drowmenu" v-if="firsts.child.length > 0">
-                        <li v-for="(seconds,index2) in firsts.child" :data-url="seconds.url" @click="routerLinkTo">{{seconds.name}}</li>
+                        <li v-for="(seconds,index2) in firsts.child" :data-url="seconds.url" @click="routerLinkTo">     <span>{{seconds.name}}</span>
+                        </li>
                     </ol>
                 </li>
             </ul>

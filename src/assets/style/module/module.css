@@ -2,7 +2,7 @@
 * @Author: Moriarty
 * @Date:   2017-04-30 16:53:37
  * @Last Modified by: mikey.zhaopeng
- * @Last Modified time: 2017-05-02 17:18:57
+ * @Last Modified time: 2017-05-03 11:42:42
 */
 html, 
 body, 
@@ -131,11 +131,9 @@ body,
 .layout-nav .nav-hidden-tree .nav-hidden-item, 
 .layout-nav .nav-tree .nav-item {
     position: relative;
-    cursor: pointer;
 }
 .layout-nav .nav-tree .nav-item {
     width: 200px;
-    padding: 0 28px 0 30px;
 }
 .layout-nav .nav-hidden-tree .nav-hidden-item em, 
 .layout-nav .nav-tree .nav-item em {
@@ -146,6 +144,9 @@ body,
     height: 50px;
     background-color: #4985F4;
     display: none;
+}
+.layout-nav .nav-hidden-tree .nav-hidden-item h3{
+    height: 50px;
 }
 .layout-nav .nav-tree .nav-item:hover {
     background: #F3F3F4;
@@ -180,11 +181,12 @@ body,
 .layout-nav .nav-tree .drowopen:hover {
     background: #fff url('../../img/drowdown.png') 92% 23px no-repeat;
 }
-/*.layout-nav .nav-tree .nav-item a {
+.layout-nav .nav-tree .nav-item span {
     display: block;
     height: 50px;
     padding: 0 28px 0 30px;
-}*/
+    cursor: pointer;
+}
 .layout-nav .nav-tree h3 {
     padding-left: 36px;
     font-size: 15px;
@@ -195,10 +197,10 @@ body,
     overflow: hidden;
     height: 0;
 }
-.layout-nav .nav-tree .nav-item .drowmenu li {
+.layout-nav .nav-tree .nav-item .drowmenu span {
     display: block;
     height: 40px;
-    padding: 0 0 0 40px;
+    padding: 0 0 0 80px;
     font-size: 14px;
     line-height: 40px;
     color: rgba(0,0,0,0.38);
@@ -206,11 +208,11 @@ body,
 .layout-nav .nav-tree .nav-item .drowmenu .active {
     box-shadow: none;
 }
-.layout-nav .nav-tree .nav-item .drowmenu li.active{
+.layout-nav .nav-tree .nav-item .drowmenu .active span {
     color: rgba(0, 0, 0, 0.87);
     background: #F3F3F4;
 }
-.layout-nav .nav-tree .nav-item .drowmenu li:hover {
+.layout-nav .nav-tree .nav-item .drowmenu span:hover {
     background: #F3F3F4;
 }
 
@@ -241,7 +243,7 @@ body,
 .layout-nav .nav-hidden-item:hover {
     background-color: #F3F3F4;
 }
-.layout-nav .nav-hidden-item h3 {
+.layout-nav .nav-hidden-item span {
     display: block;
     height: 50px;
 }
@@ -258,14 +260,14 @@ body,
     -ms-box-shadow: 2px 0px 8px 0 #c2c8d3;
     box-shadow: 2px 0px 8px 0 #c2c8d3;
 }
-.layout-nav .nav-hidden-item .drowmenu li {
+.layout-nav .nav-hidden-item .drowmenu span {
     font-size: 15px;
     line-height: 50px;
     color: rgba(0,0,0,0.38);
     padding-left: 30px;
 }
-.layout-nav .nav-hidden-item .drowmenu li.active, 
-.layout-nav .nav-hidden-item .drowmenu li:hover {
+.layout-nav .nav-hidden-item .drowmenu .active span, 
+.layout-nav .nav-hidden-item .drowmenu span:hover {
     color: rgba(0, 0, 0, 0.87);
     background-color: #F3F3F4;
 }
