@@ -11,9 +11,14 @@ var router = new Router({
         {
             path: '/',
             redirect: '/login'
-        }, {
+        }, 
+        {
             path: '/desktop',
-            component: resolve => require(['view/index.vue'], resolve),
+            component(resolve){
+                require.ensure(['view/index.vue'], () => {
+                    resolve(require('view/index.vue'));
+                });
+            },
             children: [
                 {
                     path: '',
@@ -32,9 +37,14 @@ var router = new Router({
                     }
                 }
             ]
-        }, {
+        }, 
+        {
             path: '/login',
-            component: resolve => require(['view/login.vue'], resolve)
+            component(resolve){
+                require.ensure(['view/login.vue'], () => {
+                    resolve(require('view/login.vue'));
+                });
+            }
         }
     ],
     scrollBehavior(to, from, savedPosition) {
