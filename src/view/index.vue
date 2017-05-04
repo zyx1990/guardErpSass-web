@@ -4,7 +4,7 @@
   			<div class="layout-container js-layout-container">
   				<cmptBreadcrumb class="layout-breadcrumb"></cmptBreadcrumb>
   				<div class="container-wrap">          
-  					 <router-view class="view"></router-view>
+  					 <router-view class="view" ref="routerModule"></router-view>
   				</div>
   			</div>
   		</div>
@@ -36,6 +36,8 @@
             }else{
               $layoutContainer.stop(true).animate({'margin-left' : '200px'}, 200);
             }
+            $(window).resize();
+            console.log(_vm.$refs.routerModule);
           }
         }
     }
