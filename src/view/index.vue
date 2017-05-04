@@ -36,8 +36,6 @@
             }else{
               $layoutContainer.stop(true).animate({'margin-left' : '200px'}, 200);
             }
-            $(window).resize();
-            console.log(_vm.$refs.routerModule);
           }
         }
     }
