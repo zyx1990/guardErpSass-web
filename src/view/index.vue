@@ -3,7 +3,7 @@
   		<div class="layout-main">
   			<div class="layout-container js-layout-container">
   				<cmptBreadcrumb class="layout-breadcrumb"></cmptBreadcrumb>
-  				<div class="container-wrap">
+  				<div class="container-wrap">          
   					 <router-view class="view"></router-view>
   				</div>
   			</div>

@@ -115,9 +115,11 @@
         height: 100%;
     }
     .wrap {
+        position: relative;
         width: 1170px;
         height: 100%;
         margin: 0 auto;
+        overflow: hidden;
     }
     .header {
         height: 150px;
@@ -136,12 +138,19 @@
         letter-spacing: 0;
     }
     .main {
-        overflow: hidden;
-        padding: 55px 5px 5px 190px;
+        position: absolute;
+        top: 150px;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        min-height: 500px;
     }
     .message {
-        float: left;
-        padding-top: 163px;
+        position: absolute;
+        top: 50%;
+        left: 190px;
+        height: 164px;
+        margin-top: -157px;
         -webkit-animation: fadeInLeft 1s .2s ease both;
         -ms-animation: fadeInLeft 1s .2s ease both;
         -moz-animation: fadeInLeft 1s .2s ease both;
@@ -201,10 +210,13 @@
         letter-spacing: 0;
     }
     .login {
-        float: right;
+        position: absolute;
+        right: 5px;
+        top: 50%;
         width: 350px;
         height: 490px;
         padding: 35px 25px 0;
+        margin-top: -320px;
         -webkit-box-shadow: 0 0 2px 0 rgba(0,0,0,0.12), 0 2px 2px 0 rgba(0,0,0,0.24);
         -moz-box-shadow: 0 0 2px 0 rgba(0,0,0,0.12), 0 2px 2px 0 rgba(0,0,0,0.24);
         -ms-box-shadow: 0 0 2px 0 rgba(0,0,0,0.12), 0 2px 2px 0 rgba(0,0,0,0.24);
@@ -328,13 +340,21 @@
         border-radius: 2px;
         outline: none;
     }
-    .login form a {
-        display: block;
-        font-size: 12px;
-        line-height: 17px;
-        letter-spacing: 0;
-        text-align: center;
-        color: #5B8BEE;
+    @media all and (max-width: 1169px) {
+        .wrap {
+            width: 880px;
+        }
+        .message {
+            left: 0;
+        }
+    }
+    @media all and (max-width: 879px) {
+        .wrap {
+            width: 360px;
+        }
+        .message {
+            display: none;
+        }
     }
 </style>
 <style>
