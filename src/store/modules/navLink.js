@@ -12,6 +12,7 @@ const state = {
             imgClass: "report-form",
             child: []
         },
+        //基础信息
         {
             name: "基础信息",
             url: "",
@@ -109,256 +110,507 @@ const state = {
                 }
             ]
         },
+        //系统设置
         {
             name: "系统设置",
             url: "",
             imgClass: "system-setting",
-            child: [{
-                name: "客户管理",
-                url: "",
-                imgClass: "",
-                child: []
-            },
-            {
-                name: "客户管理",
-                url: "",
-                imgClass: "",
-                child: []
-            },
-            {
-                name: "客户管理",
-                url: "",
-                imgClass: "",
-                child: [] 
-            },
-            {
-                name: "客户管理",
-                url: "",
-                imgClass: "",
-                child: []
-            },
-            {
-                name: "客户管理",
-                url: "",
-                imgClass: "",
-                child: []
-            }]
+            child: [
+                {
+                    name: "医院管理",
+                    url: "/hospital",
+                    imgClass: "",
+                    child: []
+                },
+                {
+                    name: "部门管理",
+                    url: "/dept",
+                    imgClass: "",
+                    child: []
+                },
+                {
+                    name: "用户管理",
+                    url: "/user",
+                    imgClass: "",
+                    child: [] 
+                },
+                {
+                    name: "角色管理",
+                    url: "/role",
+                    imgClass: "",
+                    child: []
+                },
+                {
+                    name: "系统设置",
+                    url: "/option",
+                    imgClass: "",
+                    child: []
+                },
+                {
+                    name: "系统日志",
+                    url: "/log",
+                    imgClass: "",
+                    child: []
+                },
+                {
+                    name: "预收款项目",
+                    url: "/depositCharge",
+                    imgClass: "",
+                    child: []
+                },
+                {
+                    name: "代金券类型",
+                    url: "/couponCategory",
+                    imgClass: "",
+                    child: [] 
+                },
+                {
+                    name: "收费项目类型",
+                    url: "/chargeCategory",
+                    imgClass: "",
+                    child: []
+                },
+                {
+                    name: "收费项目",
+                    url: "/charge",
+                    imgClass: "",
+                    child: []
+                },
+                {
+                    name: "套餐",
+                    url: "/chargeSet",
+                    imgClass: "",
+                    child: []
+                },
+                {
+                    name: "药物品类型",
+                    url: "/productCategory",
+                    imgClass: "",
+                    child: [] 
+                },
+                {
+                    name: "药物品",
+                    url: "/product",
+                    imgClass: "",
+                    child: []
+                },
+                {
+                    name: "权益管理",
+                    url: "/equity",
+                    imgClass: "",
+                    child: []
+                },
+                {
+                    name: "会员类型管理",
+                    url: "/memberCategory",
+                    imgClass: "",
+                    child: []
+                },
+                {
+                    name: "渠道组",
+                    url: "/channelGroup",
+                    imgClass: "",
+                    child: []
+                },
+                {
+                    name: "报表项目",
+                    url: "/item",
+                    imgClass: "",
+                    child: [] 
+                },
+                {
+                    name: "收费项目类型",
+                    url: "/itemGroup",
+                    imgClass: "",
+                    child: []
+                },
+                {
+                    name: "项目折扣",
+                    url: "/chargeDiscount",
+                    imgClass: "",
+                    child: []
+                },
+                {
+                    name: "用户折扣",
+                    url: "/userDiscount",
+                    imgClass: "",
+                    child: []
+                },
+                {
+                    name: "打印设置",
+                    url: "/print",
+                    imgClass: "",
+                    child: []
+                },
+                {
+                    name: "审核规则设置",
+                    url: "/auditRule",
+                    imgClass: "",
+                    child: [] 
+                },
+                {
+                    name: "编辑权限",
+                    url: "/manager",
+                    imgClass: "",
+                    child: []
+                },
+                {
+                    name: "医生预约设置",
+                    url: "/treatDoctor",
+                    imgClass: "",
+                    child: []
+                },
+                {
+                    name: "咨询医生设置",
+                    url: "/consultDoctor",
+                    imgClass: "",
+                    child: []
+                }
+            ]
         },
+        //客户管理
         {
             name: "客户管理",
             url: "",
             imgClass: "customer",
             child: [{
                 name: "客户管理",
-                url: "/customermange",
+                url: "/customer",
                 imgClass: "",
                 child: []
             },
             {
                 name: "投诉记录",
-                url: "",
+                url: "/complain",
                 imgClass: "",
                 child: []
             },
             {
                 name: "客户组管理",
-                url: "",
+                url: "/customerGroup",
                 imgClass: "",
                 child: [] 
             },
             {
                 name: "客户选择器",
-                url: "",
+                url: "/customerFilter",
                 imgClass: "",
                 child: []
             },
             {
                 name: "客户归属权变更",
-                url: "",
+                url: "/ownership",
                 imgClass: "",
                 child: []
             },
             {
                 name: "生日提醒",
-                url: "",
+                url: "/birthday",
                 imgClass: "",
                 child: []
             }]
         },
+        //医院业务
         {
             name: "医院业务",
             url: "",
             imgClass: "hospital",
-            child: [{
-                name: "客户管理",
-                url: "",
-                imgClass: "",
-                child: []
-            },
-            {
-                name: "客户管理",
-                url: "",
-                imgClass: "",
-                child: []
-            },
-            {
-                name: "客户管理",
-                url: "",
-                imgClass: "",
-                child: [] 
-            },
-            {
-                name: "客户管理",
-                url: "",
-                imgClass: "",
-                child: []
-            },
-            {
-                name: "客户管理",
-                url: "",
-                imgClass: "",
-                child: []
-            }]
+            child: [
+                {
+                    name: "网电工作台",
+                    url: "/onlineDesk",
+                    imgClass: "",
+                    child: []
+                },
+                {
+                    name: "回访工作台",
+                    url: "/callbackDesk",
+                    imgClass: "",
+                    child: []
+                },
+                {
+                    name: "前台接待",
+                    url: "/frontDesk",
+                    imgClass: "",
+                    child: [] 
+                },
+                {
+                    name: "分诊工作台",
+                    url: "/triageDesk",
+                    imgClass: "",
+                    child: []
+                },
+                {
+                    name: "接诊工作台",
+                    url: "/liveDesk",
+                    imgClass: "",
+                    child: []
+                },
+                {
+                    name: "收银台",
+                    url: "/cashierDesk",
+                    imgClass: "",
+                    child: []
+                },
+                {
+                    name: "科室中心",
+                    url: "/deptDesk",
+                    imgClass: "",
+                    child: []
+                },
+                {
+                    name: "床位管理",
+                    url: "/bed",
+                    imgClass: "",
+                    child: [] 
+                },
+                {
+                    name: "住院工作台",
+                    url: "/inpatientDesk",
+                    imgClass: "",
+                    child: []
+                },
+                {
+                    name: "手术工作台",
+                    url: "/surgeryDesk",
+                    imgClass: "",
+                    child: []
+                },
+                {
+                    name: "手术排班",
+                    url: "/surgeryScheduler",
+                    imgClass: "",
+                    child: [] 
+                },
+                {
+                    name: "治疗预约",
+                    url: "/treatScheduler",
+                    imgClass: "",
+                    child: []
+                },
+                {
+                    name: "活动设置",
+                    url: "/activity",
+                    imgClass: "",
+                    child: []
+                }
+            ]
         },
+        //市场渠道
         {
             name: "市场渠道",
             url: "",
             imgClass: "market",
             child: [{
-                name: "客户管理",
-                url: "",
+                name: "店家",
+                url: "/store",
                 imgClass: "",
                 child: []
             },
             {
-                name: "客户管理",
-                url: "",
+                name: "店家负责人",
+                url: "/storeManager",
                 imgClass: "",
                 child: []
             },
             {
-                name: "客户管理",
-                url: "",
+                name: "市场工作台",
+                url: "/marketDesk",
                 imgClass: "",
                 child: [] 
             },
             {
-                name: "客户管理",
-                url: "",
+                name: "券活动",
+                url: "/couponActivity",
                 imgClass: "",
                 child: []
             },
             {
-                name: "客户管理",
-                url: "",
+                name: "销售回款",
+                url: "/saleBack",
                 imgClass: "",
                 child: []
             }]
         },
+        //库存管理
         {
             name: "库存管理",
             url: "",
             imgClass: "stock",
-            child: [{
-                name: "客户管理",
-                url: "",
-                imgClass: "",
-                child: []
-            },
-            {
-                name: "客户管理",
-                url: "",
-                imgClass: "",
-                child: []
-            },
-            {
-                name: "客户管理",
-                url: "",
-                imgClass: "",
-                child: [] 
-            },
-            {
-                name: "客户管理",
-                url: "",
-                imgClass: "",
-                child: []
-            },
-            {
-                name: "客户管理",
-                url: "",
-                imgClass: "",
-                child: []
-            }]
+            child: [
+                {
+                    name: "仓库管理",
+                    url: "/warehouse",
+                    imgClass: "",
+                    child: []
+                },
+                {
+                    name: "供应商",
+                    url: "/supplier",
+                    imgClass: "",
+                    child: []
+                },
+                {
+                    name: "进货入库",
+                    url: "/purchase",
+                    imgClass: "",
+                    child: [] 
+                },
+                {
+                    name: "采购发票",
+                    url: "/invoice",
+                    imgClass: "",
+                    child: []
+                },
+                {
+                    name: "退货出库",
+                    url: "/return",
+                    imgClass: "",
+                    child: []
+                },
+                {
+                    name: "仓库调拨",
+                    url: "/allocate",
+                    imgClass: "",
+                    child: []
+                },
+                {
+                    name: "库存盘点",
+                    url: "/check",
+                    imgClass: "",
+                    child: []
+                },
+                {
+                    name: "科室领用",
+                    url: "/use",
+                    imgClass: "",
+                    child: [] 
+                },
+                {
+                    name: "库存查询",
+                    url: "/stock",
+                    imgClass: "",
+                    child: []
+                },
+                {
+                    name: "科室发料",
+                    url: "/deptStockOutDesk",
+                    imgClass: "",
+                    child: []
+                },
+                {
+                    name: "库存有效期预警",
+                    url: "/expiration",
+                    imgClass: "",
+                    child: []
+                }
+            ]
         },
+        //日常办公
         {
             name: "日常办公",
             url: "",
             imgClass: "work",
-            child: [{
-                name: "客户管理",
-                url: "",
-                imgClass: "",
-                child: []
-            },
-            {
-                name: "客户管理",
-                url: "",
-                imgClass: "",
-                child: []
-            },
-            {
-                name: "客户管理",
-                url: "",
-                imgClass: "",
-                child: [] 
-            },
-            {
-                name: "客户管理",
-                url: "",
-                imgClass: "",
-                child: []
-            },
-            {
-                name: "客户管理",
-                url: "",
-                imgClass: "",
-                child: []
-            }]
+            child: [
+                {
+                    name: "通讯录",
+                    url: "/addressBook",
+                    imgClass: "",
+                    child: []
+                },
+                {
+                    name: "班次管理",
+                    url: "/shiftCategory",
+                    imgClass: "",
+                    child: []
+                },
+                {
+                    name: "排班录入",
+                    url: "/myShift",
+                    imgClass: "",
+                    child: [] 
+                },
+                {
+                    name: "全院排班表",
+                    url: "/shift",
+                    imgClass: "",
+                    child: []
+                },
+                {
+                    name: "发布公告",
+                    url: "/knowledgeCategory",
+                    imgClass: "",
+                    child: []
+                },
+                {
+                    name: "知识分类管理",
+                    url: "/addressBook",
+                    imgClass: "",
+                    child: []
+                },
+                {
+                    name: "知识管理",
+                    url: "/knowledge",
+                    imgClass: "",
+                    child: []
+                },
+                {
+                    name: "知识库",
+                    url: "/knowledgeCenter",
+                    imgClass: "",
+                    child: [] 
+                },
+                {
+                    name: "我的审核申请",
+                    url: "/auditOrder",
+                    imgClass: "",
+                    child: []
+                },
+                {
+                    name: "审核工作台",
+                    url: "/auditOrderDesk",
+                    imgClass: "",
+                    child: []
+                }
+            ]
         },
+        //微信
         {
             name: "微信",
             url: "",
             imgClass: "weixin",
-            child: [{
-                name: "客户管理",
-                url: "",
-                imgClass: "",
-                child: []
-            },
-            {
-                name: "客户管理",
-                url: "",
-                imgClass: "",
-                child: []
-            },
-            {
-                name: "客户管理",
-                url: "",
-                imgClass: "",
-                child: [] 
-            },
-            {
-                name: "客户管理",
-                url: "",
-                imgClass: "",
-                child: []
-            },
-            {
-                name: "客户管理",
-                url: "",
-                imgClass: "",
-                child: []
-            }]
+            child: [
+                {
+                    name: "推荐人管理",
+                    url: "/promoter",
+                    imgClass: "",
+                    child: []
+                },
+                {
+                    name: "推荐顾客列表",
+                    url: "/promoteCustomer",
+                    imgClass: "",
+                    child: []
+                },
+                {
+                    name: "推荐佣金记录",
+                    url: "/promoteRecord",
+                    imgClass: "",
+                    child: [] 
+                },
+                {
+                    name: "佣金结算记录",
+                    url: "/promoteRebate",
+                    imgClass: "",
+                    child: []
+                },
+                {
+                    name: "验证码",
+                    url: "/verifyMessage",
+                    imgClass: "",
+                    child: []
+                }
+            ]
         }
 
         

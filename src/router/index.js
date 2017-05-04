@@ -421,19 +421,355 @@ var router = new Router({
                         });
                     }
                 },
-                //市场渠道
-                //{},
-                //库存管理
-                //{},
-                //日常办公
-                //{},
-                //微信
-                //{},           
                 {
-                    path: '/customermange',
+                    path: '/callbackDesk',
                     component(resolve) {
-                        require.ensure(['view/customermange'], () => {
-                            resolve(require('view/customermange'));
+                        require.ensure(['view/hospitalBusiness/callbackDesk'], () => {
+                            resolve(require('view/hospitalBusiness/callbackDesk'));
+                        });
+                    }
+                },
+                {
+                    path: '/frontDesk',
+                    component(resolve) {
+                        require.ensure(['view/hospitalBusiness/frontDesk'], () => {
+                            resolve(require('view/hospitalBusiness/frontDesk'));
+                        });
+                    }
+                },
+                {
+                    path: '/triageDesk',
+                    component(resolve) {
+                        require.ensure(['view/hospitalBusiness/triageDesk'], () => {
+                            resolve(require('view/hospitalBusiness/triageDesk'));
+                        });
+                    }
+                },
+                {
+                    path: '/liveDesk',
+                    component(resolve) {
+                        require.ensure(['view/hospitalBusiness/liveDesk'], () => {
+                            resolve(require('view/hospitalBusiness/liveDesk'));
+                        });
+                    }
+                },
+                {
+                    path: '/cashierDesk',
+                    component(resolve) {
+                        require.ensure(['view/hospitalBusiness/cashierDesk'], () => {
+                            resolve(require('view/hospitalBusiness/cashierDesk'));
+                        });
+                    }
+                },
+                {
+                    path: '/deptDesk',
+                    component(resolve) {
+                        require.ensure(['view/hospitalBusiness/deptDesk'], () => {
+                            resolve(require('view/hospitalBusiness/deptDesk'));
+                        });
+                    }
+                },
+                {
+                    path: '/bed',
+                    component(resolve) {
+                        require.ensure(['view/hospitalBusiness/bed'], () => {
+                            resolve(require('view/hospitalBusiness/bed'));
+                        });
+                    }
+                },
+                {
+                    path: '/inpatientDesk',
+                    component(resolve) {
+                        require.ensure(['view/hospitalBusiness/inpatientDesk'], () => {
+                            resolve(require('view/hospitalBusiness/inpatientDesk'));
+                        });
+                    }
+                },
+                {
+                    path: '/surgeryDesk',
+                    component(resolve) {
+                        require.ensure(['view/hospitalBusiness/surgeryDesk'], () => {
+                            resolve(require('view/hospitalBusiness/surgeryDesk'));
+                        });
+                    }
+                },
+                {
+                    path: '/surgeryScheduler',
+                    component(resolve) {
+                        require.ensure(['view/hospitalBusiness/surgeryScheduler'], () => {
+                            resolve(require('view/hospitalBusiness/surgeryScheduler'));
+                        });
+                    }
+                },                
+                {
+                    path: '/treatScheduler',
+                    component(resolve) {
+                        require.ensure(['view/hospitalBusiness/treatScheduler'], () => {
+                            resolve(require('view/hospitalBusiness/treatScheduler'));
+                        });
+                    }
+                },             
+                {
+                    path: '/activity',
+                    component(resolve) {
+                        require.ensure(['view/hospitalBusiness/activity'], () => {
+                            resolve(require('view/hospitalBusiness/activity'));
+                        });
+                    }
+                },
+
+
+                //市场渠道
+                {
+                    path: '/store',
+                    component(resolve) {
+                        require.ensure(['view/marketChannel/store'], () => {
+                            resolve(require('view/marketChannel/store'));
+                        });
+                    }
+                },
+                {
+                    path: '/storeManager',
+                    component(resolve) {
+                        require.ensure(['view/marketChannel/storeManager'], () => {
+                            resolve(require('view/marketChannel/storeManager'));
+                        });
+                    }
+                },
+                {
+                    path: '/marketDesk',
+                    component(resolve) {
+                        require.ensure(['view/marketChannel/marketDesk'], () => {
+                            resolve(require('view/marketChannel/marketDesk'));
+                        });
+                    }
+                },
+                {
+                    path: '/couponActivity',
+                    component(resolve) {
+                        require.ensure(['view/marketChannel/couponActivity'], () => {
+                            resolve(require('view/marketChannel/couponActivity'));
+                        });
+                    }
+                },
+                {
+                    path: '/saleBack',
+                    component(resolve) {
+                        require.ensure(['view/marketChannel/saleBack'], () => {
+                            resolve(require('view/marketChannel/saleBack'));
+                        });
+                    }
+                },
+
+
+                //库存管理
+                {
+                    path: '/warehouse',
+                    component(resolve) {
+                        require.ensure(['view/inventoryManagement/warehouse'], () => {
+                            resolve(require('view/inventoryManagement/warehouse'));
+                        });
+                    }
+                },
+                {
+                    path: '/supplier',
+                    component(resolve) {
+                        require.ensure(['view/inventoryManagement/supplier'], () => {
+                            resolve(require('view/inventoryManagement/supplier'));
+                        });
+                    }
+                },
+                {
+                    path: '/purchase',
+                    component(resolve) {
+                        require.ensure(['view/inventoryManagement/purchase'], () => {
+                            resolve(require('view/inventoryManagement/purchase'));
+                        });
+                    }
+                },
+                {
+                    path: '/invoice',
+                    component(resolve) {
+                        require.ensure(['view/inventoryManagement/invoice'], () => {
+                            resolve(require('view/inventoryManagement/invoice'));
+                        });
+                    }
+                },
+                {
+                    path: '/return',
+                    component(resolve) {
+                        require.ensure(['view/inventoryManagement/return'], () => {
+                            resolve(require('view/inventoryManagement/return'));
+                        });
+                    }
+                },
+                {
+                    path: '/allocate',
+                    component(resolve) {
+                        require.ensure(['view/inventoryManagement/allocate'], () => {
+                            resolve(require('view/inventoryManagement/allocate'));
+                        });
+                    }
+                },
+                {
+                    path: '/check',
+                    component(resolve) {
+                        require.ensure(['view/inventoryManagement/check'], () => {
+                            resolve(require('view/inventoryManagement/check'));
+                        });
+                    }
+                },
+                {
+                    path: '/use',
+                    component(resolve) {
+                        require.ensure(['view/inventoryManagement/use'], () => {
+                            resolve(require('view/inventoryManagement/use'));
+                        });
+                    }
+                },
+                {
+                    path: '/stock',
+                    component(resolve) {
+                        require.ensure(['view/inventoryManagement/stock'], () => {
+                            resolve(require('view/inventoryManagement/stock'));
+                        });
+                    }
+                },
+                {
+                    path: '/deptStockOutDesk',
+                    component(resolve) {
+                        require.ensure(['view/inventoryManagement/deptStockOutDesk'], () => {
+                            resolve(require('view/inventoryManagement/deptStockOutDesk'));
+                        });
+                    }
+                },
+                {
+                    path: '/expiration',
+                    component(resolve) {
+                        require.ensure(['view/inventoryManagement/expiration'], () => {
+                            resolve(require('view/inventoryManagement/expiration'));
+                        });
+                    }
+                },
+                //日常办公
+                {
+                    path: '/addressBook',
+                    component(resolve) {
+                        require.ensure(['view/dailyOffice/addressBook'], () => {
+                            resolve(require('view/dailyOffice/addressBook'));
+                        });
+                    }
+                },
+                {
+                    path: '/shiftCategory',
+                    component(resolve) {
+                        require.ensure(['view/dailyOffice/shiftCategory'], () => {
+                            resolve(require('view/dailyOffice/shiftCategory'));
+                        });
+                    }
+                },
+                {
+                    path: '/myShift',
+                    component(resolve) {
+                        require.ensure(['view/dailyOffice/myShift'], () => {
+                            resolve(require('view/dailyOffice/myShift'));
+                        });
+                    }
+                },
+                {
+                    path: '/shift',
+                    component(resolve) {
+                        require.ensure(['view/dailyOffice/shift'], () => {
+                            resolve(require('view/dailyOffice/shift'));
+                        });
+                    }
+                },
+                {
+                    path: '/notice',
+                    component(resolve) {
+                        require.ensure(['view/dailyOffice/notice'], () => {
+                            resolve(require('view/dailyOffice/notice'));
+                        });
+                    }
+                },
+                {
+                    path: '/knowledgeCategory',
+                    component(resolve) {
+                        require.ensure(['view/dailyOffice/knowledgeCategory'], () => {
+                            resolve(require('view/dailyOffice/knowledgeCategory'));
+                        });
+                    }
+                },
+                {
+                    path: '/knowledge',
+                    component(resolve) {
+                        require.ensure(['view/dailyOffice/knowledge'], () => {
+                            resolve(require('view/dailyOffice/knowledge'));
+                        });
+                    }
+                },
+                {
+                    path: '/knowledgeCenter',
+                    component(resolve) {
+                        require.ensure(['view/dailyOffice/knowledgeCenter'], () => {
+                            resolve(require('view/dailyOffice/knowledgeCenter'));
+                        });
+                    }
+                },
+                {
+                    path: '/auditOrder',
+                    component(resolve) {
+                        require.ensure(['view/dailyOffice/auditOrder'], () => {
+                            resolve(require('view/dailyOffice/auditOrder'));
+                        });
+                    }
+                },
+                {
+                    path: '/auditOrderDesk',
+                    component(resolve) {
+                        require.ensure(['view/dailyOffice/auditOrderDesk'], () => {
+                            resolve(require('view/dailyOffice/auditOrderDesk'));
+                        });
+                    }
+                },
+                //微信
+                {
+                    path: '/promoter',
+                    component(resolve) {
+                        require.ensure(['view/WeChat/promoter'], () => {
+                            resolve(require('view/WeChat/promoter'));
+                        });
+                    }
+                },
+                {
+                    path: '/promoteCustomer',
+                    component(resolve) {
+                        require.ensure(['view/WeChat/promoteCustomer'], () => {
+                            resolve(require('view/WeChat/promoteCustomer'));
+                        });
+                    }
+                },
+                {
+                    path: '/promoteRecord',
+                    component(resolve) {
+                        require.ensure(['view/WeChat/promoteRecord'], () => {
+                            resolve(require('view/WeChat/promoteRecord'));
+                        });
+                    }
+                },
+                {
+                    path: '/promoteRebate',
+                    component(resolve) {
+                        require.ensure(['view/WeChat/promoteRebate'], () => {
+                            resolve(require('view/WeChat/promoteRebate'));
+                        });
+                    }
+                },         
+                {
+                    path: '/VerifyMessage',
+                    component(resolve) {
+                        require.ensure(['view/WeChat/VerifyMessage'], () => {
+                            resolve(require('view/WeChat/VerifyMessage'));
                         });
                     }
                 }
