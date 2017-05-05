@@ -7,6 +7,9 @@ import store from './store/';
 //ui框架
 import iView from 'iview';
 
+//框架样式重置文件
+import './assets/style/theme/rest-iview.less';
+
 Vue.use(iView);
 
 Vue.config.productionTip = false;

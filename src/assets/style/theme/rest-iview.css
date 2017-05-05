@@ -1,0 +1,16 @@
+/**
+ * css 样式重置，针对重置变量无法完成的css
+ * 
+ */
+
+/********************
+表格样式重置        
+********************/
+.ivu-table table{ width: 100% !important;}
+.ivu-table-stripe .ivu-table-body tr:nth-child(2n+1) td, 
+.ivu-table-stripe .ivu-table-fixed-body tr:nth-child(2n+1) td{
+	background: rgba(73,133,243,0.05);
+}
+.ivu-table th, .ivu-table td{
+	height: 60px !important;
+}

@@ -1,8 +1,8 @@
 /* 
 * @Author: Moriarty
 * @Date:   2017-04-30 16:53:37
- * @Last Modified by: mikey.zhaopeng
- * @Last Modified time: 2017-05-03 11:42:42
+ * @Last Modified by:   anchen
+ * @Last Modified time: 2017-05-04 21:57:00
 */
 html, 
 body, 
@@ -95,6 +95,7 @@ body,
 
 /*导航栏展开*/
 .layout-nav .nav-show {
+    position: relative;
     overflow: hidden;
     width: 200px;
     height: 100%;
@@ -144,11 +145,13 @@ body,
     cursor: pointer;
 }
 .layout-nav .nav-tree {
+    position: absolute;
+    left: 0;
+    right: -20px;
+    top: 150px;
+    bottom: 0;
     overflow-y: scroll;
     overflow-x: hidden;
-    width: 220px;
-    height: 80%;
-    margin-right: -20px;
 }
 .layout-nav .nav-hidden-tree .nav-hidden-item, 
 .layout-nav .nav-tree .nav-item {
@@ -269,18 +272,32 @@ body,
     display: block;
     height: 50px;
 }
-.layout-nav .nav-hidden-item .drowmenu {
+.layout-nav .nav-hidden-item .hidden-box {
     overflow: hidden;
     position: absolute;
     top: 0;
     left: 50px;
     width: 150px;
+    height: 325px;
     background-color: #fff;
     display: none;
     -webkit-box-shadow: 2px 0px 8px 0 #c2c8d3;
     -moz-box-shadow: 2px 0px 8px 0 #c2c8d3;
     -ms-box-shadow: 2px 0px 8px 0 #c2c8d3;
     box-shadow: 2px 0px 8px 0 #c2c8d3;
+    z-index: 5;
+}
+.layout-nav .nav-hidden-item .drowmenu {
+    position: absolute;
+    left: 0;
+    right: -20px;
+    top: 0;
+    bottom: 0;  
+    overflow-x: hidden;
+    overflow-y: scroll;
+}
+.layout-nav .nav-hidden-item .drowmenu li {
+    width: 150px;
 }
 .layout-nav .nav-hidden-item .drowmenu span {
     font-size: 15px;

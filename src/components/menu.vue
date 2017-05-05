@@ -38,11 +38,13 @@
                     <em></em>
                     <span>
                         <h3 :class="firsts.imgClass" ></h3>
-                    </span>                  
-                    <ul class="drowmenu" v-if="firsts.child.length > 0">
-                        <li v-for="(seconds,index2) in firsts.child" :data-url="seconds.url" :data-name="seconds.name" @click="routerLinkTo">     <span>{{seconds.name}}</span>
-                        </li>
-                    </ul>
+                    </span> 
+                    <div class="hidden-box" v-if="firsts.child.length > 0">                 
+                        <ul class="drowmenu">
+                            <li v-for="(seconds,index2) in firsts.child" :data-url="seconds.url" :data-name="seconds.name" @click="routerLinkTo">     <span>{{seconds.name}}</span>
+                            </li>
+                        </ul>
+                    </div>
                 </li>
             </ul>
         </div>
@@ -121,8 +123,8 @@
                     $navItem.find('.drowmenu').stop(true).animate({'height' : '0'}, 200);
 
                     if($this.hasClass('drowdown')) {
-                        $navHiddenItem.find('.drowmenu').removeClass('block');
-                        $navHiddenItem.eq(index).find('.drowmenu').addClass('block')
+                        $navHiddenItem.find('.hidden-box').removeClass('block');
+                        $navHiddenItem.eq(index).find('.hidden-box').addClass('block')
                         if($this.hasClass('drowopen')) {
                             $this.removeClass('drowopen');
                             $this.find('.drowmenu').stop(true).animate({'height' : '0'}, 200)
@@ -133,17 +135,18 @@
                         }
                     }else{
                        $navItem.removeClass('drowopen');
+                       $navItem.find('li').removeClass('active');
                     }
                 }else{
                     $navItem.eq(index).addClass('active').siblings().removeClass('active');
 
-                    $this.addClass('active').siblings().removeClass('active').find('.drowmenu').removeClass('block');
+                    $this.addClass('active').siblings().removeClass('active').find('.hidden-box').removeClass('block');
                     $navItem.eq(index).addClass('active').siblings().removeClass('active').removeClass('drowopen').find('.drowmenu').css({'height' : '0'}).children('li').removeClass('active');
-                    if($this.find('.drowmenu').length == 1) {
-                        if($this.find('.drowmenu').hasClass('block')){
-                            $this.find('.drowmenu').removeClass('block')
+                    if($this.find('.hidden-box').length == 1) {
+                        if($this.find('.hidden-box').hasClass('block')){
+                            $this.find('.hidden-box').removeClass('block')
                         } else{
-                            $this.find('.drowmenu').addClass('block')
+                            $this.find('.hidden-box').addClass('block')
                         }
                         var num = $navItem.eq(index).children('.drowmenu').children('li').length
                         $navItem.eq(index).addClass('drowopen')
@@ -158,6 +161,19 @@
                     var breadData =  _vm.getBreadData($this, []).reverse();
                     this.$store.dispatch('setBreadData', breadData);
                     _vm.$router.push(url)
+                }
+
+                if($this.parent().hasClass('nav-hidden-tree')) {
+                    if($this.offset().top + 350 > parseInt($dom.css('height'))) {
+                        $navHiddenItem.find('.hidden-box').css({
+                            "top" : '-275px'
+                        })
+                    } else {
+                        $navHiddenItem.find('.hidden-box').css({
+                            "top" : '0'
+                        })
+                    }
+
                 }
             },
             routerLinkTo: function($event){

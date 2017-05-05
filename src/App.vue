@@ -21,7 +21,7 @@
 <style lang="scss">
 /* ui框架 有自带rest样式*/ 
 @import '~iview/dist/styles/iview.css';
-
+@import './assets/style/theme/rest-iview.css';
 
 /*公共样式*/
 @import './assets/style/_commom.scss';
