@@ -538,13 +538,13 @@ const state = {
                 },
                 {
                     name: "发布公告",
-                    url: "/knowledgeCategory",
+                    url: "/notice",
                     imgClass: "",
                     child: []
                 },
                 {
                     name: "知识分类管理",
-                    url: "/addressBook",
+                    url: "/knowledgeCategory",
                     imgClass: "",
                     child: []
                 },

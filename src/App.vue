@@ -29,5 +29,6 @@
 /* 模块样式*/
 @import './assets/style/module/module.css';
 
+@import './assets/style/_base.scss';
 
 </style>

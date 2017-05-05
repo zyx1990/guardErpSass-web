@@ -14,3 +14,29 @@
 .ivu-table th, .ivu-table td{
 	height: 60px !important;
 }
+
+/********************
+分页样式重置        
+********************/
+.ivu-page-prev{
+	margin-right: 0 !important;
+}
+.ivu-page-next{
+	margin-left: 0 !important;
+}
+.ivu-page-item{
+	margin-right: 0 !important;
+}
+
+.ivu-page-prev, 
+.ivu-page-item-jump-prev
+{
+	border-radius: 4px 0 0 4px !important;
+}
+.ivu-page-next, 
+.ivu-page-item-jump-next{
+	border-radius: 0 4px 4px 0 !important;
+}
+.ivu-page-item{
+	border-radius: 0 !important;
+}

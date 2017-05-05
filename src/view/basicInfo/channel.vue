@@ -7,7 +7,7 @@
 		<div class="container-header">
 			<h2>渠道管理</h2>
 			<ul class="header-btn-group">
-		    	<li class="header-item"><Icon type="plus-round"></Icon>增加</li>
+		    	<li class="header-item" @click="add"><Icon type="plus-round"></Icon>增加</li>
 			</ul>
 		</div>
 		<div class="container-body">
@@ -21,10 +21,7 @@
                 class-name="vertical-center-modal">
                 <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="100" label-position="right">
                     <Form-item label="名称" prop="name">
-                    	<Col span="18">
-                    		<Input v-model="formValidate.name"></Input>
-                    	</Col>
-                        
+                		<Input v-model="formValidate.name" placeholder="请输入名称"></Input>
                     </Form-item>
                     <Form-item label="状态" prop="states">
                         <Radio-group v-model="formValidate.states">
@@ -36,7 +33,7 @@
                         <Input v-model="formValidate.sort" placeholder="请输入排序号"></Input>
                     </Form-item>
                     <Form-item label="描述" prop="description">
-                        <Input v-model="formValidate.description" type="textarea" :autosize="{minRows: 2,maxRows: 5}"></Input>
+                        <Input v-model="formValidate.description" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="请输入描述"></Input>
                     </Form-item>
                 </Form>
             </Modal>
@@ -134,12 +131,19 @@
                     ],
                     sort: [
                         { required: true, message: '排序号不能为空', trigger: 'blur' },
-                        { type: 'string', message: '排序号格式不正确', trigger: 'blur' }
+                        { type: 'number', message: '排序号格式不正确', trigger: 'blur' }
                     ]
                 }
             }
         },
         methods: {
+            add: function() {
+                this.formValidate.name = ''
+                this.formValidate.states = '1'
+                this.formValidate.sort = ''
+                this.formValidate.description = ''
+                this.modalEdit = true
+            },
             edit: function(index) {
                 this.formValidate.name = this.data[index].name
                 this.formValidate.states = this.data[index].states
@@ -147,20 +151,30 @@
                 this.formValidate.description = this.data[index].description
                 this.modalEdit = true
             },
-            remove (index) {
-                
+            remove: function(index) {
+                this.$Modal.confirm({
+                    title: '系统提示',
+                    content: '确定删除'+ this.data[index].name +'?',
+                    onOk: () => {
+                        this.$Notice.success({
+                             title: '系统提示！',
+                             desc: '删除成功！'
+                        });
+                    },
+                    onCancel: () => {
+                        
+                    }
+                });
             },
             ok () {
                 setTimeout(() => {
                     this.modalEdit = false;
-                    this.$Message.success('修改成功');
-                }, 2000);
+                    this.$Notice.success({
+                        title: '系统提示！',
+                        desc: '保存成功！'
+                    });
+                }, 1000);
             }
         }
     }
 </script>
-
-
-
-
-

@@ -79,7 +79,7 @@
                     $currentLi = $dom.find('.js-nav-hidden').find('[data-url="'+path+'"]');
                 }
                 //TODO 临时这么写
-                $currentLi.trigger('click');
+                this.selectLi($currentLi);
 
                 var breadData =  this.getBreadData($currentLi, []).reverse();
                 this.$store.dispatch('setBreadData', breadData);
@@ -202,6 +202,15 @@
                     });
                 }
                 return breadData;
+            },
+            selectLi: function($currentLi){
+                var $li = $currentLi.closest('ul').closest('li');
+                if($li.length > 0 ){
+                    console.log($li.data('name'));
+                    $li.trigger('click');
+                }
+                $currentLi.trigger('click');
+
             }
         }
     }

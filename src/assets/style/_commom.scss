@@ -43,10 +43,14 @@
     line-height: 30px;
     font-weight: normal;
   }
-  .container-header .header-btn-group {
+  .container-box .header-btn-group {
     float: right;
   }
-  .container-header .header-item {
+  .container-box .header-btn-group.not-float {
+    float: none;
+    display: inline-block;
+  }
+  .container-box .header-item {
     float: left;
     padding: 4px 10px;
     margin: 1px 0 0 8px;
@@ -60,9 +64,16 @@
     cursor: pointer;
   }
 
-  .container-header .header-item i {
+  .container-box .header-item i {
     margin-right: 6px;
   }
   .container-body {
     padding: 15px 20px 0 15px;
+  }
+
+  .float-left{
+    float: left;
+  }
+   .float-right{
+    float: left;
   }
