@@ -38,6 +38,7 @@
 </template>
 
 <script>
+    var qs = require('qs');
     export default {
         data() {
             return {
@@ -47,7 +48,7 @@
                 loginImg: require('assets/img/login.png')
             }
         },
-        mounted: function(){
+        mounted: function(){    
         },
         methods: {
             reset: function(e) {
@@ -64,13 +65,51 @@
                 }
             },
             handleSubmit: function() {
-                var userName = $(this.$refs.formLogin).find('.userName')
-                var password = $(this.$refs.formLogin).find('.password')
-                this.nameRule()
-                this.passwordRule()
-                if(this.nameRule() > 0 && this.passwordRule() > 0) {
-                    window.sessionStorage.setItem('userAccount', this.name)
-                    this.$router.push('/desktop')
+                var _vm = this;
+                var userName = $(_vm .$refs.formLogin).find('.userName')
+                var password = $(_vm .$refs.formLogin).find('.password')
+                _vm .nameRule()
+                _vm .passwordRule()
+                if(_vm.nameRule() > 0 && _vm .passwordRule() > 0) {
+                    _vm.$http.post({
+                        url: 'doct-webClient/login/login.jhtml',
+                        data: {mobile: _vm.name,password: _vm.password},
+                        sussess: function(res){
+                            if(res.status == 200 ){
+                                var code = res.data.code;
+                                if(code == 0){
+                                    window.sessionStorage.setItem('userAccount', _vm .name);
+                                    _vm.$router.push('/desktop');
+                                }else{
+                                    console.log(res.data);
+                                    console.log(res.data.desc || '登录失败');
+                                } 
+                            }
+                        },
+                        errpr: function(res){
+                            console.log(res);
+                        }
+                    });
+                    // _vm.$http.post('doct-webClient/login/login.jhtml',JSON.stringify({
+                    //     mobile: _vm.name,
+                    //     password: _vm.password
+                    // }))
+                    // .then(function(res){
+                    //     if(res.status == 200 ){
+                    //         var code = res.data.code;
+                    //         if(code == 0){
+                    //             window.sessionStorage.setItem('userAccount', _vm .name);
+                    //             _vm.$router.push('/desktop');
+                    //         }else{
+                    //             console.log(res.data);
+                    //             console.log(res.data.desc || '登录失败');
+                    //         }
+                            
+                    //     }
+                    // })
+                     
+                
+                    
                 }
             },
             nameRule: function() {

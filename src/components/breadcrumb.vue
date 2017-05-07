@@ -10,9 +10,13 @@
     var isinit = false;
     export default {
         name: 'breadcrumb',
+        props: ['title'],
         data() {
             return {
             }
+        },
+        mounted: function(){
+            console.log(this.title +'组件通信方式')
         },
         computed: {
             breadData: function() {

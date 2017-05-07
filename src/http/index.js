@@ -16,12 +16,12 @@ axios.defaults.timeout = 5000;
  *  具体api 可查询下面地址
  *  https://github.com/mzabriskie/axios
  */
-var ajax = {
+var http = {
 	post: function(setting){
 		return  axios({
 		            method: 'post',
 		            url: setting.url,
-		            data: qs.stringify(setting.data),
+		            data: qs.stringify(setting.data || {}),
 		            headers: {
 		                'X-Requested-With': 'XMLHttpRequest',
 		                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
@@ -41,7 +41,7 @@ var ajax = {
 		return  axios({
 		            method: 'get',
 		            url: setting.url,
-		            data: qs.stringify(setting.data),
+		            data: qs.stringify(setting.data || {}),
 		            headers: {
 		                'X-Requested-With': 'XMLHttpRequest',
 		                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
@@ -54,7 +54,9 @@ var ajax = {
 					typeof setting.error == 'function' && setting.error(res)
 				})
 	},
-	j
+	json: function(setting){
+		
+	}
 }
 
-export default ajax;
+export default http;

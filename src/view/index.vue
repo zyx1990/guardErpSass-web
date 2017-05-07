@@ -2,7 +2,7 @@
     <div class="layout-box" ref="layoutBox">
   		<div class="layout-main">
   			<div class="layout-container js-layout-container">
-  				<cmptBreadcrumb class="layout-breadcrumb"></cmptBreadcrumb>
+  				<cmptBreadcrumb class="layout-breadcrumb" title="1111"></cmptBreadcrumb>
   				<div class="container-wrap">          
   					 <router-view class="view" ref="routerModule"></router-view>
   				</div>

@@ -4,6 +4,11 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import store from './store/';
+
+//封装
+import http from './http/index.js'
+
+Vue.prototype.$http = http;
 //ui框架
 import iView from 'iview';
 
@@ -11,6 +16,7 @@ import iView from 'iview';
 import './assets/style/theme/rest-iview.less';
 
 Vue.use(iView);
+
 
 Vue.config.productionTip = false;
 Vue.config.debug = true;

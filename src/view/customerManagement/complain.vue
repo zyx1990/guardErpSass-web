@@ -31,10 +31,9 @@
                 </ul>
             </Form>
             <Table stripe :columns="columns" :data="data"></Table>
-            <div style="margin: 10px;overflow: hidden">
-                <div style="float: right;">
-                    <Page :total="100" :current="1" show-total></Page>
-                </div>
+            <div class="table-page">
+                <div class="table-info">当前第1页，共1页，总共5条记录</div>
+                <Page class="table-paginate"></Page>
             </div>
         </div>
     </div>
