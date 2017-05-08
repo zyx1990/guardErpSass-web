@@ -70,47 +70,29 @@
                 var password = $(_vm .$refs.formLogin).find('.password')
                 _vm .nameRule()
                 _vm .passwordRule()
-                if(_vm.nameRule() > 0 && _vm .passwordRule() > 0) {
-                    _vm.$http.post({
-                        url: 'doct-webClient/login/login.jhtml',
-                        data: {mobile: _vm.name,password: _vm.password},
-                        sussess: function(res){
-                            if(res.status == 200 ){
-                                var code = res.data.code;
-                                if(code == 0){
-                                    window.sessionStorage.setItem('userAccount', _vm .name);
-                                    _vm.$router.push('/desktop');
-                                }else{
-                                    console.log(res.data);
-                                    console.log(res.data.desc || '登录失败');
-                                } 
-                            }
-                        },
-                        errpr: function(res){
-                            console.log(res);
-                        }
-                    });
-                    // _vm.$http.post('doct-webClient/login/login.jhtml',JSON.stringify({
-                    //     mobile: _vm.name,
-                    //     password: _vm.password
-                    // }))
-                    // .then(function(res){
-                    //     if(res.status == 200 ){
-                    //         var code = res.data.code;
-                    //         if(code == 0){
-                    //             window.sessionStorage.setItem('userAccount', _vm .name);
-                    //             _vm.$router.push('/desktop');
-                    //         }else{
-                    //             console.log(res.data);
-                    //             console.log(res.data.desc || '登录失败');
-                    //         }
-                            
-                    //     }
-                    // })
-                     
-                
-                    
-                }
+                window.sessionStorage.setItem('userAccount', _vm .name);
+                _vm.$router.push('/desktop');
+                // if(_vm.nameRule() > 0 && _vm .passwordRule() > 0) {
+                //     _vm.$http.post({
+                //         url: 'doct-webClient/login/login.jhtml',
+                //         data: {mobile: _vm.name,password: _vm.password},
+                //         sussess: function(res){
+                //             if(res.status == 200 ){
+                //                 var code = res.data.code;
+                //                 if(code == 0){
+                //                     window.sessionStorage.setItem('userAccount', _vm .name);
+                //                     _vm.$router.push('/desktop');
+                //                 }else{
+                //                     console.log(res.data);
+                //                     console.log(res.data.desc || '登录失败');
+                //                 } 
+                //             }
+                //         },
+                //         error: function(res){
+                //             console.log(res);
+                //         }
+                //     }); 
+                // }
             },
             nameRule: function() {
                 var userName = $(this.$refs.formLogin).find('.userName')

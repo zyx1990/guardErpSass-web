@@ -100,27 +100,7 @@
                         states: '1',
                         description: '6666'
                     }
-                ],
-                modalEdit: false,
-                loading: true,
-                formValidate: {
-                    name: '',
-                    states: '',
-                    sort: '',
-                    description: ''
-                },
-                ruleValidate: {
-                    name: [
-                        { required: true, message: '姓名不能为空', trigger: 'blur' }
-                    ],
-                    states: [
-                        { required: true, message: '请选择状态', trigger: 'change' }
-                    ],
-                    sort: [
-                        { required: true, message: '排序号不能为空', trigger: 'blur' },
-                        { type: 'number', message: '排序号格式不正确', trigger: 'blur' }
-                    ]
-                }
+                ]
             }
         },
         methods: {
