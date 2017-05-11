@@ -28,11 +28,11 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
-        '/doct-webClient':{
-            target:'http://www.hellodoctors.cn/doct-webClient',
+        '/guard-webManager':{
+            target: 'http://192.168.1.36:8080/guard-webManager',
             changeOrigin:true,
             pathRewrite:{
-                '^/doct-webClient':''
+                '^/guard-webManager':''
             }
         }
     },

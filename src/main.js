@@ -7,8 +7,10 @@ import store from './store/';
 
 //封装
 import http from './http/index.js'
+import token from 'utils/cache.js'
 
 Vue.prototype.$http = http;
+Vue.prototype.$token = token;
 //ui框架
 import iView from 'iview';
 

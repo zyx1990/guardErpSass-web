@@ -5,7 +5,8 @@
 
 //包引入
 import axios from 'axios';
-import qs from 'qs'
+import qs from 'qs';
+import cache from 'utils/cache'
 
 axios.defaults.timeout = 5000;
 //axios.defaults.baseURL = 'http://www.hellodoctors.cn';
@@ -15,7 +16,13 @@ axios.defaults.timeout = 5000;
  *  如果后面有需求可以继续封装方法api
  *  具体api 可查询下面地址
  *  https://github.com/mzabriskie/axios
+ *  
  */
+var ajaxInit = function(){
+
+
+}
+
 var http = {
 	post: function(setting){
 		return  axios({
@@ -23,8 +30,10 @@ var http = {
 		            url: setting.url,
 		            data: qs.stringify(setting.data || {}),
 		            headers: {
-		                'X-Requested-With': 'XMLHttpRequest',
-		                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+
+		            	'X-Requested-With': 'XMLHttpRequest',
+		                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+		                'adminToken' : cache.readToken('adminToken') || ''
 		            }
 		        })
 				.then(function(res){
@@ -44,7 +53,8 @@ var http = {
 		            data: qs.stringify(setting.data || {}),
 		            headers: {
 		                'X-Requested-With': 'XMLHttpRequest',
-		                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+		                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+		                'adminToken' : cache.readToken('adminToken') || ''
 		            }
 		        })
 				.then(function(res){

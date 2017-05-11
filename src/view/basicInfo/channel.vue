@@ -136,6 +136,28 @@
                 }
             }
         },
+        mounted: function(){
+            var _vm = this;
+            _vm.$http.get({
+                    url: 'guard-webManager/channel/list.jhtml',
+                    sussess: function(res){
+                        if(res.status == 200 ){
+                            var code = res.data.code;
+                            if(code == 0){
+                                _vm.$token.setToken(res.data.content);
+                                window.sessionStorage.setItem('userAccount', _vm.name);
+                                _vm.$router.push('/desktop');
+                            }else{
+                                console.log(res.data);
+                                console.log(res.data.desc || '登录失败');
+                            } 
+                        }
+                    },
+                    error: function(res){
+                        console.log(res);
+                    }
+                }); 
+        },
         methods: {
             add: function() {
                 this.formValidate.name = ''
