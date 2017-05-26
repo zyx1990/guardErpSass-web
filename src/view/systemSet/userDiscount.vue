@@ -57,7 +57,27 @@
                 ]
             }
         },
+        created () {
+            this.getList()
+        },
         methods: {
+            getList () {
+                var _vm = this;
+                _vm.$http.get({
+                    url: 'guard-webManager/treatDoctor/list.jhtml',
+                    success: function(res){
+                        if(res.status == 200 ){
+                            console.log(res)
+                            // _vm.data = res.data.content
+                        } else {
+                            console.log(res.data.desc)
+                        }
+                    },
+                    error: function(res){
+                        console.log(res);
+                    }
+                });
+            },
             edit: function(index) {
 
             },

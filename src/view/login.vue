@@ -75,7 +75,7 @@
                     _vm.$http.post({
                         url: 'guard-webManager/login/login.jhtml',
                         data: {account: _vm.name, password: _vm.password},
-                        sussess: function(res){
+                        success: function(res){
                             if(res.status == 200 ){
                                 var code = res.data.code;
                                 if(code == 0){

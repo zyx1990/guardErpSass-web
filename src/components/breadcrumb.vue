@@ -1,7 +1,7 @@
 <template>
     <div id="breadcrumb">
         <ul class="breadcrumb">
-            <li v-for="nav in breadData" :data-url="nav.url" @click="toggleNav"><span>{{nav.text}}</span></li> 
+            <li v-for="(nav, index) in breadData" :data-url="nav.url" :data-index="index" @click="toggleNav"><span>{{nav.text}}</span></li> 
         </ul>
     </div>
 </template>
@@ -26,8 +26,10 @@
         methods: {
             toggleNav : function($event){
             	var url = $($event.currentTarget).data('url');
-                console.log(url);
-                // url && this.$router.push(url);
+                var index = $($event.currentTarget).data('index') + 1;
+                this.breadData.splice(index)
+                this.$store.dispatch('setBreadData', this.breadData);
+                this.$router.push(url)
             }
         }
     }

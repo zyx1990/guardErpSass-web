@@ -7,17 +7,20 @@ import store from './store/';
 
 //封装
 import http from './http/index.js'
-import token from 'utils/cache.js'
+Vue.use(http);
 
-Vue.prototype.$http = http;
-Vue.prototype.$token = token;
+//富文本
+import VueQuillEditor from 'vue-quill-editor';
+
+
 //ui框架
 import iView from 'iview';
-
-//框架样式重置文件
 import './assets/style/theme/rest-iview.less';
-
 Vue.use(iView);
+
+//全局组件
+import cmpt from 'components/index.js';
+Vue.use(cmpt);
 
 
 Vue.config.productionTip = false;

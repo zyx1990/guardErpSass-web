@@ -71,9 +71,18 @@
                         width: 300,
                         align: 'center',
                         render (row, column, index) {
-                            return `<i-button type="primary" size="small" @click="edit(${index})"><Icon type="edit"></Icon>编辑</i-button> <i-button type="error" size="small" @click="remove(${index})"><Icon type="ios-trash-outline"></Icon>删除</i-button>
-                                <i-button type="info" size="small" @click="build(${index})"><Icon type="ios-color-wand"></Icon>设计问卷</i-button>
-                                <i-button type="warning" size="small" @click="stamp(${index})"><Icon type="printer"></Icon>打印</i-button>`;
+                            return `<i-button type="primary" size="small" @click="edit(${index})">
+                                        <Icon type="edit"></Icon>编辑
+                                    </i-button> 
+                                    <i-button type="error" size="small" @click="remove(${index})">
+                                        <Icon type="ios-trash-outline"></Icon>删除
+                                    </i-button>
+                                    <i-button type="info" size="small" @click="build(${index})">
+                                        <Icon type="ios-color-wand"></Icon>设计问卷
+                                    </i-button>
+                                    <i-button type="warning" size="small" @click="stamp(${index})">
+                                        <Icon type="printer"></Icon>打印
+                                    </i-button>`;
                         }
                     }
                 ],
@@ -135,10 +144,42 @@
                 this.modalEdit = true
             },
             build: function(index) {
-
+                var _vm = this;
+                var breadData = [
+                    {
+                        url: '/desktop',
+                        text: '桌面'
+                    },
+                    {
+                        url: '/medicalRecord',
+                        text: '病历模板管理'
+                    }
+                ];
+                breadData.push({
+                    url: '/medicalRecordEdit' + index,
+                    text: this.data[index].name
+                });
+                this.$store.dispatch('setBreadData', breadData);
+                this.$router.push('/medicalRecordEdit' + index)
             },
             stamp: function(index) {
-
+                var _vm = this;
+                var breadData = [
+                    {
+                        url: '/desktop',
+                        text: '桌面'
+                    },
+                    {
+                        url: '/medicalRecord',
+                        text: '病历模板管理'
+                    }
+                ];
+                breadData.push({
+                    url: '/medicalRecordPrint' + index,
+                    text: "打印设置"
+                });
+                this.$store.dispatch('setBreadData', breadData);
+                this.$router.push('/medicalRecordPrint' + index)
             },
             remove: function(index) {
                 this.$Modal.confirm({

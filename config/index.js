@@ -30,6 +30,8 @@ module.exports = {
     proxyTable: {
         '/guard-webManager':{
             target: 'http://192.168.1.36:8080/guard-webManager',
+            // target: 'http://192.168.1.57:8080/guard-webManager',
+            // target: 'http://192.168.1.13:8080/guard-webManager',
             changeOrigin:true,
             pathRewrite:{
                 '^/guard-webManager':''

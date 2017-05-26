@@ -118,6 +118,30 @@
                     <li class="header-item"><Icon type="search"></Icon>查询</li>
                     <li class="header-item"><Icon type="refresh"></Icon>重置</li>
                 </ul>
+                <Form-item label="自定义展示表格数据">
+                    <Checkbox-group v-model="tableColChecked" @on-change="changeTableCol">
+                        <Checkbox label="cusNumber">客户编号</Checkbox>
+                        <Checkbox label="name">姓名</Checkbox>
+                        <Checkbox label="sex">性别</Checkbox>
+                        <Checkbox label="age">年龄</Checkbox>
+                        <Checkbox label="menber">会员</Checkbox>
+                        <Checkbox label="channel">渠道</Checkbox>
+                        <Checkbox label="project">咨询项目</Checkbox>
+                        <Checkbox label="developer">开发人员</Checkbox>
+                        <Checkbox label="consultant">咨询人员</Checkbox>
+                        <Checkbox label="doorStatus">上门状态</Checkbox>
+                        <Checkbox label="transactionStatus">成交状态</Checkbox>
+                        <Checkbox label="firstDate">初诊日期</Checkbox>
+                        <Checkbox label="hospital">初诊医院</Checkbox>
+                        <Checkbox label="lastDate">最后光临</Checkbox>
+                        <Checkbox label="orderDate">预约到诊日期</Checkbox>
+                        <Checkbox label="orderHosp">预约医院</Checkbox>
+                        <Checkbox label="registerDate">登记时间</Checkbox>
+                        <Checkbox label="registerHosp">登记医院</Checkbox>
+                        <Checkbox label="registerPeo">登记人员</Checkbox>
+                        <Checkbox label="shop">推荐店家</Checkbox>
+                    </Checkbox-group>
+                </Form-item>
             </Form>
             <Table stripe :columns="columns" :data="data"></Table>
             <div class="table-page">
@@ -132,110 +156,8 @@
     export default {
         data () {
             return {
-                columns: [
-                    {   
-                        title: '序号',
-                        type: 'index',
-                        width: 60
-                    },
-                    {
-                        title: '客户编号',
-                        key: 'cusNumber'
-                    },
-                    {
-                        title: '姓名',
-                        key: 'name',
-                        render (row) {
-                            return `<Icon type="person"></Icon>${row.name}`
-                        }
-                    },
-                    {
-                        title: '性别',
-                        key: 'sex',
-                        render (row) {
-                            const text = row.sex == 1 ? '男' : '女';
-                            return `<span>${text}</span>`;
-                        }
-                    },
-                    {
-                        title: '年龄',
-                        key: 'age'
-                    },
-                    {
-                        title: '会员',
-                        key: 'menber'
-                    },
-                    {
-                        title: '渠道',
-                        key: 'channel'
-                    },
-                    {
-                        title: '咨询项目',
-                        key: 'project'
-                    },
-                    {
-                        title: '开发人员',
-                        key: 'developer'
-                    },
-                    {
-                        title: '咨询人员',
-                        key: 'consultant'
-                    },
-                    {
-                        title: '上门状态',
-                        key: 'doorStatus',
-                        render (row) {
-                            const color = row.doorStatus == 1 ? 'blue' : 'red';
-                            const text = row.doorStatus == 1 ? '已上门' : '未上门';
-                            return `<span style='color:${color};'>${text}</span>`;
-                        }
-                    },
-                    {
-                        title: '成交状态',
-                        key: 'transactionStatus',
-                        render (row) {
-                            const color = row.transactionStatus == 1 ? 'blue' : 'red';
-                            const text = row.transactionStatus == 1 ? '已成交' : '未成交';
-                            return `<span style='color:${color};'>${text}</span>`;
-                        }
-                    },
-                    {
-                        title: '初诊日期',
-                        key: 'firstDate'
-                    },
-                    {
-                        title: '初诊医院',
-                        key: 'hospital'
-                    },
-                    {
-                        title: '最后光临',
-                        key: 'lastDate'
-                    },
-                    {
-                        title: '预约到诊日期',
-                        key: 'orderDate'
-                    },
-                    {
-                        title: '预约医院',
-                        key: 'orderHosp'
-                    },
-                    {
-                        title: '登记时间',
-                        key: 'registerDate'
-                    },
-                    {
-                        title: '登记医院',
-                        key: 'registerHosp'
-                    },
-                    {
-                        title: '登记人员',
-                        key: 'registerPeo'
-                    },
-                    {
-                        title: '推荐店家',
-                        key: 'shop'
-                    }
-                ],
+                tableColChecked: ['cusNumber', 'name', 'sex', 'age', 'menber', 'channel', 'project', 'developer', 'consultant', 'doorStatus', 'transactionStatus', 'firstDate', 'hospital', 'lastDate', 'orderDate', 'orderHosp', 'registerDate', 'registerHosp', 'registerPeo', 'shop' ],
+                columns: [],
                 data: [
                     {
                         cusNumber: '101391',
@@ -493,8 +415,125 @@
                 },
             }
         },
+        mounted () {
+            this.changeTableCol();
+        },
         methods: {
-            
+            getTableCol () {
+                const tableColList = {
+                    index: {   
+                        title: '序号',
+                        type: 'index',
+                        width: 60
+                    },
+                    cusNumber: {
+                        title: '客户编号',
+                        key: 'cusNumber'
+                    },
+                    name: {
+                        title: '姓名',
+                        key: 'name',
+                        render (row) {
+                            return `<Icon type="person"></Icon>${row.name}`
+                        }
+                    },
+                    sex: {
+                        title: '性别',
+                        key: 'sex',
+                        render (row) {
+                            const text = row.sex == 1 ? '男' : '女';
+                            return `<span>${text}</span>`;
+                        }
+                    },
+                    age: {
+                        title: '年龄',
+                        key: 'age'
+                    },
+                    menber: {
+                        title: '会员',
+                        key: 'menber'
+                    },
+                    channel: {
+                        title: '渠道',
+                        key: 'channel'
+                    },
+                    project: {
+                        title: '咨询项目',
+                        key: 'project'
+                    },
+                    developer: {
+                        title: '开发人员',
+                        key: 'developer'
+                    },
+                    consultant: {
+                        title: '咨询人员',
+                        key: 'consultant'
+                    },
+                    doorStatus: {
+                        title: '上门状态',
+                        key: 'doorStatus',
+                        render (row) {
+                            const color = row.doorStatus == 1 ? 'blue' : 'red';
+                            const text = row.doorStatus == 1 ? '已上门' : '未上门';
+                            return `<span style='color:${color};'>${text}</span>`;
+                        }
+                    },
+                    transactionStatus: {
+                        title: '成交状态',
+                        key: 'transactionStatus',
+                        render (row) {
+                            const color = row.transactionStatus == 1 ? 'blue' : 'red';
+                            const text = row.transactionStatus == 1 ? '已成交' : '未成交';
+                            return `<span style='color:${color};'>${text}</span>`;
+                        }
+                    },
+                    firstDate: {
+                        title: '初诊日期',
+                        key: 'firstDate'
+                    },
+                    hospital: {
+                        title: '初诊医院',
+                        key: 'hospital'
+                    },
+                    lastDate: {
+                        title: '最后光临',
+                        key: 'lastDate'
+                    },
+                    orderDate: {
+                        title: '预约到诊日期',
+                        key: 'orderDate'
+                    },
+                    orderHosp: {
+                        title: '预约医院',
+                        key: 'orderHosp'
+                    },
+                    registerDate: {
+                        title: '登记时间',
+                        key: 'registerDate'
+                    },
+                    registerHosp: {
+                        title: '登记医院',
+                        key: 'registerHosp'
+                    },
+                    registerPeo: {
+                        title: '登记人员',
+                        key: 'registerPeo'
+                    },
+                    shop: {
+                        title: '推荐店家',
+                        key: 'shop'
+                    }
+                };
+
+                let data = [tableColList.index];
+                for(var col of this.tableColChecked) {
+                    data.push(tableColList[col])
+                }
+                return data;
+            },
+            changeTableCol () {
+                this.columns = this.getTableCol();
+            }
         }
     }
 </script>

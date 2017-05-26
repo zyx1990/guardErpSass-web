@@ -13,14 +13,14 @@
         <div class="container-body">
             <Table stripe :columns="columns" :data="data"></Table>
             <Modal
-                title="修改单位"
+                :title="modalTit"
                 v-model="modalEdit"
                 :closable="false"
                 @on-ok="ok"
                 :loading="loading"
                 class-name="vertical-center-modal">
-                <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="100" label-position="right">
-                    <Form-item label="名称" prop="name">
+                <Form ref="formValidate" :model="formValidate" :rules="ruleForm" :label-width="100" label-position="right">
+                    <Form-item label="名称" prop="name" required>
                         <Input v-model="formValidate.name" placeholder="请输入名称"></Input>
                     </Form-item>
                 </Form>
@@ -32,6 +32,13 @@
 <script>
     export default {
         data () {
+            const validateName = (rule, value, callback) => {
+                if (value === '') {
+                    callback(new Error('请输入名称'));
+                } else {
+                    callback();
+                }
+            };
             return {
                 columns: [
                     {   
@@ -46,61 +53,118 @@
                     {
                         title: '操作',
                         key: 'action',
-                        width: 150,
+                        width: 180,
                         align: 'center',
-                        render (row, column, index) {
-                            return `<i-button type="primary" size="small" @click="edit(${index})"><Icon type="edit"></Icon>编辑</i-button> <i-button type="error" size="small" @click="remove(${index})"><Icon type="ios-trash-outline"></Icon>删除</i-button>`;
+                        render: (h, params) => {
+                            return h('div', [
+                                    h('Button', {
+                                        props: {
+                                            type: 'primary',
+                                            size: 'small',
+                                            icon: 'edit'
+                                        },
+                                        style: {
+                                            marginRight: '5px'
+                                        },
+                                        on: {
+                                            click: () => {
+                                                this.edit(params.row)
+                                            }
+                                        }
+                                    }, '编辑'),
+                                    h('Button', {
+                                        props: {
+                                            type: 'error',
+                                            size: 'small',
+                                            icon: 'ios-trash-outline'
+                                        },
+                                        on: {
+                                            click: () => {
+                                                this.remove(params.row)
+                                            }
+                                        }
+                                    }, '删除'),
+                                ])
                         }
                     }
                 ],
-                data: [
-                    {
-                        name: '玻尿酸'
-                    },
-                    {
-                        name: '肉毒素'
-                    },
-                    {
-                        name: '开发角'
-                    },
-                    {
-                        name: '术后回访',
-                        states: '0'
-                    },
-                    {
-                        name: '吸脂术后回访'
-                    }
-                ],
+                data: [],
+                modalTit: '',
                 modalEdit: false,
                 loading: true,
+                seen: true,
                 formValidate: {
+                    id: '',
                     name: ''
                 },
-                ruleValidate: {
+                ruleForm: {
                     name: [
-                        { required: true, message: '姓名不能为空', trigger: 'blur' }
+                        { validator: validateName, trigger: 'blur' }
                     ]
                 }
             }
         },
+        created () {
+            this.getList()
+        },
         methods: {
-            add: function() {
-                this.formValidate.name = ''
-                this.modalEdit = true
+            getList () {
+                var _vm = this;
+                _vm.$http.get({
+                    url: 'guard-webManager/unit/list.jhtml',
+                    success: function(res){
+                        if(res.status == 200 ){
+                            _vm.data = res.data.content
+                        } else {
+                            console.log(res.data.desc)
+                        }
+                    },
+                    error: function(res){
+                        console.log(res);
+                    }
+                });
             },
-            edit: function(index) {
-                this.formValidate.name = this.data[index].name
-                this.modalEdit = true
+            add () {
+                var _vm = this;
+                _vm.modalTit = '添加单位'
+                _vm.resetField()
+                _vm.modalEdit = true
+                _vm.seen = false
+                _vm.loading = true;
             },
-            remove: function(index) {
-                this.modalDel = true;
-                this.$Modal.confirm({
+            edit (data) {
+                var _vm = this;
+                _vm.modalTit = '修改单位'
+                _vm.resetField()
+                _vm.formValidate.id = data.id
+                _vm.formValidate.name = data.name
+                _vm.seen = true
+                _vm.modalEdit = true
+                _vm.loading = true;
+            },
+            remove (data) {
+                var _vm = this;
+                _vm.$Modal.confirm({
                     title: '系统提示',
-                    content: '确定删除'+ this.data[index].name +'?',
+                    content: '确定删除'+ data.name +'?',
                     onOk: () => {
-                        this.$Notice.success({
-                             title: '系统提示！',
-                             desc: '删除成功！'
+                        _vm.$http.post({
+                            url: 'guard-webManager/unit/del.jhtml',
+                            data: {id: data.id},
+                            success: function(res){
+                                if(res.status == 200 ){
+                                    _vm.getList()
+                                    _vm.$Notice.success({
+                                        title: '系统提示！',
+                                        desc: '删除成功！'
+                                    });
+                                } else {
+                                    console.log(res.data.desc)
+                                }
+                            },
+                            error: function(res){
+                                console.log(res);
+                            }
                         });
                     },
                     onCancel: () => {
@@ -109,13 +173,49 @@
                 });
             },
             ok () {
-                setTimeout(() => {
-                    this.modalEdit = false;
-                    this.$Notice.success({
-                        title: '系统提示！',
-                        desc: '保存成功！'
-                    });
-                }, 1000);
+                var _vm = this;
+                this.$refs['formValidate'].validate((valid) => {
+                    if (valid) {
+                        var url = '';
+                        var data = {};
+                        if(_vm.seen) {
+                            url = 'guard-webManager/unit/edit.jhtml'
+                            data = _vm.formValidate
+                        } else {
+                            url = 'guard-webManager/unit/add.jhtml'
+                            data = {
+                                    name: _vm.formValidate.name
+                                }
+                        }
+                        _vm.$http.post({
+                            url: url,
+                            data: data,
+                            success: function(res){
+                                if(res.status == 200 ){
+                                    _vm.getList()
+                                    _vm.resetField()
+                                    _vm.modalEdit = false;
+                                    _vm.$Notice.success({
+                                        title: '系统提示！',
+                                        desc: '保存成功！'
+                                    });
+                                } else {
+                                    console.log(res.data.desc)
+                                }
+                            },
+                            error: function(res){
+                                console.log(res);
+                            }
+                        });
+                    } else {
+                        _vm.loading = false;
+                    }
+                })
+            }, 
+            resetField () {
+                this.$refs.formValidate.fields.forEach(field => {
+                    field.resetField();
+                });
             }
         }
     }

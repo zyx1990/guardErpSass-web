@@ -13,17 +13,21 @@
         <div class="container-body">
             <Table stripe :columns="columns" :data="data"></Table>
             <Modal
-                title="修改工具类型"
+                :title="modalTit"
                 v-model="modalEdit"
                 :closable="false"
                 @on-ok="ok"
                 :loading="loading"
                 class-name="vertical-center-modal">
-                <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="100" label-position="right">
-                    <Form-item label="代码" prop="code">
+                <Form ref="formValidate" :model="formValidate" :rules="ruleForm" :label-width="100" label-position="right">
+                    <Form-item label="代码" prop="code" required v-if='!seen'>
                         <Input v-model="formValidate.code" placeholder="请输入代码"></Input>
                     </Form-item>
-                    <Form-item label="名称" prop="name">
+                    <div class="showCode" v-if='seen'>
+                        <h3 v-model="formValidate.code">{{formValidate.code}}</h3>
+                        <span>代码</span>
+                    </div>
+                    <Form-item label="名称" prop="name" required>
                         <Input v-model="formValidate.name" placeholder="请输入名称"></Input>
                     </Form-item>
                     <Form-item label="备注" prop="remark">
@@ -38,6 +42,20 @@
 <script>
     export default {
         data () {
+            const validateName = (rule, value, callback) => {
+                if (value === '') {
+                    callback(new Error('请输入名称'));
+                } else {
+                    callback();
+                }
+            };
+            const validateCode = (rule, value, callback) => {
+                if (value === '') {
+                    callback(new Error('请输入代码'));
+                } else {
+                    callback();
+                }
+            };
             return {
                 columns: [
                     {   
@@ -60,78 +78,129 @@
                     {
                         title: '操作',
                         key: 'action',
-                        width: 150,
+                        width: 180,
                         align: 'center',
-                        render (row, column, index) {
-                            return `<i-button type="primary" size="small" @click="edit(${index})"><Icon type="edit"></Icon>编辑</i-button> <i-button type="error" size="small" @click="remove(${index})"><Icon type="ios-trash-outline"></Icon>删除</i-button>`;
-                        }
+                        render: (h, params) => {
+                            if(params.index > 4) {
+                                return h('div', [
+                                        h('Button', {
+                                            props: {
+                                                type: 'primary',
+                                                size: 'small',
+                                                icon: 'edit'
+                                            },
+                                            style: {
+                                                marginRight: '5px'
+                                            },
+                                            on: {
+                                                click: () => {
+                                                    this.edit(params.row)
+                                                }
+                                            }
+                                        }, '编辑'),
+                                        h('Button', {
+                                            props: {
+                                                type: 'error',
+                                                size: 'small',
+                                                icon: 'ios-trash-outline'
+                                            },
+                                            on: {
+                                                click: () => {
+                                                    this.remove(params.row)
+                                                }
+                                            }
+                                        }, '删除'),
+                                    ])
+                                }
+                            }
                     }
                 ],
-                data: [
-                    {
-                        code: 'a123d',
-                        name: '玻尿酸1',
-                        remark: '561234'
-                    },
-                    {
-                        code: 'aasd',
-                        name: '玻尿酸2',
-                        remark: '56234'
-                    },
-                    {
-                        code: 'asa123sd',
-                        name: '玻尿酸3',
-                        remark: '5464'
-                    },
-                    {
-                        code: 'ad',
-                        name: '玻尿酸5',
-                        remark: '5654'
-                    },
-                    {
-                        code: 'asda123sd',
-                        name: '玻尿酸7',
-                        remark: '564'
-                    }
-                ],
+                data: [],
+                modalTit: '',
                 modalEdit: false,
                 loading: true,
+                seen: true,
                 formValidate: {
+                    id: '',
                     code: '',
                     name: '',
                     remark: ''
                 },
-                ruleValidate: {
-                    code: [
-                        { required: true, message: '代码不能为空', trigger: 'blur' }
-                    ],
+                ruleForm: {
                     name: [
-                        { required: true, message: '名称不能为空', trigger: 'blur' }
+                        { validator: validateName, trigger: 'blur' }
+                    ],
+                    code: [
+                        { validator: validateCode, trigger: 'blur' }
                     ]
                 }
             }
         },
+        created () {
+            this.getList()
+        },
         methods: {
-            add: function() {
-                this.formValidate.code = ''
-                this.formValidate.name = ''
-                this.formValidate.remark = ''
-                this.modalEdit = true
+            getList () {
+                var _vm = this;
+                _vm.$http.get({
+                    url: 'guard-webManager/tool/list.jhtml',
+                    success: function(res){
+                        if(res.status == 200 ){
+                            _vm.data = res.data.content
+                            console.log(res.data.content)
+                        } else {
+                            console.log(res.data.desc)
+                        }
+                    },
+                    error: function(res){
+                        console.log(res);
+                    }
+                });
             },
-            edit: function(index) {
-                this.formValidate.code = this.data[index].code
-                this.formValidate.name = this.data[index].name
-                this.formValidate.remark = this.data[index].remark
-                this.modalEdit = true
+            add () {
+                var _vm = this;
+                _vm.modalTit = '添加工具'
+                _vm.$refs['formValidate'].resetFields();
+                _vm.formValidate.code = ''
+                _vm.seen = false
+                _vm.modalEdit = true
+                _vm.loading = true;
             },
-            remove: function(index) {
-                this.$Modal.confirm({
+            edit (data) {
+                var _vm = this;
+                _vm.modalTit = '修改工具'
+                _vm.$refs['formValidate'].resetFields();
+                _vm.formValidate.id = data.id
+                _vm.formValidate.name = data.name
+                _vm.formValidate.code = data.code
+                _vm.formValidate.remark = data.remark
+                _vm.seen = true
+                _vm.modalEdit = true
+                _vm.loading = true;
+            },
+            remove (data) {
+                var _vm = this;
+                _vm.$Modal.confirm({
                     title: '系统提示',
-                    content: '确定删除'+ this.data[index].code +'?',
+                    content: '确定删除'+ data.name +'?',
                     onOk: () => {
-                        this.$Notice.success({
-                             title: '系统提示！',
-                             desc: '删除成功！'
+                        _vm.$http.post({
+                            url: 'guard-webManager/tool/del.jhtml',
+                            data: {id: data.id},
+                            success: function(res){
+                                if(res.status == 200 ){
+                                    _vm.getList()
+                                    _vm.$Notice.success({
+                                        title: '系统提示！',
+                                        desc: '删除成功！'
+                                    });
+                                } else {
+                                    console.log(res.data.desc)
+                                }
+                            },
+                            error: function(res){
+                                console.log(res);
+                            }
                         });
                     },
                     onCancel: () => {
@@ -140,17 +209,86 @@
                 });
             },
             ok () {
-                setTimeout(() => {
-                    this.modalEdit = false;
-                    this.$Notice.success({
-                        title: '系统提示！',
-                        desc: '保存成功！'
-                    });
-                }, 1000);
+                var _vm = this;
+                _vm.$refs['formValidate'].validate((valid) => {
+                    if (valid) {
+                        var url = '';
+                        var data = {};
+                        if(_vm.seen) {
+                            url = 'guard-webManager/tool/update.jhtml'
+                            data = {
+                                    id: _vm.formValidate.id,
+                                    name: _vm.formValidate.name,
+                                    remark: _vm.formValidate.remark
+                                }
+                        } else {
+                            url = 'guard-webManager/tool/add.jhtml'
+                            data = {
+                                    name: _vm.formValidate.name,
+                                    code: _vm.formValidate.code,
+                                    remark: _vm.formValidate.remark
+                                }
+                        }
+                        _vm.$http.post({
+                            url: url,
+                            data: data,
+                            success: function(res){
+                                if(res.status == 200 ){
+                                    if(res.data.code == 0) {
+                                        _vm.getList()
+                                        _vm.$refs['formValidate'].resetFields();
+                                        _vm.modalEdit = false;
+                                        _vm.$Notice.success({
+                                            title: '系统提示！',
+                                            desc: '保存成功！'
+                                        });
+                                    } else {
+                                        _vm.$refs['formValidate'].resetFields();
+                                        _vm.modalEdit = false;
+                                        _vm.$Notice.error({
+                                            title: '系统提示！',
+                                            desc: res.data.desc
+                                        });
+                                    }
+                                } else {
+                                    console.log(res.data.desc)
+                                }
+                            },
+                            error: function(res){
+                                console.log(res);
+                            }
+                        });
+                    } else {
+                        _vm.loading = false;
+                    }
+                })
             }
         }
     }
 </script>
+
+<style scoped>
+    .vertical-center-modal .showCode {
+        overflow: hidden;
+        height: 33px;
+        margin-bottom: 24px;
+    }
+    .vertical-center-modal .showCode span {
+        float: left;
+        width: 100px;
+        padding-right: 12px;
+        margin-left: -100%;
+        line-height: 33px;
+        text-align: right;
+    }
+    .vertical-center-modal .showCode h3 {
+        float: left;
+        width: 100%;
+        padding-left: 108px;
+        line-height: 33px;
+        font-weight: normal;
+    }
+</style>
 
 
 

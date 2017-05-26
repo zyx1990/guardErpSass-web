@@ -28,6 +28,64 @@ var router = new Router({
                         });
                     }
                 }, 
+                //桌面
+                {
+                    path: '/desktop/menu',
+                    component(resolve) {
+                        require.ensure(['view/desktop/menu'], () => {
+                            resolve(require('view/desktop/menu'));
+                        });
+                    }
+                }, 
+                {
+                    path: '/desktop/favorite',
+                    component(resolve) {
+                        require.ensure(['view/desktop/favorite'], () => {
+                            resolve(require('view/desktop/favorite'));
+                        });
+                    }
+                }, 
+                {
+                    path: '/desktop/noticeCenter:id',
+                    component(resolve) {
+                        require.ensure(['view/desktop/noticeCenter'], () => {
+                            resolve(require('view/desktop/noticeCenter'));
+                        });
+                    }
+                }, 
+                //报表中心
+                {
+                    path: '/reportCenter',
+                    component(resolve) {
+                        require.ensure(['view/reportCenter'], () => {
+                            resolve(require('view/reportCenter'));
+                        });
+                    }
+                },
+                {
+                    path: '/failtureDetail',
+                    component(resolve) {
+                        require.ensure(['view/reportCenter/failtureDetail'], () => {
+                            resolve(require('view/reportCenter/failtureDetail'));
+                        });
+                    }
+                },
+                {
+                    path: '/hospitalFailtureDetail',
+                    component(resolve) {
+                        require.ensure(['view/reportCenter/hospitalFailtureDetail'], () => {
+                            resolve(require('view/reportCenter/hospitalFailtureDetail'));
+                        });
+                    }
+                },
+                {
+                    path: '/userFailtureDetail',
+                    component(resolve) {
+                        require.ensure(['view/reportCenter/userFailtureDetail'], () => {
+                            resolve(require('view/reportCenter/userFailtureDetail'));
+                        });
+                    }
+                },
                 //基础信息
                 {
                     path: '/channel',
@@ -62,6 +120,14 @@ var router = new Router({
                     }
                 },
                 {
+                    path: '/callbackSetEdit',
+                    component(resolve) {
+                        require.ensure(['view/basicInfo/callbackSetEdit'], () => {
+                            resolve(require('view/basicInfo/callbackSetEdit'));
+                        });
+                    }
+                },
+                {
                     path: '/failtureCategory',
                     component(resolve) {
                         require.ensure(['view/basicInfo/failtureCategory'], () => {
@@ -90,6 +156,14 @@ var router = new Router({
                     component(resolve) {
                         require.ensure(['view/basicInfo/tagGroup'], () => {
                             resolve(require('view/basicInfo/tagGroup'));
+                        });
+                    }
+                },
+                {
+                    path: '/tagGroupEdit',
+                    component(resolve) {
+                        require.ensure(['view/basicInfo/tagGroupEdit'], () => {
+                            resolve(require('view/basicInfo/tagGroupEdit'));
                         });
                     }
                 },
@@ -142,10 +216,66 @@ var router = new Router({
                     }
                 },
                 {
+                    path: '/surveyEdit',
+                    component(resolve) {
+                        require.ensure(['view/basicInfo/surveyEdit'], () => {
+                            resolve(require('view/basicInfo/surveyEdit'));
+                        });
+                    }
+                },
+                {
+                    path: '/surveyRtfFill:id',
+                    component(resolve) {
+                        require.ensure(['view/basicInfo/surveyRtfFill'], () => {
+                            resolve(require('view/basicInfo/surveyRtfFill'));
+                        });
+                    }
+                },
+                {
+                    path: '/surveyRtfChoice:id',
+                    component(resolve) {
+                        require.ensure(['view/basicInfo/surveyRtfChoice'], () => {
+                            resolve(require('view/basicInfo/surveyRtfChoice'));
+                        });
+                    }
+                },
+                {
                     path: '/medicalRecord',
                     component(resolve) {
                         require.ensure(['view/basicInfo/medicalRecord'], () => {
                             resolve(require('view/basicInfo/medicalRecord'));
+                        });
+                    }
+                },
+                {
+                    path: '/medicalRecordEdit:id',
+                    component(resolve) {
+                        require.ensure(['view/basicInfo/medicalRecordEdit'], () => {
+                            resolve(require('view/basicInfo/medicalRecordEdit'));
+                        });
+                    }
+                },
+                {
+                    path: '/medicalRecordRtf:id',
+                    component(resolve) {
+                        require.ensure(['view/basicInfo/medicalRecordRtf'], () => {
+                            resolve(require('view/basicInfo/medicalRecordRtf'));
+                        });
+                    }
+                },
+                {
+                    path: '/medicalRecordPrint:id',
+                    component(resolve) {
+                        require.ensure(['view/basicInfo/medicalRecordPrint'], () => {
+                            resolve(require('view/basicInfo/medicalRecordPrint'));
+                        });
+                    }
+                },
+                {
+                    path: '/medicalRecordUpdate',
+                    component(resolve) {
+                        require.ensure(['view/basicInfo/medicalRecordUpdate'], () => {
+                            resolve(require('view/basicInfo/medicalRecordUpdate'));
                         });
                     }
                 },
@@ -185,10 +315,42 @@ var router = new Router({
                     }
                 },
                 {
+                    path: '/userSetting',
+                    component(resolve) {
+                        require.ensure(['view/systemSet/userSetting'], () => {
+                            resolve(require('view/systemSet/userSetting'));
+                        });
+                    }
+                },
+                {
+                    path: '/userCheck:id',
+                    component(resolve) {
+                        require.ensure(['view/systemSet/userCheck'], () => {
+                            resolve(require('view/systemSet/userCheck'));
+                        });
+                    }
+                },
+                {
+                    path: '/userPower:id',
+                    component(resolve) {
+                        require.ensure(['view/systemSet/userPower'], () => {
+                            resolve(require('view/systemSet/userPower'));
+                        });
+                    }
+                },
+                {
                     path: '/role',
                     component(resolve) {
                         require.ensure(['view/systemSet/role'], () => {
                             resolve(require('view/systemSet/role'));
+                        });
+                    }
+                },
+                {
+                    path: '/roleSet:id',
+                    component(resolve) {
+                        require.ensure(['view/systemSet/roleSet'], () => {
+                            resolve(require('view/systemSet/roleSet'));
                         });
                     }
                 },
@@ -217,10 +379,26 @@ var router = new Router({
                     }
                 },
                 {
+                    path: '/depositChargeEdit',
+                    component(resolve) {
+                        require.ensure(['view/systemSet/depositChargeEdit'], () => {
+                            resolve(require('view/systemSet/depositChargeEdit'));
+                        });
+                    }
+                },
+                {
                     path: '/couponCategory',
                     component(resolve) {
                         require.ensure(['view/systemSet/couponCategory'], () => {
                             resolve(require('view/systemSet/couponCategory'));
+                        });
+                    }
+                },
+                {
+                    path: '/couponCategoryEdit',
+                    component(resolve) {
+                        require.ensure(['view/systemSet/couponCategoryEdit'], () => {
+                            resolve(require('view/systemSet/couponCategoryEdit'));
                         });
                     }
                 },
@@ -241,10 +419,34 @@ var router = new Router({
                     }
                 },
                 {
+                    path: '/chargeEdit',
+                    component(resolve) {
+                        require.ensure(['view/systemSet/chargeEdit'], () => {
+                            resolve(require('view/systemSet/chargeEdit'));
+                        });
+                    }
+                },
+                {
+                    path: '/chargeMedicinalSet',
+                    component(resolve) {
+                        require.ensure(['view/systemSet/chargeMedicinalSet'], () => {
+                            resolve(require('view/systemSet/chargeMedicinalSet'));
+                        });
+                    }
+                },
+                {
                     path: '/chargeSet',
                     component(resolve) {
                         require.ensure(['view/systemSet/chargeSet'], () => {
                             resolve(require('view/systemSet/chargeSet'));
+                        });
+                    }
+                },
+                {
+                    path: '/chargeSetEdit',
+                    component(resolve) {
+                        require.ensure(['view/systemSet/chargeSetEdit'], () => {
+                            resolve(require('view/systemSet/chargeSetEdit'));
                         });
                     }
                 },
@@ -261,6 +463,14 @@ var router = new Router({
                     component(resolve) {
                         require.ensure(['view/systemSet/product'], () => {
                             resolve(require('view/systemSet/product'));
+                        });
+                    }
+                },
+                {
+                    path: '/productEdit',
+                    component(resolve) {
+                        require.ensure(['view/systemSet/productEdit'], () => {
+                            resolve(require('view/systemSet/productEdit'));
                         });
                     }
                 },
@@ -285,6 +495,22 @@ var router = new Router({
                     component(resolve) {
                         require.ensure(['view/systemSet/channelGroup'], () => {
                             resolve(require('view/systemSet/channelGroup'));
+                        });
+                    }
+                },
+                {
+                    path: '/channelGroupCheck',
+                    component(resolve) {
+                        require.ensure(['view/systemSet/channelGroupCheck'], () => {
+                            resolve(require('view/systemSet/channelGroupCheck'));
+                        });
+                    }
+                },
+                {
+                    path: '/channelGroupEdit',
+                    component(resolve) {
+                        require.ensure(['view/systemSet/channelGroupEdit'], () => {
+                            resolve(require('view/systemSet/channelGroupEdit'));
                         });
                     }
                 },
@@ -368,6 +594,460 @@ var router = new Router({
                     component(resolve) {
                         require.ensure(['view/customerManagement/customer'], () => {
                             resolve(require('view/customerManagement/customer'));
+                        });
+                    }
+                },
+
+                //客户个人资料
+                {
+                    path: '/customerIndex',
+                    component(resolve) {
+                        require.ensure(['view/customerManagement/customerInfo/customerIndex'], () => {
+                            resolve(require('view/customerManagement/customerInfo/customerIndex'));
+                        });
+                    },
+                    children: [
+                        {
+                            path: '',
+                            component(resolve) {
+                                require.ensure(['view/customerManagement/customerInfo/customerMsg'], () => {
+                                    resolve(require('view/customerManagement/customerInfo/customerMsg'));
+                                });
+                            }
+                        },
+                        {
+                            path: '/customerMsg',
+                            component(resolve) {
+                                require.ensure(['view/customerManagement/customerInfo/customerMsg'], () => {
+                                    resolve(require('view/customerManagement/customerInfo/customerMsg'));
+                                });
+                            }
+                        },
+                        {
+                            path: '/indexOrderDetail',
+                            component(resolve) {
+                                require.ensure(['view/customerManagement/customerInfo/indexOrderDetail'], () => {
+                                    resolve(require('view/customerManagement/customerInfo/indexOrderDetail'));
+                                });
+                            }
+                        },
+                        {
+                            path: '/indexConsult',
+                            component(resolve) {
+                                require.ensure(['view/customerManagement/customerInfo/indexConsult'], () => {
+                                    resolve(require('view/customerManagement/customerInfo/indexConsult'));
+                                });
+                            }
+                        },
+                        {
+                            path: '/indexAppointment',
+                            component(resolve) {
+                                require.ensure(['view/customerManagement/customerInfo/indexAppointment'], () => {
+                                    resolve(require('view/customerManagement/customerInfo/indexAppointment'));
+                                });
+                            }
+                        },
+                        {
+                            path: '/indexVisit',
+                            component(resolve) {
+                                require.ensure(['view/customerManagement/customerInfo/indexVisit'], () => {
+                                    resolve(require('view/customerManagement/customerInfo/indexVisit'));
+                                });
+                            }
+                        },
+                        {
+                            path: '/indexFailture',
+                            component(resolve) {
+                                require.ensure(['view/customerManagement/customerInfo/indexFailture'], () => {
+                                    resolve(require('view/customerManagement/customerInfo/indexFailture'));
+                                });
+                            }
+                        },
+                        {
+                            path: '/indexOrder',
+                            component(resolve) {
+                                require.ensure(['view/customerManagement/customerInfo/indexOrder'], () => {
+                                    resolve(require('view/customerManagement/customerInfo/indexOrder'));
+                                });
+                            }
+                        },
+                        {
+                            path: '/indexPhoto',
+                            component(resolve) {
+                                require.ensure(['view/customerManagement/customerInfo/indexPhoto'], () => {
+                                    resolve(require('view/customerManagement/customerInfo/indexPhoto'));
+                                });
+                            }
+                        },
+                        {
+                            path: '/indexOperation',
+                            component(resolve) {
+                                require.ensure(['view/customerManagement/customerInfo/indexOperation'], () => {
+                                    resolve(require('view/customerManagement/customerInfo/indexOperation'));
+                                });
+                            }
+                        },
+                        {
+                            path: '/indexCallback',
+                            component(resolve) {
+                                require.ensure(['view/customerManagement/customerInfo/indexCallback'], () => {
+                                    resolve(require('view/customerManagement/customerInfo/indexCallback'));
+                                });
+                            }
+                        },
+                        {
+                            path: '/indexSurvey',
+                            component(resolve) {
+                                require.ensure(['view/customerManagement/customerInfo/indexSurvey'], () => {
+                                    resolve(require('view/customerManagement/customerInfo/indexSurvey'));
+                                });
+                            }
+                        },
+                        {
+                            path: '/indexMedicalRecord',
+                            component(resolve) {
+                                require.ensure(['view/customerManagement/customerInfo/indexMedicalRecord'], () => {
+                                    resolve(require('view/customerManagement/customerInfo/indexMedicalRecord'));
+                                });
+                            }
+                        },
+                        {
+                            path: '/indexAccount',
+                            component(resolve) {
+                                require.ensure(['view/customerManagement/customerInfo/indexAccount'], () => {
+                                    resolve(require('view/customerManagement/customerInfo/indexAccount'));
+                                });
+                            }
+                        },
+                        {
+                            path: '/indexMember',
+                            component(resolve) {
+                                require.ensure(['view/customerManagement/customerInfo/indexMember'], () => {
+                                    resolve(require('view/customerManagement/customerInfo/indexMember'));
+                                });
+                            }
+                        },
+                        {
+                            path: '/indexManager',
+                            component(resolve) {
+                                require.ensure(['view/customerManagement/customerInfo/indexManager'], () => {
+                                    resolve(require('view/customerManagement/customerInfo/indexManager'));
+                                });
+                            }
+                        },
+                        {
+                            path: '/indexRelation',
+                            component(resolve) {
+                                require.ensure(['view/customerManagement/customerInfo/indexRelation'], () => {
+                                    resolve(require('view/customerManagement/customerInfo/indexRelation'));
+                                });
+                            }
+                        },
+                        {
+                            path: '/indexComplain',
+                            component(resolve) {
+                                require.ensure(['view/customerManagement/customerInfo/indexComplain'], () => {
+                                    resolve(require('view/customerManagement/customerInfo/indexComplain'));
+                                });
+                            }
+                        },
+                        {
+                            path: '/indexCost',
+                            component(resolve) {
+                                require.ensure(['view/customerManagement/customerInfo/indexCost'], () => {
+                                    resolve(require('view/customerManagement/customerInfo/indexCost'));
+                                });
+                            }
+                        },
+                        {
+                            path: '/indexAudit',
+                            component(resolve) {
+                                require.ensure(['view/customerManagement/customerInfo/indexAudit'], () => {
+                                    resolve(require('view/customerManagement/customerInfo/indexAudit'));
+                                });
+                            }
+                        },
+                        {
+                            path: '/indexStore',
+                            component(resolve) {
+                                require.ensure(['view/customerManagement/customerInfo/indexStore'], () => {
+                                    resolve(require('view/customerManagement/customerInfo/indexStore'));
+                                });
+                            }
+                        },
+                        {
+                            path: '/indexPromoter',
+                            component(resolve) {
+                                require.ensure(['view/customerManagement/customerInfo/indexPromoter'], () => {
+                                    resolve(require('view/customerManagement/customerInfo/indexPromoter'));
+                                });
+                            }
+                        }
+                    ]
+                },
+                //客户添加资料
+                {
+                    path: '/consultAdd',
+                    component(resolve) {
+                        require.ensure(['view/customerManagement/customerInfo/consultAdd'], () => {
+                            resolve(require('view/customerManagement/customerInfo/consultAdd'));
+                        });
+                    }
+                },
+                {
+                    path: '/depositOrderAdd',
+                    component(resolve) {
+                        require.ensure(['view/customerManagement/customerInfo/depositOrderAdd'], () => {
+                            resolve(require('view/customerManagement/customerInfo/depositOrderAdd'));
+                        });
+                    }
+                },
+                {
+                    path: '/orderAdd',
+                    component(resolve) {
+                        require.ensure(['view/customerManagement/customerInfo/orderAdd'], () => {
+                            resolve(require('view/customerManagement/customerInfo/orderAdd'));
+                        });
+                    }
+                },
+                {
+                    path: '/appointmentAdd',
+                    component(resolve) {
+                        require.ensure(['view/customerManagement/customerInfo/appointmentAdd'], () => {
+                            resolve(require('view/customerManagement/customerInfo/appointmentAdd'));
+                        });
+                    }
+                },
+                {
+                    path: '/treatAdd',
+                    component(resolve) {
+                        require.ensure(['view/customerManagement/customerInfo/treatAdd'], () => {
+                            resolve(require('view/customerManagement/customerInfo/treatAdd'));
+                        });
+                    }
+                },
+                {
+                    path: '/surgeryAdd',
+                    component(resolve) {
+                        require.ensure(['view/customerManagement/customerInfo/surgeryAdd'], () => {
+                            resolve(require('view/customerManagement/customerInfo/surgeryAdd'));
+                        });
+                    }
+                },
+                {
+                    path: '/callbackAdd',
+                    component(resolve) {
+                        require.ensure(['view/customerManagement/customerInfo/callbackAdd'], () => {
+                            resolve(require('view/customerManagement/customerInfo/callbackAdd'));
+                        });
+                    }
+                },
+                {
+                    path: '/callbackTaskAdd',
+                    component(resolve) {
+                        require.ensure(['view/customerManagement/customerInfo/callbackTaskAdd'], () => {
+                            resolve(require('view/customerManagement/customerInfo/callbackTaskAdd'));
+                        });
+                    }
+                },
+                {
+                    path: '/callbackSetAdd',
+                    component(resolve) {
+                        require.ensure(['view/customerManagement/customerInfo/callbackSetAdd'], () => {
+                            resolve(require('view/customerManagement/customerInfo/callbackSetAdd'));
+                        });
+                    }
+                },
+                {
+                    path: '/photoAdd',
+                    component(resolve) {
+                        require.ensure(['view/customerManagement/customerInfo/photoAdd'], () => {
+                            resolve(require('view/customerManagement/customerInfo/photoAdd'));
+                        });
+                    }
+                },
+                {
+                    path: '/backOrderAdd',
+                    component(resolve) {
+                        require.ensure(['view/customerManagement/customerInfo/backOrderAdd'], () => {
+                            resolve(require('view/customerManagement/customerInfo/backOrderAdd'));
+                        });
+                    }
+                },
+                {
+                    path: '/depositRebateOrderAdd',
+                    component(resolve) {
+                        require.ensure(['view/customerManagement/customerInfo/depositRebateOrderAdd'], () => {
+                            resolve(require('view/customerManagement/customerInfo/depositRebateOrderAdd'));
+                        });
+                    }
+                },
+                {
+                    path: '/failtureAdd',
+                    component(resolve) {
+                        require.ensure(['view/customerManagement/customerInfo/failtureAdd'], () => {
+                            resolve(require('view/customerManagement/customerInfo/failtureAdd'));
+                        });
+                    }
+                },
+                {
+                    path: '/groupAdd',
+                    component(resolve) {
+                        require.ensure(['view/customerManagement/customerInfo/groupAdd'], () => {
+                            resolve(require('view/customerManagement/customerInfo/groupAdd'));
+                        });
+                    }
+                },
+                {
+                    path: '/tagAdd',
+                    component(resolve) {
+                        require.ensure(['view/customerManagement/customerInfo/tagAdd'], () => {
+                            resolve(require('view/customerManagement/customerInfo/tagAdd'));
+                        });
+                    }
+                },
+                //添加其他
+                {
+                    path: '/groupComplainAdd',
+                    component(resolve) {
+                        require.ensure(['view/customerManagement/customerInfo/groupComplainAdd'], () => {
+                            resolve(require('view/customerManagement/customerInfo/groupComplainAdd'));
+                        });
+                    }
+                },
+                {
+                    path: '/avatarInfo',
+                    component(resolve) {
+                        require.ensure(['view/customerManagement/customerInfo/avatarInfo'], () => {
+                            resolve(require('view/customerManagement/customerInfo/avatarInfo'));
+                        });
+                    }
+                },
+                {
+                    path: '/blacklistOrderAdd',
+                    component(resolve) {
+                        require.ensure(['view/customerManagement/customerInfo/blacklistOrderAdd'], () => {
+                            resolve(require('view/customerManagement/customerInfo/blacklistOrderAdd'));
+                        });
+                    }
+                },
+                {
+                    path: '/exploitChangeInfo',
+                    component(resolve) {
+                        require.ensure(['view/customerManagement/customerInfo/exploitChangeInfo'], () => {
+                            resolve(require('view/customerManagement/customerInfo/exploitChangeInfo'));
+                        });
+                    }
+                },
+                {
+                    path: '/managerChangeInfo',
+                    component(resolve) {
+                        require.ensure(['view/customerManagement/customerInfo/managerChangeInfo'], () => {
+                            resolve(require('view/customerManagement/customerInfo/managerChangeInfo'));
+                        });
+                    }
+                },
+                {
+                    path: '/orderDetailManagerAdd',
+                    component(resolve) {
+                        require.ensure(['view/customerManagement/customerInfo/orderDetailManagerAdd'], () => {
+                            resolve(require('view/customerManagement/customerInfo/orderDetailManagerAdd'));
+                        });
+                    }
+                },
+                {
+                    path: '/pointAdd',
+                    component(resolve) {
+                        require.ensure(['view/customerManagement/customerInfo/pointAdd'], () => {
+                            resolve(require('view/customerManagement/customerInfo/pointAdd'));
+                        });
+                    }
+                },
+                {
+                    path: '/pointRebate',
+                    component(resolve) {
+                        require.ensure(['view/customerManagement/customerInfo/pointRebate'], () => {
+                            resolve(require('view/customerManagement/customerInfo/pointRebate'));
+                        });
+                    }
+                },
+                {
+                    path: '/pointCoupon',
+                    component(resolve) {
+                        require.ensure(['view/customerManagement/customerInfo/pointCoupon'], () => {
+                            resolve(require('view/customerManagement/customerInfo/pointCoupon'));
+                        });
+                    }
+                },
+                {
+                    path: '/memberAdd',
+                    component(resolve) {
+                        require.ensure(['view/customerManagement/customerInfo/memberAdd'], () => {
+                            resolve(require('view/customerManagement/customerInfo/memberAdd'));
+                        });
+                    }
+                },
+                {
+                    path: '/equityAdd',
+                    component(resolve) {
+                        require.ensure(['view/customerManagement/customerInfo/equityAdd'], () => {
+                            resolve(require('view/customerManagement/customerInfo/equityAdd'));
+                        });
+                    }
+                },
+                {
+                    path: '/equityDelete',
+                    component(resolve) {
+                        require.ensure(['view/customerManagement/customerInfo/equityDelete'], () => {
+                            resolve(require('view/customerManagement/customerInfo/equityDelete'));
+                        });
+                    }
+                },
+                {
+                    path: '/couponOrderAdd',
+                    component(resolve) {
+                        require.ensure(['view/customerManagement/customerInfo/couponOrderAdd'], () => {
+                            resolve(require('view/customerManagement/customerInfo/couponOrderAdd'));
+                        });
+                    }
+                },
+                {
+                    path: '/couponRebateOrderAdd',
+                    component(resolve) {
+                        require.ensure(['view/customerManagement/customerInfo/couponRebateOrderAdd'], () => {
+                            resolve(require('view/customerManagement/customerInfo/couponRebateOrderAdd'));
+                        });
+                    }
+                },
+                {
+                    path: '/relationAdd',
+                    component(resolve) {
+                        require.ensure(['view/customerManagement/customerInfo/relationAdd'], () => {
+                            resolve(require('view/customerManagement/customerInfo/relationAdd'));
+                        });
+                    }
+                },
+                {
+                    path: '/operationAdd',
+                    component(resolve) {
+                        require.ensure(['view/customerManagement/customerInfo/operationAdd'], () => {
+                            resolve(require('view/customerManagement/customerInfo/operationAdd'));
+                        });
+                    }
+                },
+                {
+                    path: '/depositTransferOrderAdd',
+                    component(resolve) {
+                        require.ensure(['view/customerManagement/customerInfo/depositTransferOrderAdd'], () => {
+                            resolve(require('view/customerManagement/customerInfo/depositTransferOrderAdd'));
+                        });
+                    }
+                },
+                {
+                    path: '/activeCoupon',
+                    component(resolve) {
+                        require.ensure(['view/customerManagement/customerInfo/activeCoupon'], () => {
+                            resolve(require('view/customerManagement/customerInfo/activeCoupon'));
                         });
                     }
                 },

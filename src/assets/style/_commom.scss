@@ -43,13 +43,16 @@
     line-height: 30px;
     font-weight: normal;
   }
+  .ivu-modal .header-btn-group, 
   .container-box .header-btn-group {
     float: right;
   }
+  .ivu-modal .header-btn-group.not-float, 
   .container-box .header-btn-group.not-float {
     float: none;
     display: inline-block;
   }
+  .ivu-modal .header-item, 
   .container-box .header-item {
     float: left;
     padding: 4px 10px;
@@ -63,7 +66,7 @@
     border-radius: 28px;
     cursor: pointer;
   }
-
+  .ivu-modal .header-item i, 
   .container-box .header-item i {
     margin-right: 6px;
   }
@@ -77,3 +80,53 @@
    .float-right{
     float: left;
   }
+.footer-btnGroup {
+    padding: 20px 0;
+    text-align: center;
+}
+.footer-btnGroup button {
+    margin: 0 10px;
+}
+.table-left-btn button {
+  margin-bottom: 10px;
+}
+.ivu-modal .ivu-table-body {
+  overflow-x: hidden;
+  overflow-y: scroll;
+}
+#app .ivu-table td.table-info-column {
+    background-color: #fff;
+}
+#app .ivu-menu-horizontal {
+  overflow: hidden;
+  height: auto;
+}
+#app .customer-box .customer-item {
+  padding-top: 10px;
+}
+#app .customer-box .customer-item-title {
+  overflow: hidden;
+  padding-bottom: 10px;
+}
+#app .customer-box .customer-item h3 {
+  float: left;
+  line-height: 29px;
+  font-weight: normal;
+}
+#app .customer-box .customer-item h3 i {
+  margin-right: 10px;
+}
+#app .tableEdit {
+  width: 100%;
+  border-collapse:collapse;
+  border-top: 1px solid rgba(65, 65, 65, 0.3);
+  border-left: 1px solid rgba(65, 65, 65, 0.3);
+}
+#app .tableEdit .tit {
+  background: rgba(73,133,243,0.05);
+}
+#app .tableEdit td {
+  padding: 5px;
+  border-bottom: 1px solid rgba(65, 65, 65, 0.3);
+  border-right: 1px solid rgba(65, 65, 65, 0.3);
+}

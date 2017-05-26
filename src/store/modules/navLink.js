@@ -8,7 +8,7 @@ const state = {
         },
         {
             name: "报表中心",
-            url: "",
+            url: "/reportCenter",
             imgClass: "report-form",
             child: []
         },
