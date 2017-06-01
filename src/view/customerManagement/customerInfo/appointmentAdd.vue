@@ -9,13 +9,10 @@
         </div>
         <div class="container-body">
             <Form ref="formValidate" :model="formValidate" :label-width="100" label-position="right">
-                <Form-item label="选择医院" prop="hospital" required v-if='seen'>
+                <Form-item label="选择医院" prop="hospital" required>
                     <Select v-model="formValidate.hospital" style="width:300px">
                         <Option v-for="item in hospList" :value="item.id" :key="item">{{ item.value }}</Option>
                     </Select>
-                </Form-item>
-                <Form-item label="选择医院" v-else>
-                    <span>123</span>
                 </Form-item>
                 <Form-item label="预约日期" required prop="date">
                     <Date-picker type="date" placement="bottom-start" placeholder="选择日期" style="width: 300px" :options='options' @on-change='saveDate'></Date-picker>
@@ -24,7 +21,7 @@
                      <Time-picker format="HH:mm" type="timerange" placement="bottom-start" placeholder="选择时间" style="width: 300px" @on-change='saveTime'></Time-picker>
                 </Form-item>
                 <Form-item label="预约咨询人员" prop="name">
-                    <Select v-model="formValidate.name" style="width:300px">
+                    <Select v-model="formValidate.name" style="width:300px" :disabled='formValidate.hospital.length == 0'>
                         <Option v-for="item in nameList" :value="item.id" :key="item" :label='item.name'>
                             <span>{{item.name}}</span>
                             <span style="float:right;color:#ccc">{{item.hosp}}</span>
@@ -47,7 +44,6 @@
     export default {
         data () {
             return {
-                seen: true,
                 formValidate: {
                     hospital: '',
                     date: '',

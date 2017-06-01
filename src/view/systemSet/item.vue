@@ -7,8 +7,8 @@
         <div class="container-header">
             <h2>报表项目管理</h2>
             <ul class="header-btn-group">
-                <li class="header-item"><Icon type="settings"></Icon>检测症状</li> 
-                <li class="header-item"><Icon type="settings"></Icon>检测收费项目</li>  
+                <li class="header-item" @click="toCheck('Symptom')"><Icon type="settings"></Icon>检测症状</li> 
+                <li class="header-item" @click="toCheck('Charge')"><Icon type="settings"></Icon>检测收费项目</li>  
                 <li class="header-item"><Icon type="plus-round"></Icon>增加</li>            
             </ul>
         </div>
@@ -34,23 +34,51 @@
                     },
                     {
                         title: '组名称',
-                        key: 'group'
+                        key: 'groupName'
                     },
                     {
                         title: '排序号',
-                        key: 'sort'
+                        key: 'sortno'
                     },
                     {
                         title: '描述',
-                        key: 'description'
+                        key: 'remark'
                     },
                     {
                         title: '操作',
                         key: 'action',
-                        width: 150,
+                        width: 180,
                         align: 'center',
-                        render (row, column, index) {
-                            return `<i-button type="primary" size="small"><Icon type="edit"></Icon>编辑</i-button> <i-button type="error" size="small"><Icon type="ios-trash-outline"></Icon>删除</i-button>`;
+                        render: (h, params) => {
+                            return h('div', [
+                                    h('Button', {
+                                        props: {
+                                            type: 'primary',
+                                            size: 'small',
+                                            icon: 'edit'
+                                        },
+                                        style: {
+                                            marginRight: '5px'
+                                        },
+                                        on: {
+                                            click: () => {
+                                                this.toEdit(params.row)
+                                            }
+                                        }
+                                    }, '编辑'),
+                                    h('Button', {
+                                        props: {
+                                            type: 'error',
+                                            size: 'small',
+                                            icon: 'ios-trash-outline'
+                                        },
+                                        on: {
+                                            click: () => {
+                                                this.remove(params.row)
+                                            }
+                                        }
+                                    }, '删除'),
+                                ])
                         }
                     }
                 ],
@@ -70,7 +98,59 @@
                 ]
             }
         },
+        created () {
+            this.getList()
+        },
         methods: {
+            getList () {
+                var _vm = this;
+                _vm.$http.get({
+                    url: 'guard-webManager/item/list.jhtml',
+                    success: function(res){
+                        if(res.status == 200 ){
+                            console.log(res)
+                            _vm.data = res.data.content
+                        } else {
+                            console.log(res.data.desc)
+                        }
+                    },
+                    error: function(res){
+                        console.log(res);
+                    }
+                });
+            },
+            toCheck (type) {
+                var _url = ''
+                var _text = ''
+                if(type == 'Symptom') {
+                    _url = '/itemCheckSymptom'
+                    _text = '检测症状匹配'
+                } else {
+                    _url = '/itemCheckCharge'
+                    _text = '检测收费项目匹配'
+                }
+                var breadData = [
+                    {
+                        url: '/desktop',
+                        text: '桌面'
+                    },
+                    {
+                        url: '/item',
+                        text: '报表项目'
+                    },
+                    {
+                        url: _url,
+                        text: _text
+                    }
+                ];
+                this.$store.dispatch('setBreadData', breadData);
+                this.$router.push({
+                    path: _url,
+                    query: {
+                        id: '1'
+                    }
+                })
+            }
         }
     }
 </script>

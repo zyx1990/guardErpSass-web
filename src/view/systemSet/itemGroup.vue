@@ -13,21 +13,21 @@
         <div class="container-body">
             <Table stripe :columns="columns" :data="data"></Table>
             <Modal
-                title="修改报表项目组"
+                :title="modalTit"
                 v-model="modalEdit"
                 :closable="false"
                 @on-ok="ok"
                 :loading="loading"
                 class-name="vertical-center-modal">
-                <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="100" label-position="right">
-                    <Form-item label="名称" prop="name">
+                <Form ref="formValidate" :model="formValidate" :rules="ruleForm" :label-width="100" label-position="right">
+                    <Form-item label="名称" prop="name" required>
                         <Input v-model="formValidate.name" placeholder="请输入名称"></Input>
                     </Form-item>
-                    <Form-item label="排序号" prop="sort">
-                        <Input v-model="formValidate.sort" placeholder="请输入排序号"></Input>
+                    <Form-item label="排序号" prop="sortNo" required>
+                        <Input v-model="formValidate.sortNo" placeholder="请输入排序号"></Input>
                     </Form-item>
-                    <Form-item label="描述" prop="description">
-                        <Input v-model="formValidate.description" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="请输入描述"></Input>
+                    <Form-item label="描述" prop="remark">
+                        <Input v-model="formValidate.remark" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="请输入描述"></Input>
                     </Form-item>
                 </Form>
             </Modal>
@@ -38,6 +38,22 @@
 <script>
     export default {
         data () {
+            const validateName = (rule, value, callback) => {
+                if (value === '') {
+                    callback(new Error('请输入姓名'));
+                } else {
+                    callback();
+                }
+            };
+            const validateSort = (rule, value, callback) => {
+                if (value === '') {
+                    callback(new Error('请输入排序号'));
+                } else if (/^\+?[1-9][0-9]*$/.test(value)) {
+                    callback();
+                }  else  {
+                    callback(new Error('请输入正整数'));
+                }
+            };
             return {
                 columns: [
                     {   
@@ -51,79 +67,144 @@
                     },
                     {
                         title: '排序号',
-                        key: 'sort'
+                        key: 'sortno'
                     },
                     {
                         title: '描述',
-                        key: 'description'
+                        key: 'remark'
                     },
                     {
                         title: '报表项目',
-                        key: 'object'
+                        key: 'detailList',
+                        render: (h, params) => {
+                            return h('div', params.row.detailList.map(item => {
+                                return h('span', item.name + '、')
+                            }))
+                        }
                     },
                     {
                         title: '操作',
                         key: 'action',
-                        width: 150,
+                        width: 180,
                         align: 'center',
-                        render (row, column, index) {
-                            return `<i-button type="primary" size="small" @click="edit(${index})"><Icon type="edit"></Icon>编辑</i-button> <i-button type="error" size="small" @click="remove(${index})"><Icon type="ios-trash-outline"></Icon>删除</i-button>`;
+                        render: (h, params) => {
+                            return h('div', [
+                                    h('Button', {
+                                        props: {
+                                            type: 'primary',
+                                            size: 'small',
+                                            icon: 'edit'
+                                        },
+                                        style: {
+                                            marginRight: '5px'
+                                        },
+                                        on: {
+                                            click: () => {
+                                                this.edit(params.row)
+                                            }
+                                        }
+                                    }, '编辑'),
+                                    h('Button', {
+                                        props: {
+                                            type: 'error',
+                                            size: 'small',
+                                            icon: 'ios-trash-outline'
+                                        },
+                                        on: {
+                                            click: () => {
+                                                this.remove(params.row)
+                                            }
+                                        }
+                                    }, '删除'),
+                                ])
                         }
                     }
                 ],
-                data: [
-                    {
-                        name: '公交广告',
-                        sort: 1,
-                        description: '公交广告',
-                        object: '1231'
-                    },
-                    {
-                        name: '公as告',
-                        sort: 2,
-                        description: '公交asd告',
-                        object: '1asd31'
-                    }
-                ],
+                data: [],
+                modalTit: '',
                 modalEdit: false,
                 loading: true,
+                seen: true,
                 formValidate: {
+                    id: '',
                     name: '',
-                    sort: '',
-                    description: ''
+                    sortNo: '',
+                    remark: ''
                 },
-                ruleValidate: {
+                ruleForm: {
                     name: [
-                        { required: true, message: '姓名不能为空', trigger: 'blur' }
+                        { validator: validateName, trigger: 'blur' }
                     ],
-                    sort: [
-                        { required: true, message: '排序号不能为空', trigger: 'blur' },
-                        { type: 'number', message: '排序号格式不正确', trigger: 'blur' }
+                    sortNo: [
+                        { validator: validateSort, trigger: 'blur' }
                     ]
                 }
             }
         },
+        created () {
+            this.getList()
+        },
         methods: {
-            add: function() {
-                this.formValidate.name = ''
-                this.formValidate.sort = ''
-                this.formValidate.description = ''
-                this.modalEdit = true
+            getList () {
+                var _vm = this;
+                _vm.$http.get({
+                    url: 'guard-webManager/itemGroup/list.jhtml',
+                    success: function(res){
+                        if(res.status == 200 ){
+                            console.log(res.data.content)
+                            _vm.data = res.data.content
+                        } else {
+                            console.log(res.data.desc)
+                        }
+                    },
+                    error: function(res){
+                        console.log(res);
+                    }
+                });
             },
-            edit: function(index) {
-                this.formValidate.name = this.data[index].name
-                this.formValidate.sort = this.data[index].sort
-                this.formValidate.description = this.data[index].description
-                this.modalEdit = true
+            add () {
+                var _vm = this;
+                _vm.modalTit = '添加渠道'
+                _vm.$refs['formValidate'].resetFields();
+                _vm.seen = false
+                _vm.modalEdit = true
+                _vm.loading = true;
             },
-            remove: function(index) {
-                this.$Modal.confirm({
+            edit (data) {
+                var _vm = this;
+                _vm.modalTit = '修改渠道'
+                _vm.$refs['formValidate'].resetFields();
+                _vm.formValidate.id = data.id
+                _vm.formValidate.name = data.name
+                _vm.formValidate.sortNo = data.sortno
+                _vm.formValidate.remark = data.remark
+                _vm.seen = true
+                _vm.modalEdit = true
+                _vm.loading = true;
+            },
+            remove (data) {
+                var _vm = this;
+                _vm.$Modal.confirm({
                     title: '系统提示',
-                    content: '确定删除'+ this.data[index].name +'?',
+                    content: '确定删除'+ data.name +'?',
                     onOk: () => {
-                        this.$Notice.success({
-                             title: '系统提示！',
-                             desc: '删除成功！'
+                        _vm.$http.post({
+                            url: 'guard-webManager/itemGroup/del.jhtml',
+                            data: {id: data.id},
+                            success: function(res){
+                                if(res.status == 200 ){
+                                    _vm.getList()
+                                    _vm.$Notice.success({
+                                        title: '系统提示！',
+                                        desc: '删除成功！'
+                                    });
+                                } else {
+                                    console.log(res.data.desc)
+                                }
+                            },
+                            error: function(res){
+                                console.log(res);
+                            }
                         });
                     },
                     onCancel: () => {
@@ -132,13 +213,39 @@
                 });
             },
             ok () {
-                setTimeout(() => {
-                    this.modalEdit = false;
-                    this.$Notice.success({
-                        title: '系统提示！',
-                        desc: '保存成功！'
-                    });
-                }, 1000);
+                var _vm = this;
+                _vm.$refs['formValidate'].validate((valid) => {
+                    if (valid) {
+                        var url = '';
+                        if(_vm.seen) {
+                            url = 'guard-webManager/itemGroup/update.jhtml'
+                        } else {
+                            url = 'guard-webManager/itemGroup/add.jhtml'
+                        }
+                        _vm.$http.post({
+                            url: url,
+                            data: _vm.formValidate,
+                            success: function(res){
+                                if(res.status == 200 ){
+                                    _vm.getList()
+                                    _vm.$refs['formValidate'].resetFields();
+                                    _vm.modalEdit = false;
+                                    _vm.$Notice.success({
+                                        title: '系统提示！',
+                                        desc: '保存成功！'
+                                    });
+                                } else {
+                                    console.log(res.data.desc)
+                                }
+                            },
+                            error: function(res){
+                                console.log(res);
+                            }
+                        });
+                    } else {
+                        _vm.loading = false;
+                    }
+                })
             }
         }
     }

@@ -357,12 +357,14 @@
             },
             //确定增加项目
             ok () {
-                this.$refs['formAdd'].validate((valid) => {
+                var _vm = this;
+                _vm.$refs['formAdd'].validate((valid) => {
                     if(valid) {
-                        this.body.push(this.formAdd)
-                        this.modal = false
+                        _vm.body.push(JSON.parse(JSON.stringify(_vm.formAdd)))
+                        _vm.modal = false
                     }
                 })
+                console.log(_vm.body)
             },
             remove (index) {
                 this.body.splice(index, 1)
@@ -370,7 +372,6 @@
             save () {
                 var _vm = this
                 var url = ''
-                // _vm.formValidate.detailListStr = JSON.stringify(_vm.formValidate.body)
                 _vm.$refs['formValidate'].validate((valid) => {
                     if(valid) {
                         if(_vm.key) {

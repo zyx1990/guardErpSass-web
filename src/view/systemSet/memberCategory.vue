@@ -169,7 +169,7 @@
                                         },
                                         on: {
                                             click: () => {
-                                                this.edit(params.row)
+                                                this.toEquitys(params.row)
                                             }
                                         }
                                     }, '配置权益'),
@@ -322,18 +322,32 @@
                     }
                 });
             },
-            remove: function(index) {
-
+            toEquitys (data) {
+                var breadData = [
+                    {
+                        url: '/desktop',
+                        text: '桌面'
+                    },
+                    {
+                        url: '/memberCategory',
+                        text: '会员类型管理'
+                    },
+                    {
+                        url: '/memberCategoryQuitys',
+                        text: '修改会员类型'
+                    }
+                ];
+                this.$store.dispatch('setBreadData', breadData);
+                this.$router.push({
+                    path: '/memberCategoryQuitys',
+                    query: {
+                        id: data.id
+                    }
+                })
             },
             set: function(index) {
 
             },
-            cusStamp: function(index) {
-
-            },
-            backStamp: function(index) {
-
-            }
         }
     }
 </script>

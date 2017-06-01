@@ -33,8 +33,14 @@
                 :loading="loading"
                 class-name="vertical-center-modal">
                 <Form ref="formValidate" :model="formValidate" :rules="ruleForm" :label-width="100" label-position="right">
-                    <Form-item label="收费项目" prop="chargeId" required>
+                    <Form-item label="收费项目" prop="chargeId" required v-if='!key'>
                         <Input v-model="objName" readonly icon="ios-search" placeholder="请选择收费项目" @on-focus='show'></Input>
+                    </Form-item>
+                    <Form-item label="收费项目" v-if='key'>
+                        <span>{{chargeName}}</span>
+                    </Form-item>
+                    <Form-item label="价格" v-if='key'>
+                        <span>{{chargePrice}}</span>
                     </Form-item>
                     <Form-item label="折扣" prop="discount" required>
                         <Input v-model="formValidate.discount" placeholder="请输入折扣"></Input>
@@ -68,6 +74,26 @@
 <script>
     export default {
         data () {
+            const validateDis = (rule, value, callback) => {
+                if (value === '') {
+                    callback(new Error('请输入折扣'));
+                } else if (/^\+?[0-9]*$/.test(value)) {
+                    if (value >= 0 && value <= 100) {
+                        callback();
+                    } else {
+                        callback(new Error('请输入1-100'));
+                    }
+                }  else  {
+                    callback(new Error('请输入正整数'));
+                }
+            };
+            const validateCid = (rule, value, callback) => {
+                if (value === '') {
+                    callback(new Error('请选择类型'));
+                } else {
+                    callback();
+                }
+            };
             return {
                 columns: [
                     {   
@@ -80,7 +106,7 @@
                     },
                     {
                         title: '项目编号',
-                        key: 'chargeID'
+                        key: 'chargeid'
                     },
                     {
                         title: '项目名称',
@@ -157,11 +183,14 @@
                 modalEdit: false,
                 loading: true,
                 key: true,
+
                 formValidate: {
                     id: '',
                     discount: '',
                     chargeId: ''
                 },
+                chargeName: '',
+                chargePrice: '',
                 objName: '',
                 modal2: false,
                 formSearch2: {
@@ -200,7 +229,14 @@
                     }
                 ],
                 objData: [],
-                ruleForm: {}
+                ruleForm: {
+                    discount: [
+                        { validator: validateDis, trigger: 'blur' }
+                    ],
+                    chargeId: [
+                        { validator: validateCid, trigger: 'change' }
+                    ]
+                }
             }
         },
         computed: {
@@ -246,6 +282,7 @@
                     data: form,
                     success: function(res){
                         if(res.status == 200 ){
+                            console.log(res.data.content)
                             _vm.objData = res.data.content
                         } else {
                             console.log(res.data.desc)
@@ -260,7 +297,7 @@
                 var _vm = this;
                 _vm.$Modal.confirm({
                     title: '系统提示',
-                    content: '确定删除'+ data.name +'?',
+                    content: '确定删除'+ data.chargeName +'?',
                     onOk: () => {
                         _vm.$http.post({
                             url: 'guard-webManager/chargeDiscount/del.jhtml',
@@ -309,6 +346,18 @@
                 _vm.modalEdit = true
                 _vm.loading = true;
             },
+            edit (data) {
+                var _vm = this;
+                _vm.modalTit = '修改收费项目折扣'
+                _vm.$refs['formValidate'].resetFields();
+                _vm.chargeName = data.chargeName
+                _vm.chargePrice = (data.chargePrice).toFixed(2)
+                _vm.formValidate.id = data.id
+                _vm.formValidate.discount = (data.discount * 100).toFixed(0) 
+                _vm.key = true
+                _vm.modalEdit = true
+                _vm.loading = true;
+            },
             show () {
                 this.modal2 = true
             },
@@ -332,13 +381,20 @@
                             data: _vm.formValidate,
                             success: function(res){
                                 if(res.status == 200 ){
-                                    _vm.getList('1', '10', _vm.formSearch)
+                                    if(res.data.code == 0) {
+                                        _vm.getList('1', '10', _vm.formSearch)
+                                        _vm.$Notice.success({
+                                            title: '系统提示！',
+                                            desc: '保存成功！'
+                                        });
+                                    } else {
+                                        _vm.$Notice.error({
+                                            title: '系统提示！',
+                                            desc: res.data.desc
+                                        });
+                                    }
                                     _vm.$refs['formValidate'].resetFields();
                                     _vm.modalEdit = false;
-                                    _vm.$Notice.success({
-                                        title: '系统提示！',
-                                        desc: '保存成功！'
-                                    });
                                 } else {
                                     console.log(res.data.desc)
                                 }

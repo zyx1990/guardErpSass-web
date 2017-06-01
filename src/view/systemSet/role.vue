@@ -102,10 +102,10 @@
                                         },
                                         on: {
                                             click: () => {
-                                                this.set(params.row)
+                                                this.toSet(params.row)
                                             }
                                         }
-                                    }, '删除'),
+                                    }, '配置'),
                                 ])
                         }
                     }
@@ -197,7 +197,7 @@
                     }
                 });
             },
-            set: function(index) {
+            toSet (data) {
                 var _vm = this;
                 var breadData = [
                     {
@@ -210,11 +210,16 @@
                     }
                 ];
                 breadData.push({
-                    url: '/roleSet' + index,
-                    text: this.data[index].name
+                    url: '/roleSet',
+                    text: data.name
                 });
-                this.$store.dispatch('setBreadData', breadData);
-                this.$router.push('/roleSet' + index)
+                _vm.$store.dispatch('setBreadData', breadData);
+                _vm.$router.push({
+                    path: '/roleSet',
+                    query: {
+                        id: data.id
+                    }
+                })
             },
             ok () {
                 var _vm = this;

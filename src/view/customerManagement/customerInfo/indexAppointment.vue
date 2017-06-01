@@ -217,8 +217,28 @@
                 ]
             }
         },
+        created () {
+            this.getList()
+        },
         methods: {
-            
+            getList () {
+                var _vm = this;
+                _vm.$http.get({
+                    url: 'guard-webManager/customerRecord/getAppointments.jhtml',
+                    data: {id: _vm.$route.query.id},
+                    success: function(res){
+                        if(res.status == 200 ){
+                            console.log(res)
+                            // _vm.data = res.data.content
+                        } else {
+                            console.log(res.data.desc)
+                        }
+                    },
+                    error: function(res){
+                        console.log(res);
+                    }
+                });
+            },
         }
     }
 </script>

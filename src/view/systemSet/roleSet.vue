@@ -234,7 +234,28 @@
                 return data;
             }
         },
+        created () {
+            this.getId()
+        },
         methods: {
+            getId () {
+                var _vm = this;
+                _vm.$http.post({
+                    url: 'guard-webManager/role/config.jhtml',
+                    data: {id: _vm.$route.query.id},
+                    success: function(res){
+                        if(res.status == 200 ){
+                            console.log(res)
+                            // var dataMsg = res.data.content
+                        } else {
+                            console.log(res.data.desc)
+                        }
+                    },
+                    error: function(res){
+                        console.log(res);
+                    }
+                });
+            },
             add () {
                 this.modalEdit = true
             },

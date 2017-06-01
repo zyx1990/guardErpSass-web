@@ -15,8 +15,14 @@
             return {
             }
         },
+        watch: {
+            title(val) {
+                var _breadData = JSON.parse(window.sessionStorage[val])
+                this.$store.dispatch('setBreadData', _breadData);
+            }
+        },
         mounted: function(){
-            //console.log(this.title +'组件通信方式')
+            console.log(this.title +'组件通信方式')
         },
         computed: {
             breadData: function() {

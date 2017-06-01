@@ -347,7 +347,7 @@ var router = new Router({
                     }
                 },
                 {
-                    path: '/roleSet:id',
+                    path: '/roleSet',
                     component(resolve) {
                         require.ensure(['view/systemSet/roleSet'], () => {
                             resolve(require('view/systemSet/roleSet'));
@@ -491,6 +491,14 @@ var router = new Router({
                     }
                 },
                 {
+                    path: '/memberCategoryQuitys',
+                    component(resolve) {
+                        require.ensure(['view/systemSet/memberCategoryQuitys'], () => {
+                            resolve(require('view/systemSet/memberCategoryQuitys'));
+                        });
+                    }
+                },
+                {
                     path: '/channelGroup',
                     component(resolve) {
                         require.ensure(['view/systemSet/channelGroup'], () => {
@@ -519,6 +527,22 @@ var router = new Router({
                     component(resolve) {
                         require.ensure(['view/systemSet/item'], () => {
                             resolve(require('view/systemSet/item'));
+                        });
+                    }
+                },
+                {
+                    path: '/itemCheckSymptom',
+                    component(resolve) {
+                        require.ensure(['view/systemSet/itemCheckSymptom'], () => {
+                            resolve(require('view/systemSet/itemCheckSymptom'));
+                        });
+                    }
+                },
+                {
+                    path: '/itemCheckCharge',
+                    component(resolve) {
+                        require.ensure(['view/systemSet/itemCheckCharge'], () => {
+                            resolve(require('view/systemSet/itemCheckCharge'));
                         });
                     }
                 },
@@ -575,6 +599,14 @@ var router = new Router({
                     component(resolve) {
                         require.ensure(['view/systemSet/treatDoctor'], () => {
                             resolve(require('view/systemSet/treatDoctor'));
+                        });
+                    }
+                },
+                {
+                    path: '/treatDoctorEdit',
+                    component(resolve) {
+                        require.ensure(['view/systemSet/treatDoctorEdit'], () => {
+                            resolve(require('view/systemSet/treatDoctorEdit'));
                         });
                     }
                 },

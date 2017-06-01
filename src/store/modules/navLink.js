@@ -165,7 +165,7 @@ const state = {
                     child: [] 
                 },
                 {
-                    name: "报表项目组管理",
+                    name: "收费项目类型",
                     url: "/chargeCategory",
                     imgClass: "",
                     child: []

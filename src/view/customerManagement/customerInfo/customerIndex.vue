@@ -12,14 +12,14 @@
                     <Icon type="arrow-down-b"></Icon>
                 </Button>
                 <Dropdown-menu slot="list">
-                    <Dropdown-item v-if='item.children.length == 0' v-for='(item, index) in dropData' :name='item.url' :key='item.index' :divided='item.line'>{{item.name}}</Dropdown-item>
+                    <Dropdown-item v-if='item.children.length == 0' v-for='(item, index) in dropData' :name="item.url + ',' + item.name" :key='item.index' :divided='item.line'>{{item.name}}</Dropdown-item>
                     <Dropdown placement="right-start" v-else>
                         <Dropdown-item>
                             {{item.name}}
                             <Icon type="ios-arrow-right"></Icon>
                         </Dropdown-item>
                         <Dropdown-menu slot="list">
-                            <Dropdown-item v-for='(item1, index1) in item.children' :key='item1.index1' :name='item1.url'>{{item1.name}}</Dropdown-item>
+                            <Dropdown-item v-for='(item1, index1) in item.children' :key='item1.index1' :name="item1.url + ',' + item1.name">{{item1.name}}</Dropdown-item>
                         </Dropdown-menu>
                     </Dropdown>
                 </Dropdown-menu>
@@ -38,7 +38,8 @@
     export default {
         data () {
             return {
-                cusTitle: 'Moriarty',
+                cusId: '',
+                cusTitle: '',
                 menuRouteUrl: '',
                 dropData: [
                     {
@@ -378,12 +379,61 @@
             this.menuRouteUrl = to.path
             next();
         },
+        created () {
+            if (window.sessionStorage) {
+                var lg = window.sessionStorage;
+                this.cusTitle = lg.cusName
+                this.cusId = lg.cusId
+            }
+        },
         methods: {
             toDrop (url) {
-                this.$router.push(url)
+                var _url = url.split(',')[0]
+                var _text = url.split(',')[1]
+                var breadData = [
+                    {
+                        url: '/desktop',
+                        text: '桌面'
+                    },
+                    {
+                        url: '/customerMsg',
+                        text: this.cusTitle
+                    },
+                    {
+                        url: _url,
+                        text:_text
+                    }
+                ];
+                this.$store.dispatch('setBreadData', breadData);
+                this.$router.push({
+                    path: _url,
+                    query: {
+                        id: this.cusId
+                    }
+                })
             },
             toMenu (url) {
-                this.$router.push(url)
+                var breadData = [
+                    {
+                        url: '/desktop',
+                        text: '桌面'
+                    },
+                    {
+                        url: '/customer',
+                        text: '客户管理'
+                    },
+                    {
+                        url: url,
+                        text: this.cusTitle
+                    }
+                ];
+                this.$store.dispatch('setBreadData', breadData);
+                this.$router.push({
+                    path: url,
+                    query: {
+                        id: this.cusId
+                    }
+                })
             }
         }
     }

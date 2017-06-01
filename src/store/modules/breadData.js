@@ -15,6 +15,8 @@ const actions = {
 const mutations = {
     breadData(state, data) {
         state.breadData = data;
+        let _key = data[data.length - 1].url
+        window.sessionStorage.setItem(_key, JSON.stringify(data))
     }
 };
 

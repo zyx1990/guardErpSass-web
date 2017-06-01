@@ -55,9 +55,15 @@
 <script>
     export default {
         name: 'menu',
+        props: ['pathMsg'],
         data() {
             return {
                 istoggle: true
+            }
+        },
+        watch: {
+            pathMsg(val) {
+                // this.startLister(val)
             }
         },
         computed: {
@@ -83,9 +89,39 @@
 
                 var breadData =  this.getBreadData($currentLi, []).reverse();
                 this.$store.dispatch('setBreadData', breadData);
+                // this.startLister(this.$route.path)
             });
         },
         methods: {
+            //监听router方法
+            startLister (path) {
+                var $dom = $(this.$refs.menu);
+                this.$dom = $dom;
+
+
+                var $currentLi = null;
+                if(this.istoggle){
+                    $currentLi = $dom.find('.js-nav-show').find('[data-url="'+path+'"]');
+                }else{
+                    $currentLi = $dom.find('.js-nav-hidden').find('[data-url="'+path+'"]');
+                }
+                // $currentLi.parent().parent().addClass('drowopen')
+                // var num = $currentLi.parent().find('li').length;
+                // $currentLi.parent().stop(true).animate({'height' : num * 40}, 200,function() {
+                //     console.log(123)
+                // })
+                if($currentLi.length != 0) {
+                    //TODO 临时这么写
+                    this.selectLi($currentLi);
+
+                    var breadData =  this.getBreadData($currentLi, []).reverse();
+                    this.$store.dispatch('setBreadData', breadData);
+                } else {
+                    var _breadData = JSON.parse(window.sessionStorage[path])
+                    this.$store.dispatch('setBreadData', _breadData);
+                    console.log(_breadData)
+                }
+            },
             //meunToogle 方法是控制菜单是否显示文字
             meunToogle: function(){
                 var _vm = this,
@@ -212,7 +248,7 @@
                 $currentLi.trigger('click');
 
             }
-        }
+        },
     }
 
 </script>

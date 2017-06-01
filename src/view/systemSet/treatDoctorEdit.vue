@@ -1,33 +1,30 @@
 /**
- * 添加/修改渠道组页面
+ * 批量添加设置页面
  */
 
 <template>
     <div class="container-box">
         <div class="container-header">
-            <h2>{{titMsg}}</h2>
+            <h2>批量添加设置</h2>
         </div>
         <div class="container-body">
             <Form :label-width="100" ref="formValidate" :model="formValidate" label-position="right" :rules="ruleForm">
-                <Form-item label="名称" prop="name" required style='width:400px;'>
-                    <Input v-model="formValidate.name" placeholder="请输入名称"></Input>
-                </Form-item>
-                <Form-item label="排序号" prop="sortNo" required style='width:400px;'>
-                    <Input v-model="formValidate.sortNo" placeholder="请输入排序号"></Input>
-                </Form-item>
-                <Form-item label="备注" prop="remark">
-                    <Input v-model="formValidate.remark" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="请输入描述"></Input>
-                </Form-item>
-                <Form-item label="渠道列表列表" prop="channels" required>
+                <Form-item label="医生" prop="userIds" required>
                     <Row>
                         <Col span="20">
-                            <Table stripe :columns="col" :data="formValidate.channels"></Table>
+                            <Table stripe :columns="col" :data="formValidate.userIds"></Table>
                         </Col>
                         <Col span="3" offset="1" class='table-left-btn'>
                             <Button type="primary" shape="circle" icon="plus-round" @click='add'>增加</Button>
                             <Button type="primary" shape="circle" icon="refresh" @click='clean'>清空</Button>
                         </Col>
                     </Row>
+                </Form-item>
+                <Form-item label="预约时间" required prop="startTime" style='width:400px;'>
+                    <Time-picker :value='dateVal' format="HH:mm" type="timerange" placement="bottom-start" placeholder="选择时间" @on-change='saveTime'></Time-picker>
+                </Form-item>
+                <Form-item label="人数" prop="num" required style='width:400px;'>
+                    <Input v-model="formValidate.num" placeholder="请输入人数"></Input>
                 </Form-item>
             </Form>
             <div class="footer-btnGroup">
@@ -37,10 +34,28 @@
             <Modal
                 title="选择标签"
                 v-model="modalEdit"
+                width='700'
                 :closable="false"
                 @on-ok="ok"
                 :loading="loading"
                 class-name="vertical-center-modal">
+                <Form  :label-width="50" inline ref='formSearch' :model='formSearch'>
+                    <Form-item label="部门" prop='deptId'>
+                        <Select v-model="formSearch.deptId" clearable style="width:162px">
+                            <Option v-for="item in deptList" :value="item.id" :key="item">{{ item.name }}</Option>
+                        </Select>
+                    </Form-item>
+                    <Form-item label="账号" prop='account'>
+                        <Input v-model="formSearch.account" placeholder="请输入账号"></Input>
+                    </Form-item>
+                    <Form-item label="姓名" prop='name'>
+                        <Input v-model="formSearch.name" placeholder="请输入姓名"></Input>
+                    </Form-item>
+                    <ul class="header-btn-group not-float">
+                        <li class="header-item" @click="getObj(formSearch)"><Icon type="search"></Icon>查询</li>
+                        <li class="header-item" @click="handleReset('formSearch')"><Icon type="refresh"></Icon>重置</li>
+                    </ul>
+                </Form>
                 <Table height="350" stripe :columns="col1" :data="data" @on-selection-change='change'></Table>
             </Modal>
         </div>
@@ -50,16 +65,9 @@
 <script>
     export default {
         data () {
-            const validateName = (rule, value, callback) => {
-                if (value === '') {
-                    callback(new Error('请输入名称'));
-                } else {
-                    callback();
-                }
-            };
             const validateSort = (rule, value, callback) => {
                 if (value === '') {
-                    callback(new Error('请输入排序号'));
+                    callback(new Error('请输入人数'));
                 } else if (/^\+?[1-9][0-9]*$/.test(value)) {
                     callback();
                 }  else  {
@@ -74,12 +82,14 @@
                 }
             };
             return {
-                key: true,
-                titMsg: '',
                 col: [
                     {
-                        title: '名称',
-                        key: 'channelName'
+                        title: '用户账号',
+                        key: 'account'
+                    },
+                    {
+                        title: '用户姓名',
+                        key: 'name'
                     },
                     {
                         title: '操作',
@@ -113,71 +123,61 @@
                         align: 'center'
                     },
                     {
-                        title: '名称',
+                        title: '账号',
+                        key: 'account'
+                    },
+                    {
+                        title: '姓名',
                         key: 'name'
                     },
                     {
-                        title: '状态',
-                        width: 70,
-                        key: 'status',
-                        render: (h, params) => {
-                            const color = params.row.status === 1 ? 'blue' : 'red';
-                            const text = params.row.status === 1 ? '启用' : '禁用';
-                            return h('span', {
-                                style: {
-                                    color: color
-                                }
-                            },text)
-                        }
+                        title: '部门',
+                        key: 'deptName'
                     },
+                    {
+                        title: '性别',
+                        key: 'gender'
+                    }
                 ],
+                deptList: [],
+                formSearch: {
+                    hospitalId: '1',
+                    account: '',
+                    name: '',
+                    deptId: ''
+                },
                 modalEdit: false,
                 loading: true,
+                dateVal: [],
                 formValidate: {
-                    id: '',
-                    name: '',
-                    sortNo: '',
-                    remark: '',
-                    channels: []
+                    num: '',
+                    endTime: '',
+                    startTime: '',
+                    userIds: []
                 },
                 ruleForm: {
-                    name: [
-                        { validator: validateName, trigger: 'blur' }
-                    ],
-                    sortNo: [
+                    num: [
                         { validator: validateSort, trigger: 'blur' }
                     ],
-                    channels: [
+                    userIds: [
                         { validator: validateList, trigger: 'blur' }
                     ]
                 },
             }
         },
-        created () {
-            if(this.$route.query.id != 'add') {
-                this.titMsg = '修改渠道组'
-                this.getId()
-            } else {
-                this.titMsg = '添加渠道组'
-                this.key = false
-            }
-        },
         mounted () {
-            this.getList()
+            this.getDept('1')
         },
         methods: {
-            getId () {
+            //获取部门下拉列表
+            getDept (id) {
                 var _vm = this;
                 _vm.$http.get({
-                    url: 'guard-webManager/channelGroup/get.jhtml',
-                    data: {id: _vm.$route.query.id},
+                    url: 'guard-webManager/select/hospitalDeptInfo.jhtml',
+                    data: {hospitalId: id},
                     success: function(res){
                         if(res.status == 200 ){
-                            console.log(res)
-                            _vm.formValidate.name = res.data.content.name
-                            _vm.formValidate.sortNo = res.data.content.sortno
-                            _vm.formValidate.remark = res.data.content.remark
-                            _vm.formValidate.channels = res.data.content.detailList
+                            _vm.deptList = res.data.content
                         } else {
                             console.log(res.data.desc)
                         }
@@ -187,13 +187,14 @@
                     }
                 });
             },
-            getList () {
-                var _vm = this
+            //获取项目列表
+            getObj (form) {
+                var _vm = this;
                 _vm.$http.get({
-                    url: 'guard-webManager/select/channelInfo.jhtml',
+                    url: 'guard-webManager/select/hospitalUserList.jhtml',
+                    data: form,
                     success: function(res){
                         if(res.status == 200 ){
-                            console.log(res.data.content)
                             _vm.data = res.data.content
                         } else {
                             console.log(res.data.desc)
@@ -208,26 +209,28 @@
                 this.modalEdit = true
             },
             clean () {
-                this.formValidate.channels.splice(0)
+                this.formValidate.userIds.splice(0)
             },
             remove (index) {
-                this.formValidate.channels.splice(index, 1)
+                this.formValidate.userIds.splice(index, 1)
             },
             change (data) {
                 this.selectBox = data
             },
+            saveTime (time) {
+                this.formValidate.startTime = time[0]
+                this.formValidate.endTime = time[1]
+            },
             ok () {
                 var bool = true
                 for(var n of this.selectBox) {
-                    for(var m of this.formValidate.channels) {
-                        if(n.id == m.channelid) {
+                    for(var m of this.formValidate.userIds) {
+                        if(n.id == m.id) {
                             bool = false
                         }
                     }
                     if(bool) {
-                        n['channelid'] = n['id']
-                        n['channelName'] = n['name']
-                        this.formValidate.channels.push(n)
+                        this.formValidate.userIds.push(n)
                     } else {
                         bool = true
                     }
@@ -236,35 +239,20 @@
             },
             save () {
                 var _vm = this
-                var url = ''
-                var data = {}
                 var idBox = []
-                for(var id of _vm.formValidate.channels) {
-                    idBox.push(id.channelid)
+                for(var id of _vm.formValidate.userIds) {
+                    idBox.push(id.id)
                 }
                 _vm.$refs['formValidate'].validate((valid) => {
                     if(valid) {
-                        if(_vm.key) {
-                            url = 'guard-webManager/channelGroup/update.jhtml'
-                            data = {
-                                id: _vm.$route.query.id,
-                                name: _vm.formValidate.name,
-                                sortNo: _vm.formValidate.sortNo,
-                                remark: _vm.formValidate.remark,
-                                channels: idBox
-                            }
-                        } else {
-                            url = 'guard-webManager/channelGroup/add.jhtml'
-                            data = {
-                                name: _vm.formValidate.name,
-                                remark: _vm.formValidate.remark,
-                                sortNo: _vm.formValidate.sortNo,
-                                channels: idBox
-                            }
-                        }
                         _vm.$http.ajax({
-                            url: url,
-                            data: data,
+                            url: '/guard-webManager/treatDoctor/batchAdd.jhtml',
+                            data: {
+                                userIds: idBox,
+                                startTime: _vm.formValidate.startTime,
+                                endTime: _vm.formValidate.endTime,
+                                num: _vm.formValidate.num
+                            },
                             success: function(res){
                                 if(res.code == 0 ){
                                     var breadData = [
@@ -273,12 +261,12 @@
                                             text: '桌面'
                                         },
                                         {
-                                            url: '/channelGroup',
-                                            text: '渠道组'
+                                            url: '/treatDoctor',
+                                            text: '医生预约设置'
                                         }
                                     ];
                                     _vm.$store.dispatch('setBreadData', breadData);
-                                    _vm.$router.push('/channelGroup')
+                                    _vm.$router.push('/treatDoctor')
                                 } else {
                                     console.log(res.desc)
                                 }
@@ -297,8 +285,8 @@
                         text: '桌面'
                     },
                     {
-                        url: '/channelGroup',
-                        text: '渠道组'
+                        url: '/treatDoctor',
+                        text: '医生预约设置'
                     }
                 ];
                 this.$store.dispatch('setBreadData', breadData);

@@ -142,17 +142,6 @@
                 }
             }
         },
-        created () {
-            this.$http.get({
-                url: 'guard-webManager/birthday/list.jhtml',
-                data: {
-                    
-                },
-                success: function(res){
-                    console.log(res);
-                }
-            });
-        },
         methods: {
             edit: function(index) {
                 

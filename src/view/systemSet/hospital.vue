@@ -187,7 +187,7 @@
             getProvince () {
                 var _vm = this;
                 _vm.$http.get({
-                    url: 'guard-webManager/select/provinceList.jhtml',
+                    url: 'guard-webManager/select/provinceInfo.jhtml',
                     data: {name: null},
                     success: function(res){
                         if(res.status == 200 ){

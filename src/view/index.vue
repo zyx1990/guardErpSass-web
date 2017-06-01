@@ -2,13 +2,13 @@
     <div class="layout-box" ref="layoutBox">
   		<div class="layout-main">
   			<div class="layout-container js-layout-container">
-  				<cmptBreadcrumb class="layout-breadcrumb" title="1111"></cmptBreadcrumb>
+  				<cmptBreadcrumb class="layout-breadcrumb" :title="backGoPath"></cmptBreadcrumb>
   				<div class="container-wrap">          
   					 <router-view class="view" ref="routerModule"></router-view>
   				</div>
   			</div>
   		</div>
-  		<cmptMeun class="layout-nav" @on-click-toggle="meunToogle"></cmptMeun>
+  		<cmptMeun class="layout-nav" @on-click-toggle="meunToogle" :pathMsg='backGoPath'></cmptMeun>
   	</div>
 </template>
 
@@ -19,8 +19,17 @@
     export default {
         data() {
             return {
-
+              backGoPath: ''
             }
+        },
+        beforeRouteUpdate (to, from, next) {
+            this.backGoPath = to.path
+            next();
+        },
+        beforeRouteEnter(to, from, next) {
+            next(vm => {
+                vm.backGoPath = to.path
+            });
         },
         components: {
             cmptBreadcrumb,

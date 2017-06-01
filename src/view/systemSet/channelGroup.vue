@@ -33,7 +33,7 @@
                     },
                     {
                         title: '排序号',
-                        key: 'sortNo'
+                        key: 'sortno'
                     },
                     {
                         title: '描述',
@@ -91,7 +91,7 @@
                     success: function(res){
                         if(res.status == 200 ){
                             console.log(res)
-                            // _vm.data = res.data.content
+                            _vm.data = res.data.content
                         } else {
                             console.log(res.data.desc)
                         }
