@@ -8,9 +8,16 @@ const cmpt = {
     cmptUeditor
 };
 
-exports.install = function (Vue, options) { 
+// exports.install = function (Vue, options) { 
 
-    Object.keys(cmpt).forEach(function(key) {
-        Vue.component(key, cmpt[key]);
-    });
-}
+//     Object.keys(cmpt).forEach(function(key) {
+//         Vue.component(key, cmpt[key]);
+//     });
+// }
+export default {
+    install: function (Vue, options) { 
+        Object.keys(cmpt).forEach(function(key) {
+            Vue.component(key, cmpt[key]);
+        });
+    }
+};

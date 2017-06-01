@@ -11,7 +11,8 @@ Vue.use(http);
 
 //富文本
 import VueQuillEditor from 'vue-quill-editor';
-
+import token from 'utils/cache.js';
+Vue.prototype.$token = token;
 
 //ui框架
 import iView from 'iview';

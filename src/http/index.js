@@ -87,6 +87,11 @@ var http = {
 // axios.post("url", params).then( (response) => {
 //     console.log(response.data)
 // })
-exports.install = function (Vue, options) { 
-    Vue.prototype.$http = http
-}
+// exports.install = function (Vue, options) { 
+//     Vue.prototype.$http = http
+// }
+export default {
+    install: function (Vue, options) { 
+        Vue.prototype.$http = http;
+    }
+};

@@ -16,7 +16,7 @@
             }
         },
         mounted: function(){
-            console.log(this.title +'组件通信方式')
+            //console.log(this.title +'组件通信方式')
         },
         computed: {
             breadData: function() {
