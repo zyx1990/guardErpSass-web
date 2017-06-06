@@ -1,19 +1,23 @@
 /**
- * 添加回访页面
+ * 修改回访信息页面
  */
 
 <template>
     <div class="container-box userPower">
         <div v-if='powerLoad > 0'>
             <div class="container-header">
-                <h2>添加回访</h2>
+                <h2>修改回访信息</h2>
             </div>
             <div class="container-body">
                 <Form ref="formValidate" :model="formValidate" :rules="ruleForm" :label-width="100" label-position="right">
-                    <Form-item label="回访类型" prop="categoryId" required>
-                        <Select v-model="formValidate.categoryId" style="width:300px">
-                            <Option v-for="item in typeList" :value="item.id" :key="item">{{ item.name }}</Option>
-                        </Select>
+                    <Form-item label="提交时间">
+                        <span>{{createtime}}</span>
+                    </Form-item>
+                    <Form-item label="提交用户">
+                        <span>【{{createUserHospitalName}}】 【{{createUserDeptName}}】 【{{createUserName}}】</span>
+                    </Form-item>
+                    <Form-item label="回访类型">
+                        <span>{{categoryName}}</span>
                     </Form-item>
                     <Form-item label="回访方式" prop="tool" required>
                         <Select v-model="formValidate.tool" style="width:300px">
@@ -47,13 +51,6 @@
 <script>
     export default {
         data () {
-            const validateType = (rule, value, callback) => {
-                if (value === '') {
-                    callback(new Error('请选择回访类型'));
-                } else {
-                    callback();
-                }
-            };
             const validateWay = (rule, value, callback) => {
                 if (value === '') {
                     callback(new Error('请选择回访方式'));
@@ -72,19 +69,18 @@
                 cusName: '',
                 powerLoad: '-1',
                 errorMsg: '',
-
+                createtime: '',
+                createUserName: '',
+                createUserHospitalName: '',
+                createUserDeptName: '',
+                categoryName: '',
                 formValidate: {
-                    customerId: '',
-                    categoryId: '',
+                    id: '',
                     tool: '',
                     content: ''
                 },
                 wayList: [],
-                typeList: [],
                 ruleForm: {
-                    categoryId: [
-                        { validator: validateType, trigger: 'change' }
-                    ],
                     tool: [
                         { validator: validateWay, trigger: 'change' }
                     ],
@@ -97,46 +93,31 @@
         created () {
             if (window.sessionStorage) {
                 var lg = window.sessionStorage;
-                this.formValidate.customerId = lg.cusId
                 this.cusName = lg.cusName
             }
-            this.getId(this.formValidate.customerId)
+            this.formValidate.id = this.$route.query.id
+            this.getId(this.$route.query.id)
         },
         methods: {
             // 获取资料
             getId (id) {
                 var _vm = this;
                 _vm.$http.get({
-                    url: 'guard-webManager/customerRecord/callbackAdd.jhtml',
-                    data: {customerId: id},
+                    url: 'guard-webManager/customerRecord/callbackUpdate.jhtml',
+                    data: {id: id},
                     success: function(res){
                         if(res.status == 200 ){
                             if(res.data.code == 0) {
                                 _vm.powerLoad = 1
-                                _vm.getType()
+                                console.log(res)
+                                _vm.categoryName = res.data.content.Callback.categoryName
+                                _vm.createUserDeptName = res.data.content.Callback.createUserDeptName
+                                _vm.createUserHospitalName = res.data.content.Callback.createUserHospitalName
+                                _vm.createUserName = res.data.content.Callback.createUserName
+                                _vm.createtime = res.data.content.Callback.createtime
+                                _vm.formValidate.tool = res.data.content.Callback.tool
+                                _vm.formValidate.content = res.data.content.Callback.content
                                 _vm.getTool()
-                            } else {
-                                _vm.powerLoad = 0
-                                _vm.errorMsg = res.data.desc
-                            }
-                        } else {
-                            console.log(res.data.desc)
-                        }
-                    },
-                    error: function(res){
-                        console.log(res);
-                    }
-                });
-            },
-            //获取回访类型
-            getType () {
-                var _vm = this;
-                _vm.$http.get({
-                    url: 'guard-webManager/select/callbackCategoryInfo.jhtml',
-                    success: function(res){
-                        if(res.status == 200 ){
-                            if(res.data.code == 0) {
-                                _vm.typeList = res.data.content
                             } else {
                                 _vm.powerLoad = 0
                                 _vm.errorMsg = res.data.desc
@@ -177,7 +158,7 @@
                 _vm.$refs['formValidate'].validate((valid) => {
                     if(valid) { 
                         _vm.$http.post({
-                            url: 'guard-webManager/customerRecord/addCallback.jhtml',
+                            url: 'guard-webManager/customerRecord/updateCallback.jhtml',
                             data: _vm.formValidate,
                             success: function(res){
                                 if(res.status == 200 ){

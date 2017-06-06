@@ -1,25 +1,33 @@
 /**
  * 生日提醒
  */
-
 <template>
     <div class="container-box" ref="containerBox">
         <div class="container-header">
             <h2>生日提醒</h2>
             <ul class="header-btn-group">
-                <li class="header-item"><Icon type="gear-b"></Icon>今天</li>
-                <li class="header-item"><Icon type="gear-b"></Icon>本周</li>
-                <li class="header-item"><Icon type="gear-b"></Icon>本月</li>
+                <li class="header-item" @click="selectDate('day')"><Icon type="gear-b"></Icon>今天</li>
+                <li class="header-item" @click="selectDate('wek')"><Icon type="gear-b"></Icon>本周</li>
+                <li class="header-item" @click="selectDate('mou')"><Icon type="gear-b"></Icon>本月</li>
             </ul>
         </div>
         <div class="container-body">
             <Form  :label-width="80" inline>
                 <Form-item label="选择日期">
-                    <Date-picker type="daterange" placement="bottom-start" placeholder="选择日期" style="width: 200px" :options='options'></Date-picker>
+                    <Date-picker type="daterange" placement="bottom-start" placeholder="选择日期" 
+                    style="width: 200px" format="MM-dd" :value="nowDate" @on-change="dateChange"></Date-picker>
                 </Form-item>
             </Form>
             <Table stripe :columns="columns" :data="data"></Table>
+             <div class="table-page">
+                <div class="table-info">当前第{{page.pageNumber}}页，共{{page.totalPages}}页，总共{{page.total}}条记录</div>
+                <Page class="table-paginate" :total="page.total" @on-change='changePage' :current='page.pageNumber'></Page>
+            </div>
         </div>
+        <Spin fix v-show="pageLodading">
+            <Icon type="load-c" size=40 class="spin-icon-load"></Icon>
+            <div>Loading</div>
+        </Spin>
     </div>
 </template>
 
@@ -35,117 +43,193 @@
                     },
                     {
                         title: '客户编号',
-                        key: 'cusNumber'
+                        key: 'id'
                     },
                     {
                         title: '客户姓名',
                         key: 'name',
-                        render (row) {
-                            return `<Icon type="person"></Icon>${row.name}`
+                        render: (h, params) => {
+                           return h('span', {
+                                on: {
+                                    click: () => {
+                                        this.$router.push({path: 'customerIndex', query: {id: params.row.id}});
+                                    }
+                                },
+                                style: {
+                                    cursor: 'pointer',
+                                    color: 'orange'
+                                }
+                            }, [
+                                h('Icon', {
+                                    props: {
+                                        type: "person"
+                                    }
+                                }),
+                                h('span', params.row.name)
+                            ]) 
                         }
                     },
                     {
                         title: '性别',
-                        key: 'sex',
-                        render (row) {
-                            const text = row.sex == 1 ? '男' : '女';
-                            return `<span>${text}</span>`;
+                        key: 'gender',
+                        render: (h, params) => {
+                            var gender = '女';
+                            if(params.row.gender == 1){
+                                gender = '女';
+                            }else{
+                                gender = '男';
+                            }
+                            return h('span', gender)
                         }
                     },
                     {
                         title: '年龄',
-                        key: 'age'
+                        key: 'age',
+                        render: (h, params) => {
+                            var age = 20;
+                            if(params.row.birthyear != 0){
+                                age = moment().format('YYYY') - params.row.birthyear;
+                            }
+                            return h('span', age)
+                        }
                     },
                     {
                         title: '生日',
-                        key: 'birth'
+                        key: 'birthday'
                     },
                     {
                         title: '上门状态',
-                        key: 'doorStatus',
-                        render (row) {
-                            const color = row.doorStatus == 1 ? 'blue' : 'red';
-                            const text = row.doorStatus == 1 ? '已上门' : '未上门';
-                            return `<span style='color:${color};'>${text}</span>`;
+                        key: 'firstvisittime',
+                        render: (h, params) => {
+                            var firstVisit = '已上门';
+                            if(params.row.firstvisittime != null){
+                                firstVisit = '已上门';
+                            }else{
+                                firstVisit = '未上门';
+                            }
+                            return h('span', firstVisit)
                         }
                     },
                     {
                         title: '成交状态',
-                        key: 'transactionStatus',
-                        render (row) {
-                            const color = row.transactionStatus == 1 ? 'blue' : 'red';
-                            const text = row.transactionStatus == 1 ? '已成交' : '未成交';
-                            return `<span style='color:${color};'>${text}</span>`;
+                        key: 'firstdealtime',
+                        render: (h, params) => {
+                            var firstDeal = '已成交';
+                            if(params.row.firstdealtime != null){
+                                firstDeal = '已成交';
+                            }else{
+                                firstDeal = '未成交';
+                            }
+                            return h('span', firstDeal)
                         }
                     },
                     {
                         title: '初诊日期',
-                        key: 'firstDate'
+                        key: 'firstvisittime',
+                        render: (h, params) => {
+                            if(params.row.firstvisittime != null){
+                                return h('span', moment(params.row.firstvisittime).format('YYYY-MM-DD'))
+                            }
+                            
+                        }
                     },
                     {
                         title: '最后光临',
-                        key: 'lastDate'
+                        key: 'lastvisittime',
+                        render: (h, params) => {
+                            if(params.row.lastvisittime != null){
+                                return h('span', moment(params.row.lastvisittime).format('YYYY-MM-DD'))
+                            }
+                        }
                     },
                     {
                         title: '会员类型',
-                        key: 'menber'
+                        key: 'memberCategoryName'
                     },
                     {
                         title: '开发人员',
-                        key: 'develop'
+                        key: 'exploitUserName'
                     },
                     {
                         title: '咨询人员',
-                        key: 'consult'
+                        key: 'managerUserName'
                     },
                     {
                         title: '电话',
-                        key: 'phone'
+                        key: 'mobile'
                     }
                 ],
-                data: [
-                    {
-                        cusNumber: "1111",
-                        name: '玻尿酸',
-                        sex: '1',
-                        age: '555',
-                        birth: '05-02',
-                        doorStatus: '1',
-                        transactionStatus: '0',
-                        firstDate: '2017-04-10',
-                        lastDate: '2017-04-10',
-                        menber: "金卡",
-                        develop: '22',
-                        consult: '33',
-                        phone: '13988888888'
-                    },
-                    {
-                        cusNumber: "1111",
-                        name: '玻尿酸',
-                        sex: '0',
-                        age: '555',
-                        birth: '05-02',
-                        doorStatus: '0',
-                        transactionStatus: '1',
-                        firstDate: '2017-04-10',
-                        lastDate: '2017-04-10',
-                        menber: "金卡",
-                        develop: '22',
-                        consult: '33',
-                        phone: '13988888888'
-                    }
-                ],
-                options: {
-                    disabledDate (date) {
-                        return date && date.valueOf() > Date.now();
-                    }
-                }
+                data: [],
+                nowDate: [moment().format('MM-DD'), moment().format('MM-DD')],
+                pageLodading: true,
+                page: {}
             }
         },
+        mounted () {
+            this.getPageList();
+        },
         methods: {
-            edit: function(index) {
-                
+            getPageList: function(){
+                var _vm = this;
+                _vm.$http.get({
+                    url: 'guard-webManager/birthday/list.jhtml',
+                    data: {
+                        pageNumber: _vm.currtPageNum || 1,
+                        pageSize: 10,
+                        startTime: _vm.nowDate[0],
+                        endTime : _vm.nowDate[1]
+                    },
+                    success: function(data){
+                        var data = data.data || {};
+                        if(data.code == 0){
+                            _vm.pageLodading = false;
+                            try {
+                                var content = data.content || [];
+                                _vm.data = content.page.content || [];
+                                _vm.page = {
+                                    pageNumber: content.page.pageNumber,
+                                    total: content.page.total,
+                                    totalPages: content.page.totalPages
+                                }
+                                
+                            } catch (error) {
+                                _vm.data = [];
+                                _vm.page = {}
+                            }
+                        }
+                        
+                    }
+                });
+            },
+            dateChange: function(date) {
+                this.pageLodading = true;
+                this.nowDate = date;
+                this.getPageList();
+            },
+            changePage: function(pageNum){
+                this.currtPageNum = pageNum;
+                this.pageLodading = true;
+                this.getPageList();
+            },
+            selectDate: function(type){
+                var date = [];
+                const nowDate = new Date();
+                if(type == 'day'){
+                    date = [moment().format('MM-DD'), moment().format('MM-DD')];
+                }else if(type == 'wek'){
+                    var wek = nowDate.setTime(nowDate.getTime() - 3600 * 1000 * 24 * 7);
+                    date = [moment(wek).format('MM-DD'), moment().format('MM-DD')];
+                }else{
+                    var mon = nowDate.setTime(nowDate.getTime() - 3600 * 1000 * 24 * 30);
+                    date = [moment(mon).format('MM-DD'), moment().format('MM-DD')];
+                }
+                this.nowDate = date;
+                this.pageLodading = true;
+                this.getPageList();
             }
         }
     }
 </script>
+<style lang="scss" scoped>
+
+</style>

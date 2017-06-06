@@ -44,7 +44,8 @@ module.exports = {
           jQuery: 'jquery',
           'windows.jQuery': 'jquery',
           'window.jQuery': 'jquery',
-          _: 'lodash'
+          _: 'lodash',
+          moment: 'moment'
       }),
       // 公共模块提取
       new webpack.optimize.CommonsChunkPlugin({

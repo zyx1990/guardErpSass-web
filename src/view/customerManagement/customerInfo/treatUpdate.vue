@@ -1,25 +1,29 @@
 /**
- * 添加治疗预约信息页面
+ * 修改治疗预约信息页面
  */
 
 <template>
     <div class="container-box userPower">
         <div v-if='powerLoad > 0'>
             <div class="container-header">
-                <h2>治疗预约信息</h2>
+                <h2>修改治疗预约</h2>
             </div>
             <div class="container-body">
                 <Form ref="formValidate" :model="formValidate" :rules="ruleForm" :label-width="100" label-position="right">
-                    <Form-item label="选择医院" prop="hospitalId" required>
-                        <Select v-model="formValidate.hospitalId" style="width:300px" :disabled='!key' @on-change='changeHosp'>
-                            <Option v-for="item in hospList" :value="item.id" :key="item">{{ item.name }}</Option>
-                        </Select>
+                    <Form-item label="提交时间">
+                        <span>{{createtime}}</span>
+                    </Form-item>
+                    <Form-item label="提交用户">
+                        <span>【{{createUserHospitalName}}】 【{{createUserDeptName}}】 【{{createUserName}}】</span>
+                    </Form-item>
+                    <Form-item label="预约医院">
+                        <span>{{hospitalName}}</span>
                     </Form-item>
                     <Form-item label="预约日期" required prop="appointmentDate">
-                        <Date-picker type="date" placement="bottom-start" placeholder="选择日期" style="width: 300px" :options='options' @on-change='saveDate'></Date-picker>
+                        <Date-picker :value='timeDay' type="date" placement="bottom-start" placeholder="选择日期" style="width: 300px" :options='options' @on-change='saveDate'></Date-picker>
                     </Form-item>
                     <Form-item label="预约时间" required prop="startTime">
-                         <Time-picker format="HH:mm" type="timerange" placement="bottom-start" placeholder="选择时间" style="width: 300px" @on-change='saveTime'></Time-picker>
+                         <Time-picker :value='timeBox' format="HH:mm" type="timerange" placement="bottom-start" placeholder="选择时间" style="width: 300px" @on-change='saveTime'></Time-picker>
                     </Form-item>
                     <Form-item label="预约医生" prop="userId">
                         <Select v-model="formValidate.userId" style="width:300px">
@@ -89,13 +93,6 @@
 <script>
     export default {
         data () {
-            const validateHosp = (rule, value, callback) => {
-                if (value === '') {
-                    callback(new Error('请选择医院'));
-                } else {
-                    callback();
-                }
-            };
             const validateDay = (rule, value, callback) => {
                 if (value === '') {
                     callback(new Error('请选择预约日期'));
@@ -121,13 +118,17 @@
                 cusName: '',
                 powerLoad: '-1',
                 errorMsg: '',
-                key: true,
 
 
-                seen: true,
+                createtime: '',
+                createUserName: '',
+                createUserHospitalName: '',
+                createUserDeptName: '',
+                hospitalName: '',
+                timeBox: [],
+                timeDay: '',
                 formValidate: {
-                    customerId: '',
-                    hospitalId: '',
+                    id: '',
                     appointmentDate: '',
                     startTime: '',
                     endTime: '',
@@ -142,7 +143,6 @@
                 },
                 objName: '',
                 nameList: [],
-                hospList: [],
                 options: {
                     disabledDate (date) {
                         return date && date.valueOf() < Date.now() - 86400000;
@@ -213,9 +213,6 @@
                 ],
                 dataAll: [],
                 ruleForm: {
-                    hospitalId: [
-                        { validator: validateHosp, trigger: 'change' }
-                    ],
                     appointmentDate: [
                         { validator: validateDay, trigger: 'change' }
                     ],
@@ -231,53 +228,43 @@
         created () {
             if (window.sessionStorage) {
                 var lg = window.sessionStorage;
-                this.formValidate.customerId = lg.cusId
                 this.cusName = lg.cusName
             }
-            this.getId(this.formValidate.customerId)
+            this.formValidate.id = this.$route.query.id
+            this.getId(this.$route.query.id)
         },
         methods: {
             // 获取资料
             getId (id) {
                 var _vm = this;
                 _vm.$http.get({
-                    url: 'guard-webManager/customerRecord/treatAdd.jhtml',
-                    data: {customerId: id},
+                    url: 'guard-webManager/customerRecord/treatUpdate.jhtml',
+                    data: {id: id},
                     success: function(res){
                         if(res.status == 200 ){
                             if(res.data.code == 0) {
                                 _vm.powerLoad = 1
-                                _vm.hospList = res.data.content.Hospital
+                                _vm.hospitalName = res.data.content.Treat.hospitalName
+                                _vm.createUserDeptName = res.data.content.Treat.createUserDeptName
+                                _vm.createUserHospitalName = res.data.content.Treat.createUserHospitalName
+                                _vm.createUserName = res.data.content.Treat.createUserName
+                                _vm.createtime = res.data.content.Treat.createtime
+                                _vm.nameList = res.data.content.AppointmentUserList
+                                _vm.timeDay = res.data.content.Treat.appointmentdate.split(' ')[0]
+                                _vm.timeBox.push(res.data.content.Treat.appointmentstarttime)
+                                _vm.timeBox.push(res.data.content.Treat.appointmentendtime)
+                                _vm.formValidate.userId = res.data.content.Treat.userid
+                                _vm.formValidate.remark = res.data.content.Treat.remark
+                                _vm.formValidate.startTime = res.data.content.Treat.appointmentstarttime
+                                _vm.formValidate.endTime = res.data.content.Treat.appointmentendtime
+                                _vm.formValidate.appointmentDate = res.data.content.Treat.appointmentdate.split(' ')[0]
+                                _vm.objName = res.data.content.Treat.chargeName
+                                _vm.formValidate.chargeId = res.data.content.Treat.chargeid
                                 _vm.dataBuy = res.data.content.DetailList
-                                if(res.data.content.IsGroupHospital) {
-
-                                } else {
-                                    _vm.formValidate.hospitalId = res.data.content.LoginHospitalId
-                                    _vm.key = false
-                                    _vm.getList(res.data.content.LoginHospitalId)
-                                }
                             } else {
                                 _vm.powerLoad = 0
                                 _vm.errorMsg = res.data.desc
                             }
-                        } else {
-                            console.log(res.data.desc)
-                        }
-                    },
-                    error: function(res){
-                        console.log(res);
-                    }
-                });
-            },
-            //获取人员列表
-            getList (id) {
-                var _vm = this;
-                _vm.$http.get({
-                    url: 'guard-webManager/customerRecord/treatmentUserList.jhtml',
-                    data: {hospitalId: id},
-                    success: function(res){
-                        if(res.status == 200 ){
-                            _vm.nameList = res.data.content   
                         } else {
                             console.log(res.data.desc)
                         }
@@ -305,9 +292,6 @@
                         console.log(res);
                     }
                 });
-            },
-            changeHosp (id) {
-                this.getList(id)
             },
             saveDate (date) {
                 this.formValidate.appointmentDate = date
@@ -340,11 +324,11 @@
                 _vm.$refs['formValidate'].validate((valid) => {
                     if(valid) { 
                         _vm.$http.post({
-                            url: 'guard-webManager/customerRecord/addTreat.jhtml',
+                            url: 'guard-webManager/customerRecord/treatUpdateEdit.jhtml',
                             data: _vm.formValidate,
                             success: function(res){
+                                console.log(res)
                                 if(res.status == 200 ){
-                                    console.log(res)
                                     if(res.data.code == 0) {
                                         var breadData = [
                                             {

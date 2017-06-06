@@ -239,8 +239,11 @@
                     <Select v-model="formCusEdit.provinceID" style="width:200px" @on-change='getCity'>
                         <Option v-for="item in provinceList" :value="item.id" :key="item">{{ item.name }}</Option>
                     </Select>
-                    <Select v-model="formCusEdit.cityID" style="width:200px">
+                    <Select v-model="formCusEdit.cityID" style="width:200px" @on-change='getDistrict'>
                         <Option v-for="item in cityList" :value="item.id" :key="item">{{ item.name }}</Option>
+                    </Select>
+                    <Select v-model="formCusEdit.districtId" style="width:200px">
+                        <Option v-for="item in districtList" :value="item.id" :key="item">{{ item.name }}</Option>
                     </Select>
                 </Form-item>
                 <Form-item label="地址" prop="address">
@@ -308,6 +311,7 @@
         data () {
             return {
                 //客户信息
+                cusId: '',
                 cusData: {
                     id: '',
                     name: '',
@@ -380,6 +384,7 @@
                 loadingCus: true,
                 provinceList: [],
                 cityList: [],
+                districtList: [],
                 //客户自定义信息
                 custom1: '',
                 custom2: '',
@@ -394,6 +399,7 @@
                 modalCusEdit2: false,
                 loadingCus2: true,
                 formCusEdit2: {
+                    id: '',
                     custom1: '',
                     custom2: '',
                     custom3: '',
@@ -423,8 +429,9 @@
         created () {
             if (window.sessionStorage) {
                 var lg = window.sessionStorage;
+                this.cusId = lg.cusId
             }
-            this.getId(lg.cusId)
+            this.getId(this.cusId)
         },
         mounted () {
             this.getProvince()
@@ -503,6 +510,26 @@
                     }
                 });
             },
+            //获取区
+            getDistrict (id) {
+                if(typeof id == 'number') {
+                    var _vm = this;
+                    _vm.$http.get({
+                        url: 'guard-webManager/select/districtList.jhtml',
+                        data: {id: id},
+                        success: function(res){
+                            if(res.status == 200 ){
+                                _vm.districtList = res.data.content
+                            } else {
+                                console.log(res.data.desc)
+                            }
+                        },
+                        error: function(res){
+                            console.log(res);
+                        }
+                    });
+                }
+            },
             //设置生日
             setBirthday (date) {
                 this.formCusEdit.birthday = date
@@ -515,8 +542,9 @@
                 }
                 _vm.formCusEdit.gender = _vm.cusData.gender + ''
                 _vm.formCusEdit.districtId = _vm.cusData.districtid
-                _vm.formCusEdit.birthday = _vm.cusData.districtid.BirthDay
-                _vm.birthday = _vm.cusData.districtid.BirthDay
+                _vm.formCusEdit.birthday = _vm.cusData.BirthDay
+                _vm.birthday = _vm.cusData.BirthDay
+                _vm.formCusEdit.age = _vm.cusData.Age
                 _vm.modalCusEdit = true
             },
             editCus2 () {
@@ -526,8 +554,50 @@
                 }
                 _vm.modalCusEdit2 = true
             },
-            okCus () {},
-            okCus2 () {},
+            okCus () {
+                var _vm = this;
+                _vm.$http.post({
+                    url: 'guard-webManager/customerRecord/updateEdit.jhtml',
+                    data: _vm.formCusEdit,
+                    success: function(res){
+                        if(res.status == 200 ){
+                            _vm.getId(_vm.cusId)
+                            _vm.modalCusEdit = false;
+                            _vm.$Notice.success({
+                                title: '系统提示！',
+                                desc: '保存成功！'
+                            });
+                        } else {
+                            console.log(res.data.desc)
+                        }
+                    },
+                    error: function(res){
+                        console.log(res);
+                    }
+                });
+            },
+            okCus2 () {
+                var _vm = this;
+                _vm.$http.post({
+                    url: 'guard-webManager/customerRecord/updateCustomEdit.jhtml',
+                    data: _vm.formCusEdit2,
+                    success: function(res){
+                        if(res.status == 200 ){
+                            _vm.getId(_vm.cusId)
+                            _vm.modalCusEdit2 = false;
+                            _vm.$Notice.success({
+                                title: '系统提示！',
+                                desc: '保存成功！'
+                            });
+                        } else {
+                            console.log(res.data.desc)
+                        }
+                    },
+                    error: function(res){
+                        console.log(res);
+                    }
+                });
+            },
         }
     }
 </script>

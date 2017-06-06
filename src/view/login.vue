@@ -79,8 +79,10 @@
                             if(res.status == 200 ){
                                 var code = res.data.code;
                                 if(code == 0){
+                                    console.log(res)
                                     _vm.$token.setToken('adminToken', res.data.content);
                                     window.sessionStorage.setItem('userAccount', _vm.name);
+                                    window.sessionStorage.setItem('hospId', '1');
                                     _vm.$router.push('/desktop');
                                 }else{
                                     console.log(res.data);

@@ -486,16 +486,41 @@
             // 获取资料
             getId (id) {
                 var _vm = this;
+                var _data = {};
                 _vm.$http.get({
-                    url: 'guard-webManager/customerRecord/orderAdd.jhtml',
-                    data: {customerId: id},
+                    url: 'guard-webManager/customerRecord/orderUpdate.jhtml',
+                    data: {id: _vm.$route.query.id},
                     success: function(res){
                         if(res.status == 200 ){
+                            console.log(res)
                             if(res.data.code == 0) {
                                 _vm.powerLoad = 1
+                                _vm.formEdit.remark = res.data.content.Order.remark
                                 _vm.comData = res.data.content.CommonList
                                 _vm.lastData = res.data.content.LastList
                                 _vm.doctorList = eval(res.data.content.Arr)
+                                for(let item of res.data.content.Order.detailList) {
+                                    if(typeof item.setid == 'object') {
+                                        _data['key'] = true
+                                    } else {
+                                        _data['key'] = false
+                                    }
+                                    if(typeof item.doctoruserid == 'number') {
+                                        _data['assigndoctor'] = 1
+                                    } else {
+                                        _data['assigndoctor'] = 0
+                                    }
+                                    _data['id'] = item['id']
+                                    _data['name'] = item['chargeName']
+                                    _data['num'] = item['num']
+                                    _data['price'] = item['price']
+                                    _data['finalPrice'] = item['finalprice']
+                                    _data['realPrice'] = item['price']
+                                    _data['setid'] = item['setid']
+                                    _data['doctorUserId'] = item['doctoruserid']
+                                    _vm.formEdit.editData.push(_data)
+                                    _data = {}
+                                }
                             } else {
                                 _vm.powerLoad = 0
                                 _vm.errorMsg = res.data.desc
@@ -677,9 +702,9 @@
                 _vm.$refs['formEdit'].validate((valid) => {
                     if(valid) {
                         _vm.$http.post({
-                            url: 'guard-webManager/customerRecord/addOrder.jhtml',
+                            url: 'guard-webManager/customerRecord/orderUpdateEdit.jhtml',
                             data: {
-                                customerId: _vm.cusId,
+                                id: _vm.$route.query.id,
                                 remark: _vm.formEdit.remark,
                                 detailListStr: JSON.stringify(_box)
                             },

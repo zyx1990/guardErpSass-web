@@ -827,10 +827,26 @@ var router = new Router({
                     }
                 },
                 {
+                    path: '/consultUpdate',
+                    component(resolve) {
+                        require.ensure(['view/customerManagement/customerInfo/consultUpdate'], () => {
+                            resolve(require('view/customerManagement/customerInfo/consultUpdate'));
+                        });
+                    }
+                },
+                {
                     path: '/depositOrderAdd',
                     component(resolve) {
                         require.ensure(['view/customerManagement/customerInfo/depositOrderAdd'], () => {
                             resolve(require('view/customerManagement/customerInfo/depositOrderAdd'));
+                        });
+                    }
+                },
+                {
+                    path: '/depositOrderView',
+                    component(resolve) {
+                        require.ensure(['view/customerManagement/customerInfo/depositOrderView'], () => {
+                            resolve(require('view/customerManagement/customerInfo/depositOrderView'));
                         });
                     }
                 },
@@ -843,10 +859,34 @@ var router = new Router({
                     }
                 },
                 {
+                    path: '/orderView',
+                    component(resolve) {
+                        require.ensure(['view/customerManagement/customerInfo/orderView'], () => {
+                            resolve(require('view/customerManagement/customerInfo/orderView'));
+                        });
+                    }
+                },
+                {
+                    path: '/orderUpdate',
+                    component(resolve) {
+                        require.ensure(['view/customerManagement/customerInfo/orderUpdate'], () => {
+                            resolve(require('view/customerManagement/customerInfo/orderUpdate'));
+                        });
+                    }
+                },
+                {
                     path: '/appointmentAdd',
                     component(resolve) {
                         require.ensure(['view/customerManagement/customerInfo/appointmentAdd'], () => {
                             resolve(require('view/customerManagement/customerInfo/appointmentAdd'));
+                        });
+                    }
+                },
+                {
+                    path: '/appointmentUpdate',
+                    component(resolve) {
+                        require.ensure(['view/customerManagement/customerInfo/appointmentUpdate'], () => {
+                            resolve(require('view/customerManagement/customerInfo/appointmentUpdate'));
                         });
                     }
                 },
@@ -859,10 +899,26 @@ var router = new Router({
                     }
                 },
                 {
+                    path: '/treatUpdate',
+                    component(resolve) {
+                        require.ensure(['view/customerManagement/customerInfo/treatUpdate'], () => {
+                            resolve(require('view/customerManagement/customerInfo/treatUpdate'));
+                        });
+                    }
+                },
+                {
                     path: '/surgeryAdd',
                     component(resolve) {
                         require.ensure(['view/customerManagement/customerInfo/surgeryAdd'], () => {
                             resolve(require('view/customerManagement/customerInfo/surgeryAdd'));
+                        });
+                    }
+                },
+                {
+                    path: '/surgeryUpdate',
+                    component(resolve) {
+                        require.ensure(['view/customerManagement/customerInfo/surgeryUpdate'], () => {
+                            resolve(require('view/customerManagement/customerInfo/surgeryUpdate'));
                         });
                     }
                 },
@@ -875,10 +931,26 @@ var router = new Router({
                     }
                 },
                 {
+                    path: '/callbackUpdate',
+                    component(resolve) {
+                        require.ensure(['view/customerManagement/customerInfo/callbackUpdate'], () => {
+                            resolve(require('view/customerManagement/customerInfo/callbackUpdate'));
+                        });
+                    }
+                },
+                {
                     path: '/callbackTaskAdd',
                     component(resolve) {
                         require.ensure(['view/customerManagement/customerInfo/callbackTaskAdd'], () => {
                             resolve(require('view/customerManagement/customerInfo/callbackTaskAdd'));
+                        });
+                    }
+                },
+                {
+                    path: '/callbackTaskUpdate',
+                    component(resolve) {
+                        require.ensure(['view/customerManagement/customerInfo/callbackTaskUpdate'], () => {
+                            resolve(require('view/customerManagement/customerInfo/callbackTaskUpdate'));
                         });
                     }
                 },

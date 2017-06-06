@@ -1,25 +1,35 @@
 /**
- * 添加治疗预约信息页面
+ * 修改手术预约信息页面
  */
 
 <template>
     <div class="container-box userPower">
         <div v-if='powerLoad > 0'>
             <div class="container-header">
-                <h2>治疗预约信息</h2>
+                <h2>修改手术预约信息</h2>
             </div>
             <div class="container-body">
                 <Form ref="formValidate" :model="formValidate" :rules="ruleForm" :label-width="100" label-position="right">
-                    <Form-item label="选择医院" prop="hospitalId" required>
-                        <Select v-model="formValidate.hospitalId" style="width:300px" :disabled='!key' @on-change='changeHosp'>
-                            <Option v-for="item in hospList" :value="item.id" :key="item">{{ item.name }}</Option>
-                        </Select>
+                    <Form-item label="提交时间">
+                        <span>{{createtime}}</span>
+                    </Form-item>
+                    <Form-item label="提交用户">
+                        <span>【{{createUserHospitalName}}】 【{{createUserDeptName}}】 【{{createUserName}}】</span>
+                    </Form-item>
+                    <Form-item label="预约医院">
+                        <span>{{hospitalName}}</span>
                     </Form-item>
                     <Form-item label="预约日期" required prop="appointmentDate">
-                        <Date-picker type="date" placement="bottom-start" placeholder="选择日期" style="width: 300px" :options='options' @on-change='saveDate'></Date-picker>
+                        <Date-picker :value='timeDay' type="date" placement="bottom-start" placeholder="选择日期" style="width: 300px" :options='options' @on-change='saveDate'></Date-picker>
                     </Form-item>
                     <Form-item label="预约时间" required prop="startTime">
-                         <Time-picker format="HH:mm" type="timerange" placement="bottom-start" placeholder="选择时间" style="width: 300px" @on-change='saveTime'></Time-picker>
+                         <Time-picker :value='timeBox' format="HH:mm" type="timerange" placement="bottom-start" placeholder="选择时间" style="width: 300px" @on-change='saveTime'></Time-picker>
+                    </Form-item>
+                    <Form-item label="麻醉类型" prop="anesthesiaType">
+                        <Radio-group v-model="formValidate.anesthesiaType">
+                            <Radio label="1">全麻</Radio>
+                            <Radio label="2">局麻</Radio>
+                        </Radio-group>
                     </Form-item>
                     <Form-item label="预约医生" prop="userId">
                         <Select v-model="formValidate.userId" style="width:300px">
@@ -29,8 +39,8 @@
                             </Option>
                         </Select>
                     </Form-item>
-                    <Form-item label="预约项目" prop="chargeId" required class='treatAddObj'>
-                        <Input v-model="objName" placeholder="请选择预约项目" style='float:left;width:300px;margin-right:10px;'></Input>
+                    <Form-item label="预约项目" prop="detailListStr" required class='surgeryAddObj'>
+                        <Table stripe :columns="col" :data="data"></Table>
                         <Button type="primary" shape="circle" icon="ios-search-strong" @click='showBuy'>选择已购项目</Button>
                         <Button type="primary" shape="circle" icon="ios-search-strong" @click='showAll'>选择所有项目</Button>
                     </Form-item>
@@ -89,13 +99,6 @@
 <script>
     export default {
         data () {
-            const validateHosp = (rule, value, callback) => {
-                if (value === '') {
-                    callback(new Error('请选择医院'));
-                } else {
-                    callback();
-                }
-            };
             const validateDay = (rule, value, callback) => {
                 if (value === '') {
                     callback(new Error('请选择预约日期'));
@@ -121,62 +124,80 @@
                 cusName: '',
                 powerLoad: '-1',
                 errorMsg: '',
-                key: true,
-
-
-                seen: true,
+                createtime: '',
+                createUserName: '',
+                createUserHospitalName: '',
+                createUserDeptName: '',
+                hospitalName: '',
+                timeBox: [],
+                timeDay: '',
                 formValidate: {
-                    customerId: '',
-                    hospitalId: '',
+                    id: '',
                     appointmentDate: '',
                     startTime: '',
                     endTime: '',
-                    remark: '',
                     userId: '',
-                    chargeId: '',
+                    anesthesiaType: '1',
+                    remark: '',
+                    detailListStr: '',
                 },
                 formSearch: {
                     name: '',
                     pinyin: '',
                     categoryId: ''
                 },
-                objName: '',
                 nameList: [],
-                hospList: [],
                 options: {
                     disabledDate (date) {
                         return date && date.valueOf() < Date.now() - 86400000;
                     }
                 },
                 modalbuy: false,
-                colBuy: [
+                col: [
                     {
-                        title: '订购日期',
-                        key: 'orderPaidTime',
-                        render: (h, params) => {
-                            const _time = params.row.orderPaidTime.split(' ')[0]
-                            return h('span', _time)
-                        }
+                        title: '项目编号',
+                        key: 'id'
                     },
                     {
                         title: '项目名称',
-                        key: 'chargeName'
+                        key: 'name'
                     },
                     {
-                        title: '分类',
-                        key: 'chargeCategoryName'
+                        title: '操作',
+                        key: 'action',
+                        width: 100,
+                        align: 'center',
+                        render: (h, params) => {
+                            return h('div', [
+                                    h('Button', {
+                                        props: {
+                                            type: 'error',
+                                            size: 'small',
+                                            icon: 'ios-trash-outline'
+                                        },
+                                        on: {
+                                            click: () => {
+                                                this.remove(params.index)
+                                            }
+                                        }
+                                    }, '删除'),
+                                ])
+                        }
+                    }
+                ],
+                data: [],
+                colBuy: [
+                    {
+                        title: '编号',
+                        key: 'id'
                     },
                     {
-                        title: '数量',
-                        key: 'num'
+                        title: '名称',
+                        key: 'name'
                     },
                     {
-                        title: '下单用户',
-                        key: 'orderCreateUserName'
-                    },
-                    {
-                        title: '指定医生',
-                        key: 'doctorUserName'
+                        title: '规格',
+                        key: 'unitName'
                     }
                 ],
                 dataBuy: [],
@@ -213,71 +234,82 @@
                 ],
                 dataAll: [],
                 ruleForm: {
-                    hospitalId: [
-                        { validator: validateHosp, trigger: 'change' }
-                    ],
                     appointmentDate: [
                         { validator: validateDay, trigger: 'change' }
                     ],
                     startTime: [
                         { validator: validateTime, trigger: 'change' }
                     ],
-                    categoryId: [
+                    detailListStr: [
                         { validator: validateObj, trigger: 'blur' }
                     ],
                 }
             }
         },
+        computed: {
+            toSave () {
+                var _box = []
+                var _obj = {}
+                for(let item of this.data) {
+                    _obj['chargeId'] = item['id']
+                    _box.push(_obj)
+                    _obj = {}
+                }
+                return _box
+            } 
+        },
         created () {
             if (window.sessionStorage) {
                 var lg = window.sessionStorage;
-                this.formValidate.customerId = lg.cusId
                 this.cusName = lg.cusName
             }
-            this.getId(this.formValidate.customerId)
+            this.formValidate.id = this.$route.query.id
+            this.getId(this.$route.query.id)
         },
         methods: {
             // 获取资料
             getId (id) {
                 var _vm = this;
                 _vm.$http.get({
-                    url: 'guard-webManager/customerRecord/treatAdd.jhtml',
-                    data: {customerId: id},
+                    url: 'guard-webManager/customerRecord/surgeryUpdate.jhtml',
+                    data: {id: id},
                     success: function(res){
                         if(res.status == 200 ){
                             if(res.data.code == 0) {
+                                console.log(res)
                                 _vm.powerLoad = 1
-                                _vm.hospList = res.data.content.Hospital
-                                _vm.dataBuy = res.data.content.DetailList
-                                if(res.data.content.IsGroupHospital) {
-
-                                } else {
-                                    _vm.formValidate.hospitalId = res.data.content.LoginHospitalId
-                                    _vm.key = false
-                                    _vm.getList(res.data.content.LoginHospitalId)
+                                _vm.hospitalName = res.data.content.Surgery.hospitalName
+                                _vm.createUserDeptName = res.data.content.Surgery.createUserDeptName
+                                _vm.createUserHospitalName = res.data.content.Surgery.createUserHospitalName
+                                _vm.createUserName = res.data.content.Surgery.createUserName
+                                _vm.createtime = res.data.content.Surgery.createtime
+                                _vm.timeDay = res.data.content.Surgery.appointmentdate.split(' ')[0]
+                                const _start = res.data.content.Surgery.appointmenttimestart.split(' ')[1]
+                                const _end = res.data.content.Surgery.appointmenttimeend.split(' ')[1]
+                                _vm.timeBox.push(_start)
+                                _vm.timeBox.push(_end)
+                                _vm.formValidate.startTime = _start
+                                _vm.formValidate.endTime = _end
+                                _vm.formValidate.appointmentDate = res.data.content.Surgery.appointmentdate.split(' ')[0]
+                                _vm.formValidate.anesthesiaType = res.data.content.Surgery.anesthesiatype
+                                _vm.nameList = res.data.content.AppointmentUserList
+                                _vm.dataBuy = res.data.content.ChargeList
+                                _vm.formValidate.remark = res.data.content.Surgery.remark
+                                _vm.formValidate.userId = res.data.content.Surgery.userid
+                                var _box1 = []
+                                var _obj1 = {}
+                                for(let item of res.data.content.Surgery.detailList) {
+                                    _obj1['name'] = item['chargeName']
+                                    _obj1['id'] = item['chargeid']
+                                    _box1.push(_obj1)
+                                    _obj1 = {}
                                 }
+                                _vm.data = _box1
+                                _vm.formValidate.detailListStr = JSON.stringify(_vm.toSave)
                             } else {
                                 _vm.powerLoad = 0
                                 _vm.errorMsg = res.data.desc
                             }
-                        } else {
-                            console.log(res.data.desc)
-                        }
-                    },
-                    error: function(res){
-                        console.log(res);
-                    }
-                });
-            },
-            //获取人员列表
-            getList (id) {
-                var _vm = this;
-                _vm.$http.get({
-                    url: 'guard-webManager/customerRecord/treatmentUserList.jhtml',
-                    data: {hospitalId: id},
-                    success: function(res){
-                        if(res.status == 200 ){
-                            _vm.nameList = res.data.content   
                         } else {
                             console.log(res.data.desc)
                         }
@@ -306,6 +338,9 @@
                     }
                 });
             },
+            handleReset (name) {
+                this.$refs[name].resetFields();
+            },
             changeHosp (id) {
                 this.getList(id)
             },
@@ -316,31 +351,50 @@
                 this.formValidate.startTime = time[0]
                 this.formValidate.endTime = time[1]
             },
-            showBuy () {
+            showBuy (data) {
                 this.modalbuy = true
             },
             showAll () {
                 this.modalall = true
             },
             chooseBuy (data) {
-                this.formValidate.chargeId = data.chargeid
-                this.objName = data.chargeName
-                this.modalbuy = false
+                var bool = true
+                var _vm = this;
+                for(var i = 0; i < _vm.data.length; i++) {
+                    if(_vm.data[i].id == data.id) {
+                        bool = false
+                    }
+                }
+                if(bool) {
+                    _vm.data.push(data)
+                    _vm.formValidate.detailListStr = JSON.stringify(_vm.toSave)
+                    _vm.modalbuy = false
+                }     
             },
             chooseAll (data) {
-                this.formValidate.chargeId = data.id
-                this.objName = data.name
-                this.modalall = false
+                var bool = true
+                var _vm = this;
+                for(var i = 0; i < _vm.data.length; i++) {
+                    if(_vm.data[i].id == data.id) {
+                        bool = false
+                    }
+                }
+                if(bool) {
+                    _vm.data.push(data)
+                    _vm.formValidate.detailListStr = JSON.stringify(_vm.toSave)
+                    _vm.modalall = false
+                }  
             },
-            handleReset (name) {
-                this.$refs[name].resetFields();
+            remove (index) {
+                this.data.splice(index, 1)
+                this.formValidate.detailListStr = JSON.stringify(this.toSave)
             },
             save () {
                 var _vm = this
                 _vm.$refs['formValidate'].validate((valid) => {
                     if(valid) { 
                         _vm.$http.post({
-                            url: 'guard-webManager/customerRecord/addTreat.jhtml',
+                            url: 'guard-webManager/customerRecord/surgeryUpdateEdit.jhtml',
                             data: _vm.formValidate,
                             success: function(res){
                                 if(res.status == 200 ){
@@ -402,8 +456,8 @@
 </script>
 
 <style>
-   .treatAddObj button {
-        margin: 0 10px;
+   .surgeryAddObj button {
+        margin: 10px 10px 0;
    } 
 </style>
 

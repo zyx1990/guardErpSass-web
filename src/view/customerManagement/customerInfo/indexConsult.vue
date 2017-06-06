@@ -10,6 +10,8 @@
     export default {
         data () {
             return {
+                cusName: '',
+                cusId: '',
                 columns: [
                     {   
                         title: '序号',
@@ -129,6 +131,8 @@
         created () {
             if (window.sessionStorage) {
                 var lg = window.sessionStorage;
+                this.cusName = lg.cusName
+                this.cusId = lg.cusId
             }
             this.getList(lg.cusId)
         },
@@ -151,6 +155,29 @@
                     }
                 });
             },
+            toEdit (data) {
+                var breadData = [
+                    {
+                        url: '/desktop',
+                        text: '桌面'
+                    },
+                    {
+                        url: '/customerMsg',
+                        text: this.cusName
+                    },
+                    {
+                        url: '/consultUpdate',
+                        text: '修改咨询'
+                    }
+                ];
+                this.$store.dispatch('setBreadData', breadData);
+                this.$router.push({
+                    path: '/consultUpdate',
+                    query: {
+                        id: data.id
+                    }
+                })
+            },
             remove (data) {
                 var _vm = this;
                 _vm.$Modal.confirm({
@@ -163,7 +190,7 @@
                             success: function(res){
                                 if(res.status == 200 ){
                                     if(res.data.code == 0) {
-                                        _vm.getList()
+                                        _vm.getList(_vm.cusId)
                                         _vm.$Notice.success({
                                             title: '系统提示！',
                                             desc: '删除成功！'
