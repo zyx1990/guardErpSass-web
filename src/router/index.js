@@ -995,6 +995,14 @@ var router = new Router({
                     }
                 },
                 {
+                    path: '/failtureUpdate',
+                    component(resolve) {
+                        require.ensure(['view/customerManagement/customerInfo/failtureUpdate'], () => {
+                            resolve(require('view/customerManagement/customerInfo/failtureUpdate'));
+                        });
+                    }
+                },
+                {
                     path: '/groupAdd',
                     component(resolve) {
                         require.ensure(['view/customerManagement/customerInfo/groupAdd'], () => {
@@ -1007,6 +1015,14 @@ var router = new Router({
                     component(resolve) {
                         require.ensure(['view/customerManagement/customerInfo/tagAdd'], () => {
                             resolve(require('view/customerManagement/customerInfo/tagAdd'));
+                        });
+                    }
+                },
+                {
+                    path: '/tagInfo',
+                    component(resolve) {
+                        require.ensure(['view/customerManagement/customerInfo/tagInfo'], () => {
+                            resolve(require('view/customerManagement/customerInfo/tagInfo'));
                         });
                     }
                 },
@@ -1168,6 +1184,14 @@ var router = new Router({
                     component(resolve) {
                         require.ensure(['view/customerManagement/customerGroup'], () => {
                             resolve(require('view/customerManagement/customerGroup'));
+                        });
+                    }
+                },
+                {
+                    path: '/customerGroupManagement',
+                    component(resolve) {
+                        require.ensure(['view/customerManagement/customerGroupManagement'], () => {
+                            resolve(require('view/customerManagement/customerGroupManagement'));
                         });
                     }
                 },

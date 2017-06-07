@@ -19,7 +19,7 @@
                 </Form-item>
             </Form>
             <Table stripe :columns="columns" :data="data"></Table>
-             <div class="table-page">
+            <div class="table-page">
                 <div class="table-info">当前第{{page.pageNumber}}页，共{{page.totalPages}}页，总共{{page.total}}条记录</div>
                 <Page class="table-paginate" :total="page.total" @on-change='changePage' :current='page.pageNumber'></Page>
             </div>

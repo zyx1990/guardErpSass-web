@@ -1,7 +1,6 @@
 /**
  * 客户组管理
  */
-
 <template>
     <div class="container-box" ref="containerBox">
         <div class="container-header">
@@ -13,11 +12,11 @@
         <div class="container-body">
             <Form  :label-width="50" inline>
                 <Form-item label="名称">
-                    <Input type="text" placeholder="请输入名称"></Input>
+                    <Input type="text" placeholder="请输入名称" v-model="keyName"></Input>
                 </Form-item>
                 <ul class="header-btn-group not-float">
-                    <li class="header-item"><Icon type="search"></Icon>查询</li>
-                    <li class="header-item"><Icon type="refresh"></Icon>重置</li>
+                    <li class="header-item" @click="search"><Icon type="search"></Icon>查询</li>
+                    <li class="header-item" @click="reset"><Icon type="refresh"></Icon>重置</li>
                 </ul>
             </Form>
             <Table stripe :columns="columns" :data="data"></Table>
@@ -33,7 +32,7 @@
                         <Input v-model="formValidate.name" placeholder="请输入名称"></Input>
                     </Form-item>
                     <Form-item label="描述" prop="description">
-                        <Input v-model="formValidate.description" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="请输入描述"></Input>
+                        <Input v-model="formValidate.remark" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="请输入描述"></Input>
                     </Form-item>
                 </Form>
             </Modal>
@@ -57,47 +56,71 @@
                     },
                     {
                         title: '说明',
-                        key: 'description'
+                        key: 'remark'
                     },
                     {
                         title: '操作',
                         key: 'action',
                         width: 250,
                         align: 'center',
-                        render (row, column, index) {
-                            return `<i-button type="primary" size="small" @click="edit(${index})"><Icon type="edit"></Icon>编辑</i-button> <i-button type="error" size="small" @click="remove(${index})"><Icon type="ios-trash-outline"></Icon>删除</i-button>
-                                <i-button type="info" size="small" @click="build(${index})"><Icon type="ios-color-wand"></Icon>管理分组</i-button>`;
+                        render: (h, params) => {
+                            return h('div', [
+                                    h('Button', {
+                                        props: {
+                                            type: 'primary',
+                                            size: 'small',
+                                            icon: 'edit'
+                                        },
+                                        style: {
+                                            marginRight: '5px'
+                                        },
+                                        on: {
+                                            click: () => {
+                                                this.edit(params.row)
+                                            }
+                                        }
+                                    }, '编辑'),
+                                    h('Button', {
+                                        props: {
+                                            type: 'error',
+                                            size: 'small',
+                                            icon: 'ios-trash-outline'
+                                        },
+                                        style: {
+                                            marginRight: '5px'
+                                        },
+                                        on: {
+                                            click: () => {
+                                                this.remove(params.row)
+                                            }
+                                        }
+                                    }, '删除'),
+                                    h('Button', {
+                                        props: {
+                                            type: 'info',
+                                            size: 'small',
+                                            icon: 'ios-people'
+                                        },
+                                        on: {
+                                            click: () => {
+                                                this.groupManagement(params.row)
+                                            }
+                                        }
+                                    }, '分组管理'),
+                                ])
                         }
                     }
                 ],
-                data: [
-                    {
-                        name: '玻尿酸',
-                        description: '公交广告'
-                    },
-                    {
-                        name: '肉毒素',
-                        description: '222'
-                    },
-                    {
-                        name: '开发角',
-                        description: '333'
-                    },
-                    {
-                        name: '术后回访',
-                        description: '654654'
-                    },
-                    {
-                        name: '吸脂术后回访',
-                        description: '6666'
-                    }
-                ],
+                data: [],
                 modalEdit: false,
                 loading: true,
+                editType: 'add',
+                keyName: '',
                 formValidate: {
                     name: '',
-                    description: ''
+                    remark: ''
                 },
+                hideInptId: '',
                 ruleValidate: {
                     name: [
                         { required: true, message: '姓名不能为空', trigger: 'blur' }
@@ -105,29 +128,95 @@
                 }
             }
         },
+        mounted: function(){
+            this.getList();
+        },
         methods: {
+            getList: function(){
+                var _vm = this;
+                _vm.$http.get({
+                    url: 'guard-webManager/customerGroup/list.jhtml',
+                    data: {
+                        name: _vm.keyName || ''
+                    },
+                    success: function(data){
+                        var data = data.data || {};
+                        try {
+                            _vm.data = data.content || [];
+                        } catch (error) {
+                            _vm.data = [];
+                        }
+                        console.log(data);
+                    }
+                });
+            },
+            search: function(){
+                this.getList();
+            },
+            reset: function(){
+                this.keyName = '';
+                this.getList();
+            },
             add: function() {
                 this.formValidate.name = ''
-                this.formValidate.description = ''
-                this.modalEdit = true
+                this.formValidate.remark = ''
+                this.modalEdit = true;
+                this.editType = 'add';
+                
             },
-            edit: function(index) {
-                this.formValidate.name = this.data[index].name
-                this.formValidate.description = this.data[index].description
-                this.modalEdit = true
-            },
-            build: function(index) {
+            edit: function(row) {
+                this.formValidate.name = row.name;
+                this.formValidate.remark = row.remark;
+                this.modalEdit = true;
+                this.hideInptId = row.id;
+                this.editType = 'update';
 
             },
-            remove: function(index) {
+            groupManagement: function(row){
+                 var breadData = [
+                    {
+                        url: '/desktop',
+                        text: '桌面'
+                    },
+                    {
+                        url: '/customerGroup',
+                        text: '客户管理'
+                    },
+                    {
+                        url: '/customerGroupManagement',
+                        text: row.name
+                    },
+                ];
+                this.$store.dispatch('setBreadData', breadData);
+                this.$router.push({path: 'customerGroupManagement',query:{id: row.id}})
+            },
+            build: function(index) {
+                
+            },
+            remove: function(row) {
                 this.$Modal.confirm({
                     title: '系统提示',
-                    content: '确定删除'+ this.data[index].name +'?',
+                    content: '确定删除'+ row.name +'?',
                     onOk: () => {
-                        this.$Notice.success({
-                             title: '系统提示！',
-                             desc: '删除成功！'
+                        this.$http.post({
+                            url: 'guard-webManager/customerGroup/del.jhtml',
+                            data: {
+                                id: row.id
+                            },
+                            success: function(data){
+                                var data = data.data || {};
+                                if(data.code == 0){
+                                    this.$Notice.success({
+                                        title: '系统提示！',
+                                        desc: '删除成功！'
+                                    });
+                                    this.getList();
+                                }
+                                
+                            }
+
                         });
+                        
                     },
                     onCancel: () => {
                         
@@ -135,13 +224,35 @@
                 });
             },
             ok () {
-                setTimeout(() => {
-                    this.modalEdit = false;
-                    this.$Notice.success({
-                        title: '系统提示！',
-                        desc: '保存成功！'
-                    });
-                }, 1000);
+                var _vm = this,
+                    url = '',
+                    data = {
+                        name: _vm.formValidate.name,
+                        remark: _vm.formValidate.remark
+                    };
+                    
+                if(_vm.editType == 'add'){
+                    url = 'guard-webManager/customerGroup/add.jhtml';
+                }else{
+                    url = 'guard-webManager/customerGroup/update.jhtml';
+                    data.id = _vm.hideInptId;
+                }
+                console.log(data);
+                _vm.$http.post({
+                    url: url,
+                    data: data,
+                    success: function(res){
+                        var data = res.data || {};
+                        _vm.loading = false;
+                        _vm.modalEdit = false;
+                        try {
+                            console.log(data);
+                        } catch (error) {
+                            
+                        }
+                        _vm.getList();
+                    }
+                });
             }
         }
     }

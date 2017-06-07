@@ -4,7 +4,7 @@
 
 <template>
     <div class="customer-box">
-        <Alert type="success">当前会员类型为：金卡；累计缴费金额为：￥0元；距离下一级会员 ￥1000.00元</Alert>
+        <Alert type="success" style='marginTop: 10px;'>{{memberStr}}</Alert>
         <div class="customer-item">
             <div class="customer-item-title">
                 <h3><Icon type="pricetag"></Icon>会员记录</h3>
@@ -24,6 +24,9 @@
     export default {
         data () {
             return {
+                cusName: '',
+                cusId: '',
+                memberStr: '',
                 columns: [
                     {   
                         title: '序号',
@@ -32,19 +35,24 @@
                     },
                     {
                         title: '会员类型',
-                        key: 'name'
+                        key: 'categoryName'
                     },
                     {
                         title: '操作时间',
-                        key: 'age'
+                        key: 'createtime'
                     },
                     {
                         title: '操作用户',
-                        key: 'address'
+                        key: 'createUserName',
+                        render: (h, params) => {
+                            if(typeof params.row.createUserName == 'string') {
+                                return h('span', '【' + params.row.createUserHospitalName + '】 【' + params.row.createUserDeptName + '】 【' + params.row.createUserName + '】')
+                            }
+                        }
                     },
                     {
                         title: '备注',
-                        key: 'address'
+                        key: 'remark'
                     }
                 ],
                 columns1: [
@@ -55,31 +63,63 @@
                     },
                     {
                         title: '权益名称',
-                        key: 'name'
+                        key: 'equityName'
                     },
                     {
                         title: '内容',
-                        key: 'age'
+                        key: 'equityContent'
                     },
                     {
                         title: '操作时间',
-                        key: 'address'
+                        key: 'createtime'
                     },
                     {
                         title: '操作用户',
-                        key: 'age'
+                        key: 'createUserName',
+                        render: (h, params) => {
+                            if(typeof params.row.createUserName == 'string') {
+                                return h('span', '【' + params.row.createUserHospitalName + '】 【' + params.row.createUserName + '】')
+                            }
+                        }
                     },
                     {
                         title: '备注',
-                        key: 'address'
+                        key: 'remark'
                     },
                 ],
                 data: [],
                 data1: []
             }
         },
+        created () {
+            if (window.sessionStorage) {
+                var lg = window.sessionStorage;
+                this.cusId = lg.cusId
+                this.cusName = lg.cusName
+            }
+            this.getList(this.cusId)
+        },
         methods: {
-            
+          getList (id) {
+                var _vm = this;
+                _vm.$http.get({
+                    url: 'guard-webManager/customerRecord/getMember.jhtml',
+                    data: {id: id},
+                    success: function(res){
+                        if(res.status == 200 ){
+                            console.log(res)
+                            _vm.memberStr = res.data.content.memberStr
+                            _vm.data = res.data.content.memberList
+                            _vm.data1 = res.data.content.equityList
+                        } else {
+                            console.log(res.data.desc)
+                        }
+                    },
+                    error: function(res){
+                        console.log(res);
+                    }
+                });
+            },  
         }
     }
 </script>

@@ -122,7 +122,19 @@
                 }
             }
         },
+        mounted () {
+            this.getList();
+        },
         methods: {
+            getList: function(){
+                var _vm = this;
+                _vm.$http.get({
+                    url: 'guard-webManager/customerFilter/list.jhtml',
+                    success: function(res){
+                        console.log(res);
+                    }
+                });
+            },
             add: function() {
                 this.formValidate.name = ''
                 this.formValidate.description = ''

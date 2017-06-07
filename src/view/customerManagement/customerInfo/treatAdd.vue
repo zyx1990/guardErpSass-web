@@ -124,7 +124,6 @@
                 key: true,
 
 
-                seen: true,
                 formValidate: {
                     customerId: '',
                     hospitalId: '',

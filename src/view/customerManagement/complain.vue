@@ -1,7 +1,6 @@
 /**
  * 投诉记录
  */
-
 <template>
     <div class="container-box" ref="containerBox">
         <div class="container-header">
@@ -10,32 +9,37 @@
         <div class="container-body">
             <Form  :label-width="70" inline>
                 <Form-item label="投诉日期">
-                    <Date-picker type="daterange" placement="bottom-start" placeholder="选择日期" style="width: 162px" :options='options'></Date-picker>
+                    <Date-picker type="daterange" placement="bottom-start" placeholder="选择日期" style="width: 200px" 
+                    format="yyyy-MM-dd" @on-change="dateChange" :value="nowDate"></Date-picker>
                 </Form-item>
                 <Form-item label="类型">
-                    <Select v-model="typeBox" clearable style="width:162px">
-                        <Option v-for="item in typeList" :value="item.value" :key="item" :disabled="item.choose">{{ item.label }}</Option>
+                    <Select v-model="typeBox" clearable style="width:200px">
+                        <Option v-for="item in typeList" :value="item.id" :key="item">{{ item.name }}</Option>
                     </Select>
                 </Form-item>
                 <Form-item label="客户编号">
-                    <Input type="text" placeholder="请输入客户编号"></Input>
+                    <Input type="text" placeholder="请输入客户编号" style="width:200px" v-model="customID"></Input>
                 </Form-item>
                 <Form-item label="状态">
-                    <Select v-model="statusBox" clearable style="width:162px">
+                    <Select v-model="statusBox" clearable style="width:200px">
                         <Option v-for="item in statusList" :value="item.value" :key="item">{{ item.label }}</Option>
                     </Select>
                 </Form-item>
                 <ul class="header-btn-group not-float">
-                    <li class="header-item"><Icon type="search"></Icon>查询</li>
-                    <li class="header-item"><Icon type="refresh"></Icon>重置</li>
+                    <li class="header-item" @click="search"><Icon type="search"></Icon>查询</li>
+                    <li class="header-item" @click="refresh"><Icon type="refresh"></Icon>重置</li>
                 </ul>
             </Form>
             <Table stripe :columns="columns" :data="data"></Table>
             <div class="table-page">
-                <div class="table-info">当前第1页，共1页，总共5条记录</div>
-                <Page class="table-paginate"></Page>
+                <div class="table-info">当前第{{page.pageNumber}}页，共{{page.totalPages}}页，总共{{page.total}}条记录</div>
+                <Page class="table-paginate" :total="page.total" @on-change='changePage' :current='page.pageNumber'></Page>
             </div>
         </div>
+        <Spin fix v-show="pageLodading">
+            <Icon type="load-c" size=40 class="spin-icon-load"></Icon>
+            <div>Loading</div>
+        </Spin>
     </div>
 </template>
 
@@ -51,55 +55,92 @@
                     },
                     {
                         title: '客户',
-                        key: 'customer',
-                        render (row) {
-                            return `<Icon type="person"></Icon>${row.customer[0].name} (${row.customer[0].num})`
+                        key: 'customerName',
+                        render: (h, params) => {
+                           return h('span', {
+                                on: {
+                                    click: () => {
+                                        this.$router.push({path: 'customerIndex', query: {id: params.row.customerid}});
+                                    }
+                                },
+                                style: {
+                                    cursor: 'pointer',
+                                    color: 'orange'
+                                }
+                            }, [
+                                h('Icon', {
+                                    props: {
+                                        type: "person"
+                                    }
+                                }),
+                                h('span', params.row.customerName+'('+params.row.customerid+')')
+                            ]) 
                         }
+                        
                     },
                     {
                         title: '投诉类型',
-                        key: 'compType'
+                        key: 'categoryName'
                     },
                     {
                         title: '投诉对象',
-                        key: 'compName'
+                        key: 'targetUserName'
                     },
                     {
                         title: '投诉项目',
-                        key: 'compObj'
+                        key: 'chargeName'
                     },
                     {
                         title: '投诉内容',
-                        key: 'compCon'
+                        key: 'content'
                     },
                     {
                         title: '提交时间',
-                        key: 'subDate'
+                        key: 'createtime',
+                        render: (h, params) => {
+                            if(params.row.createtime != null){
+                                return h('span', moment(params.row.createtime).format('YYYY-MM-DD'))
+                            }
+                            
+                        }
                     },
                     {
                         title: '提交用户',
-                        key: 'subUser'
+                        key: 'createUserName'
                     },
                     {
                         title: '状态',
                         key: 'status',
-                        render (row) {
-                            const color = row.status == 1 ? 'blue' : 'red';
-                            const text = row.status == 1 ? '已处理' : '未处理';
-                            return `<span style='color:${color};'>${text}</span>`;
+                        render: (h, params) => {
+                            var status = params.row.status;
+                            var statusText = '已处理';
+                            if(status == 1){
+                                statusText = '已处理';
+                            }else{
+                                statusText = '未处理';
+                            }
+                            return h('span', statusText);
+
                         }
+                    
                     },
                     {
                         title: '处理用户',
-                        key: 'handleUser'
+                        key: 'finishUserName'
                     },
                     {
                         title: '处理时间',
-                        key: 'handleDate'
+                        key: 'finishtime',
+                        render: (h, params) => {
+                            if(params.row.finishtime != null){
+                                return h('span', moment(params.row.finishtime).format('YYYY-MM-DD'))
+                            }
+                            
+                        }
                     },
                     {
                         title: '处理措施',
-                        key: 'measure'
+                        key: 'solution'
                     },
                     {
                         title: '客户反馈',
@@ -110,51 +151,30 @@
                         key: 'action',
                         width: 100,
                         align: 'center',
-                        render (row, column, index) {
-                            return `<i-button type="primary" size="small" @click="handle(${index})"><Icon type="edit"></Icon>处理</i-button>`;
+                        render: (h, params) => {
+                            return h('div', [
+                                h('Button', {
+                                    props: {
+                                        type: 'primary',
+                                        size: 'small',
+                                        icon: 'edit'
+                                    },
+                                    style: {
+                                        marginRight: '5px'
+                                    },
+                                    on: {
+                                        click: () => {
+                                            //this.edit(params.row, 2)
+                                        }
+                                    }
+                                }, '操作')    
+                            ])
+
                         }
+    
                     }
                 ],
-                data: [
-                    {
-                        customer: [
-                            {
-                                name: '阿斯顿',
-                                num: '1231654'
-                            }
-                        ],
-                        compType: ' 服务不好',
-                        compName: '赵国浩',
-                        compObj: '瑞蓝玻尿酸',
-                        compCon: '服务态度不好',
-                        subDate: '2017-05-04 15:12:15',
-                        subUser: '赵国浩',
-                        status: '1',
-                        handleUser: '测试医生',
-                        handleDate: '2017-04-24 14:49:32',
-                        measure: '测试',
-                        feedback: '5465'
-                    },
-                    {
-                        customer: [
-                            {
-                                name: '阿斯顿',
-                                num: '1231654'
-                            }
-                        ],
-                        compType: ' 服务不好',
-                        compName: '赵国浩',
-                        compObj: '瑞蓝玻尿酸',
-                        compCon: '服务态度不好',
-                        subDate: '2017-05-04 15:12:15',
-                        subUser: '赵国浩',
-                        status: '0',
-                        handleUser: '',
-                        handleDate: '',
-                        measure: '',
-                        feedback: ''
-                    }
-                ],
+                data: [],
                 statusBox: '',
                 statusList: [
                     {
@@ -167,29 +187,96 @@
                     }
                 ],
                 typeBox: '',
-                typeList: [
-                    {
-                        value: '2',
-                        label: 'sss',
-                        choose: false
-                    },
-                    {
-                        value: '3',
-                        label: 'ssss',
-                        choose: true
-                    }
-                ],
-                options: {
-                    disabledDate (date) {
-                        return date && date.valueOf() > Date.now();
-                    }
-                },
+                typeList: [],
+                customID: '',
+                page: {},
+                currtPageNum: 1,
+                pageLodading: true,
+                nowDate: [moment().format('YYYY-MM-DD'), moment().format('YYYY-MM-DD')]
             }
         },
+        mounted: function() {
+            this.getPage();
+            this.getAllComplainCategoryInfo();
+        },
         methods: {
+            getPage: function(){
+                var _vm = this;
+                _vm.$http.get({
+                    url: 'guard-webManager/complain/page.jhtml',
+                    data: {
+                        pageNumber: _vm.currtPageNum || 1,
+                        pageSize: 10,
+                        startTime: _vm.nowDate[0],
+                        endTime: _vm.nowDate[1],
+                        categoryId: '',
+                        customerId: _vm.customID,
+                        status: _vm.statusBox
+                    },
+                    success: function(data){
+                        var data = data.data || {};
+                        if(data.code == 0){
+                            _vm.pageLodading = false;
+                            try {
+                                var content = data.content || [];
+                                _vm.data = content.content || [];
+                                _vm.page = {
+                                    pageNumber: content.pageNumber,
+                                    total: content.total,
+                                    totalPages: content.totalPages
+                                }
+                            } catch (error) {
+                                _vm.data = [];
+                                _vm.page = {}
+                            }
+                        }
+                        
+                    }
+
+                });
+            },
+            getAllComplainCategoryInfo: function(){
+                var _vm = this;
+                _vm.$http.get({
+                    url: 'guard-webManager/select/allComplainCategoryInfo.jhtml',
+                    success: function(data){
+                        var data = data.data || {};
+                        if(data.code == 0){
+                            try {
+                                _vm.typeList = data.content || []
+                            } catch (error) {
+                                _vm.typeList = [];
+                            }
+                        }
+                        
+
+                    }
+                });
+            },
             handle: function(index) {
                 
-            }
+            },
+            search: function(){
+                 this.getPageList();
+            },
+            refresh: function(){
+                var _vm = this;
+                _vm.nowDate = [moment().format('YYYY-MM-DD'), moment().format('YYYY-MM-DD')];
+                _vm.customID = '';
+                _vm.statusBox = '';
+                _vm.typeBox = '';
+
+            },
+            dateChange: function(date) {
+                this.pageLodading = true;
+                this.nowDate = date;
+                this.getPage();
+            },
+            changePage: function(pageNum){
+                this.currtPageNum = pageNum;
+                this.pageLodading = true;
+                this.getPageList();
+            },
         }
     }
 </script>

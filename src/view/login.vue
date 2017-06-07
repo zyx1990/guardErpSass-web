@@ -41,6 +41,7 @@
     export default {
         data() {
             return {
+                isHQ: '',
                 name: '',
                 password: '',
                 single: false,
@@ -79,10 +80,15 @@
                             if(res.status == 200 ){
                                 var code = res.data.code;
                                 if(code == 0){
-                                    console.log(res)
-                                    _vm.$token.setToken('adminToken', res.data.content);
-                                    window.sessionStorage.setItem('userAccount', _vm.name);
-                                    window.sessionStorage.setItem('hospId', '1');
+                                     _vm.$token.setToken('adminToken', res.data.content.access_token);
+                                    window.sessionStorage.setItem('userAccount', res.data.content.user.name);
+                                    window.sessionStorage.setItem('hospId', res.data.content.user.hospitalid);
+                                    if(res.data.content.user.hospitalid == 1) {
+                                        _vm.isHQ = true
+                                    } else {
+                                        _vm.isHQ = false
+                                    }
+                                    window.sessionStorage.setItem('isHQ', _vm.isHQ);
                                     _vm.$router.push('/desktop');
                                 }else{
                                     console.log(res.data);

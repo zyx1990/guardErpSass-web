@@ -65,7 +65,7 @@
                     <div class="customer-item-title">
                         <h3><Icon type="pricetag"></Icon>客户标签</h3>
                         <ul class="header-btn-group">
-                            <li class="header-item"><Icon type="information"></Icon>详情</li>
+                            <li class="header-item" @click='toTag'><Icon type="information"></Icon>详情</li>
                         </ul>
                     </div>
                     <div>
@@ -598,6 +598,29 @@
                     }
                 });
             },
+            toTag () {
+                var breadData = [
+                    {
+                        url: '/desktop',
+                        text: '桌面'
+                    },
+                    {
+                        url: '/customerMsg',
+                        text: this.cusData.name
+                    },
+                    {
+                        url: '/tagInfo',
+                        text: '标签详细'
+                    }
+                ];
+                this.$store.dispatch('setBreadData', breadData);
+                this.$router.push({
+                    path: '/tagInfo',
+                    query: {
+                        id: this.cusId
+                    }
+                })
+            }
         }
     }
 </script>

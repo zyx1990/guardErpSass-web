@@ -84,8 +84,8 @@
                     {
                         title: '提交用户',
                         key: 'createUserName',
-                        return: (h, params) => {
-                            return h('span', '【' + createUserHospitalName + '】 【' + createUserDeptName + '】 【' + createUserName + '】')
+                        render: (h, params) => {
+                            return h('span', '【' + params.row.createUserHospitalName + '】 【' + params.row.createUserDeptName + '】 【' + params.row.createUserName + '】')
                         }
                     },
                     {
@@ -186,8 +186,8 @@
                     {
                         title: '提交用户',
                         key: 'createUserName',
-                        return: (h, params) => {
-                            return h('span', '【' + createUserHospitalName + '】 【' + createUserDeptName + '】 【' + createUserName + '】')
+                        render: (h, params) => {
+                            return h('span', '【' + params.row.createUserHospitalName + '】 【' + params.row.createUserDeptName + '】 【' + params.row.createUserName + '】')
                         }
                     },
                     {
@@ -295,8 +295,8 @@
                     {
                         title: '提交用户',
                         key: 'createUserName',
-                        return: (h, params) => {
-                            return h('span', '【' + createUserHospitalName + '】 【' + createUserDeptName + '】 【' + createUserName + '】')
+                        render: (h, params) => {
+                            return h('span', '【' + params.row.createUserHospitalName + '】 【' + params.row.createUserDeptName + '】 【' + params.row.createUserName + '】')
                         }
                     },
                     {

@@ -1,21 +1,28 @@
 /**
- * 投诉反馈页面
+ * 标签详细页面
  */
 
 <template>
-    <div class="customer-box">
-        <div class="customer-item">
-            <div class="customer-item-title">
-                <h3><Icon type="pricetag"></Icon>投诉</h3>
+    <div class="container-box userPower">
+        <div v-if='powerLoad > 0'>
+            <div class="container-header">
+                <h2>客户标签管理</h2>
             </div>
-            <Table :columns="col" :data="data"></Table>
-        </div>
-        <div class="customer-item">
-            <div class="customer-item-title">
-                <h3><Icon type="pricetag"></Icon>黑名单</h3>
+            <div class="container-body">
+                <Table :columns="columns" :data="data"></Table>
             </div>
-            <Table :columns="col1" :data="data1"></Table>
         </div>
+        <Alert type="error" show-icon v-if='powerLoad == 0'>
+            提示信息
+            <div slot="desc">
+                <p>{{errorMsg}}</p>
+                <Button type="primary" shape="circle" icon="android-arrow-back" @click='back'>返回</Button>
+            </div>
+        </Alert>
+        <Spin fix v-if='powerLoad < 0'>
+            <Icon type="load-c" size=40 class="demo-spin-icon-load"></Icon>
+            <div>Loading</div>
+        </Spin>
     </div>
 </template>
 
@@ -23,82 +30,30 @@
     export default {
         data () {
             return {
-                cusName: '',
                 cusId: '',
-                data: [],
-                data1: [],
-                col: [
+                cusName: '',
+                powerLoad: '-1',
+                errorMsg: '',
+                columns: [
                     {   
                         title: '序号',
                         type: 'index',
                         width: 60
                     },
                     {
-                        title: '提交时间',
-                        key: 'name'
+                        title: '标签',
+                        key: 'tagName'
                     },
                     {
-                        title: '提交用户',
-                        key: 'address'
+                        title: '添加用户',
+                        key: 'createUserName',
+                        render: (h, params) => {
+                            return h('span', '【' + params.row.createUserHospitalName + '】 【' + params.row.createUserDeptName + '】【' + params.row.createUserName + '】')
+                        }
                     },
                     {
-                        title: '投诉医院',
-                        key: 'address'
-                    },
-                    {
-                        title: '投诉医生',
-                        key: 'address'
-                    },
-                    {
-                        title: '投诉项目',
-                        key: 'address'
-                    },
-                    {
-                        title: '投诉内容',
-                        key: 'address'
-                    },
-                    {
-                        title: '状态',
-                        key: 'address'
-                    },
-                    {
-                        title: '处理用户',
-                        key: 'address'
-                    },
-                    {
-                        title: '处理时间',
-                        key: 'address'
-                    },
-                    {
-                        title: '处理措施',
-                        key: 'address'
-                    },
-                    {
-                        title: '客户反馈',
-                        key: 'address'
-                    }
-                ],
-                col1: [
-                    {   
-                        title: '序号',
-                        type: 'index',
-                        width: 60
-                    },
-                    {
-                        title: '提交时间',
+                        title: '添加时间',
                         key: 'createtime'
-                    },
-                    {
-                        title: '提交医院',
-                        key: 'hospitalName'
-                    },
-                    {
-                        title: '提交用户',
-                        key: 'createUserName'
-                    },
-                    {
-                        title: '原因',
-                        key: 'content'
                     },
                     {
                         title: '操作',
@@ -123,26 +78,33 @@
                         }
                     }
                 ],
+                data: []
             }
         },
         created () {
             if (window.sessionStorage) {
                 var lg = window.sessionStorage;
-                this.cusName = lg.cusName
                 this.cusId = lg.cusId
+                this.cusName = lg.cusName
             }
-            this.getList(lg.cusId)
+            this.getList(this.cusId)
         },
         methods: {
             getList (id) {
                 var _vm = this;
                 _vm.$http.get({
-                    url: 'guard-webManager/customerRecord/getComplain.jhtml',
-                    data: {id: id},
+                    url: 'guard-webManager/customerRecord/tagInfo.jhtml',
+                    data: {customerId: id},
                     success: function(res){
                         if(res.status == 200 ){
-                            console.log(res)
-                            _vm.data1 = res.data.content.blacklistOrderList
+                             if(res.data.code == 0) {
+                                console.log(res)
+                                _vm.powerLoad = 1
+                                _vm.data = res.data.content.TagList
+                            } else {
+                                _vm.powerLoad = 0
+                                _vm.errorMsg = res.data.desc
+                            }
                         } else {
                             console.log(res.data.desc)
                         }
@@ -152,14 +114,15 @@
                     }
                 });
             },
-            remove (data, type) {
+            //取消
+            remove (data) {
                 var _vm = this;
                 _vm.$Modal.confirm({
                     title: '系统提示',
-                    content: '确定取消此预约？',
+                    content: '确定取消未成交？',
                     onOk: () => {
                         _vm.$http.post({
-                            url: 'guard-webManager/customerRecord/blacklistDelete.jhtml',
+                            url: 'guard-webManager/customerRecord/failtureDelete.jhtml',
                             data: {id: data.id},
                             success: function(res){
                                 if(res.status == 200 ){

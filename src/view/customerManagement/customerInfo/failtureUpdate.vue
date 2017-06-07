@@ -1,40 +1,36 @@
 /**
- * 积分兑换券页面
+ * 修改未成交页面
  */
 
 <template>
     <div class="container-box userPower">
         <div v-if='powerLoad > 0'>
             <div class="container-header">
-                <h2>积分兑换券</h2>
+                <h2>修改未成交</h2>
             </div>
             <div class="container-body">
                 <Form ref="formValidate" :model="formValidate" :rules="ruleForm" :label-width="100" label-position="right">
-                    <Form-item label="现有积分">
-                        <span>{{content}}</span>
+                    <Form-item label="提交时间">
+                        <span>{{createtime}}</span>
                     </Form-item>
-                    <Form-item label="兑换积分" prop="amount" style="width:300px;">
-                        <Input v-model="formValidate.amount" placeholder="请输入兑换积分"></Input>
+                    <Form-item label="提交用户">
+                        <span>【{{hospitalName}}】</span>
+                        <span>【{{createUserDeptName}}】</span>
+                        <span>【{{createUserName}}】</span>
                     </Form-item>
-                    <Form-item label="兑换券" prop="couponName" required class='treatAddObj'>
-                        <Input v-model="formValidate.couponName" readonly icon="ios-search" placeholder="请选择兑换券" @on-focus="show" style="width:300px"></Input>
+                    <Form-item label="未成交类型" prop="categoryId" required>
+                        <Select v-model="formValidate.categoryId" style="width:300px">
+                            <Option v-for="item in typeList" :value="item.id" :key="item">{{ item.name }}</Option>
+                        </Select>
                     </Form-item>
-                    <Form-item label="券额" prop="couponAmount" style="width:300px;">
-                        <Input v-model="formValidate.couponAmount" placeholder="请输入兑换券积分"></Input>
+                    <Form-item label="未成交原因" prop="content" required>
+                        <Input v-model="formValidate.content" type="textarea" :autosize="{minRows: 2,maxRows: 7}" placeholder="请输入原因"></Input>
                     </Form-item>
                 </Form>
                 <div class="footer-btnGroup">
                     <Button type="primary" shape="circle" icon="checkmark" @click='save'>保存</Button>
                     <Button type="primary" shape="circle" icon="android-arrow-back" @click='back'>返回</Button>
                 </div>
-                <Modal
-                    title="选择兑换券"
-                    width='700'
-                    v-model="modal"
-                    :closable="false"
-                    class-name="vertical-center-modal">
-                    <Table height="350" stripe :columns="col" :data="data" @on-row-click='choose'></Table>
-                </Modal>
             </div>
         </div>
         <Alert type="error" show-icon v-if='powerLoad == 0'>
@@ -54,28 +50,17 @@
 <script>
     export default {
         data () {
-            const validatePoint = (rule, value, callback) => {
+            const validateType = (rule, value, callback) => {
                 if (value === '') {
-                    callback(new Error('请输入兑换积分'));
-                } else if (/^\+?[1-9][0-9]*$/.test(value)) {
+                    callback(new Error('请选择回访类型'));
+                } else {
                     callback();
-                }  else  {
-                    callback(new Error('请输入正整数'));
                 }
             };
-            const validatePoint1 = (rule, value, callback) => {
+            const validateCon = (rule, value, callback) => {
                 if (value === '') {
-                    callback(new Error('请输入券额'));
-                } else if (/^\+?[1-9][0-9]*$/.test(value)) {
-                    callback();
-                }  else  {
-                    callback(new Error('请输入正整数'));
-                }
-            };
-            const validateCou = (rule, value, callback) => {
-                if (value === '') {
-                    callback(new Error('请选择兑换券'));
-                } else  {
+                    callback(new Error('请填写未成交原因'));
+                } else {
                     callback();
                 }
             };
@@ -83,74 +68,53 @@
                 cusName: '',
                 powerLoad: '-1',
                 errorMsg: '',
-                content: '',
+                createtime: '',
+                createUserName: '',
+                createUserDeptName: '',
+                hospitalName: '',
                 formValidate: {
-                    customerId: '',
-                    amount: '',
-                    couponCategoryId: '',
-                    couponName: '',
-                    couponAmount: '',
+                    id: '',
+                    categoryId: '',
+                    content: ''
                 },
-                modal: false,
-                col: [
-                    {
-                        title: '编号',
-                        key: 'id'
-                    },
-                    {
-                        title: '名称',
-                        key: 'name'
-                    },
-                    {
-                        title: '可使用医院',
-                        key: 'hospitalList',
-                        render: (h, params) => {
-                            return h('div', params.row.hospitalList.map(item => {
-                                return h('span', item.name + '、')
-                            }))
-                        }
-                    },
-                    {
-                        title: '备注',
-                        key: 'remark'
-                    }
-                ],
-                data: [],
+                typeList: [],
                 ruleForm: {
-                    amount: [
-                        { validator: validatePoint, trigger: 'blur' }
+                    categoryId: [
+                        { validator: validateType, trigger: 'change' }
                     ],
-                    couponAmount: [
-                        { validator: validatePoint1, trigger: 'blur' }
-                    ],
-                    couponName: [
-                        { validator: validateCou, trigger: 'change' }
-                    ],
+                    content: [
+                        { validator: validateCon, trigger: 'blur' }
+                    ]
                 }
             }
         },
         created () {
             if (window.sessionStorage) {
                 var lg = window.sessionStorage;
-                this.formValidate.customerId = lg.cusId
                 this.cusName = lg.cusName
             }
-            this.getId(this.formValidate.customerId)
+            this.formValidate.id = this.$route.query.id
+            this.getId(this.formValidate.id)
+            this.getList()
         },
         methods: {
             // 获取资料
             getId (id) {
                 var _vm = this;
                 _vm.$http.get({
-                    url: 'guard-webManager/customerRecord/pointCoupon.jhtml',
-                    data: {customerId: id},
+                    url: 'guard-webManager/customerRecord/failtureUpdate.jhtml',
+                    data: {id: id},
                     success: function(res){
                         if(res.status == 200 ){
                             if(res.data.code == 0) {
                                 _vm.powerLoad = 1
                                 console.log(res)
-                                _vm.content = res.data.content
-                                _vm.getList()
+                                _vm.hospitalName = res.data.content.Failture.hospitalName
+                                _vm.createUserName = res.data.content.Failture.createUserName
+                                _vm.createtime = res.data.content.Failture.createtime
+                                _vm.createUserDeptName = res.data.content.Failture.createUserDeptName
+                                _vm.formValidate.categoryId = res.data.content.Failture.categoryid
+                                _vm.formValidate.content = res.data.content.Failture.content
                             } else {
                                 _vm.powerLoad = 0
                                 _vm.errorMsg = res.data.desc
@@ -164,14 +128,14 @@
                     }
                 });
             },
-            //获取券列表
+            //获取未成交类型
             getList () {
-                var _vm = this;
+               var _vm = this;
                 _vm.$http.get({
-                    url: 'guard-webManager/select/couponCategoryList.jhtml',
+                    url: 'guard-webManager/select/failtureCategoryInfo.jhtml',
                     success: function(res){
                         if(res.status == 200 ){
-                            _vm.data = res.data.content
+                            _vm.typeList = res.data.content
                         } else {
                             console.log(res.data.desc)
                         }
@@ -179,22 +143,14 @@
                     error: function(res){
                         console.log(res);
                     }
-                });
-            },
-            show () {
-                this.modal = true
-            },
-            choose (data) {
-                this.formValidate.couponCategoryId = data.id
-                this.formValidate.couponName = data.name
-                this.modal = false 
+                }); 
             },
             save () {
                 var _vm = this
                 _vm.$refs['formValidate'].validate((valid) => {
                     if(valid) { 
                         _vm.$http.post({
-                            url: 'guard-webManager/customerRecord/addPointCoupon.jhtml',
+                            url: 'guard-webManager/customerRecord/updateFailture.jhtml',
                             data: _vm.formValidate,
                             success: function(res){
                                 if(res.status == 200 ){
@@ -210,12 +166,12 @@
                                                 text: '客户管理'
                                             },
                                             {
-                                                url: '/indexAccount',
+                                                url: '/indexFailture',
                                                 text: _vm.cusName
                                             }
                                         ];
                                         _vm.$store.dispatch('setBreadData', breadData);
-                                        _vm.$router.push('/indexAccount')
+                                        _vm.$router.push('/indexFailture')
                                     } else {
                                         _vm.$Notice.error({
                                             title: '系统提示！',
@@ -244,7 +200,7 @@
                         text: '客户管理'
                     },
                     {
-                        url: '/indexAccount',
+                        url: '/indexFailture',
                         text: this.cusName
                     }
                 ];
