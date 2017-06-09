@@ -8,7 +8,7 @@
             <h2>客户结果集</h2>
             <ul class="header-btn-group">
                 <li class="header-item" @click="add"><Icon type="plus-round"></Icon>增加</li>
-                <li class="header-item"><Icon type="social-buffer"></Icon></Icon>合并</li>
+                <li class="header-item" @click="merge"><Icon type="social-buffer"></Icon></Icon>合并</li>
                 <li class="header-item">
                     <Dropdown style="margin-left: 20px">
                         <a href="javascript:void(0)" class="header-item-drow">
@@ -28,19 +28,38 @@
         </div>
         <div class="container-body">
             <Table stripe :columns="columns" :data="data"></Table>
+            <!--增加 编辑模态框-->
             <Modal
-                title="修改客户结果集"
-                v-model="modalEdit"
+                :title="modalReviseTitle"
+                v-model="modalRevise"
                 :closable="false"
-                @on-ok="ok"
+                @on-ok="modalReviseOk"
                 :loading="loading"
                 class-name="vertical-center-modal">
-                <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="100" label-position="right">
+                <Form :model="modalReviseForm" :rules="modalReviseRules" :label-width="100" label-position="right">
                     <Form-item label="名称" prop="name">
-                        <Input v-model="formValidate.name" placeholder="请输入名称"></Input>
+                        <Input v-model="modalReviseForm.name" placeholder="请输入名称"></Input>
                     </Form-item>
                     <Form-item label="备注" prop="description">
-                        <Input v-model="formValidate.description" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="请输入备注"></Input>
+                        <Input v-model="modalReviseForm.remark" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="请输入备注"></Input>
+                    </Form-item>
+                </Form>
+            </Modal>
+
+            <!-- 合并模态框 -->
+            <Modal
+                title="合并"
+                v-model="modalMerge"
+                :closable="false"
+                @on-ok="modalMergeOk"
+                :loading="loading"
+                class-name="vertical-center-modal">
+                <Form :label-width="100" label-position="right">
+                    <Form-item label="名称" prop="name">
+                        <Input  placeholder="请输入名称"></Input>
+                    </Form-item>
+                    <Form-item label="备注" prop="description">
+                        <Input placeholder="请输入备注"></Input>
                     </Form-item>
                 </Form>
             </Modal>
@@ -64,62 +83,99 @@
                     },
                     {
                         title: '创建用户',
-                        key: 'creatUser'
+                        key: 'createUserName'
                     },
                     {
                         title: '备注',
-                        key: 'description'
+                        key: 'remark'
                     },
                     {
                         title: '操作',
                         key: 'action',
                         width: 300,
                         align: 'center',
-                        render (row, column, index) {
-                            return `<i-button type="primary" size="small" @click="edit(${index})"><Icon type="edit"></Icon>编辑</i-button> <i-button type="error" size="small" @click="remove(${index})"><Icon type="ios-trash-outline"></Icon>删除</i-button>
-                                <i-button type="info" size="small" @click="build(${index})"><Icon type="ios-color-wand"></Icon>详细</i-button>
-                                <i-button type="warning" size="small" @click="stamp(${index})"><Icon type="wrench"></Icon>权限</i-button>`;
+                        render: (h, params) => {
+                            return h('div', [
+                                    h('Button', {
+                                        props: {
+                                            type: 'primary',
+                                            size: 'small',
+                                            icon: 'edit'
+                                        },
+                                        style: {
+                                            marginRight: '5px'
+                                        },
+                                        on: {
+                                            click: () => {
+                                                this.edit(params.row)
+                                            }
+                                        }
+                                    }, '编辑'),
+                                    h('Button', {
+                                        props: {
+                                            type: 'error',
+                                            size: 'small',
+                                            icon: 'ios-trash-outline'
+                                        },
+                                        style: {
+                                            marginRight: '5px'
+                                        },
+                                        on: {
+                                            click: () => {
+                                                this.remove(params.row)
+                                            }
+                                        }
+                                    }, '删除'),
+                                    h('Button', {
+                                        props: {
+                                            type: 'info',
+                                            size: 'small',
+                                            icon: 'ios-people'
+                                        },
+                                        style: {
+                                            marginRight: '5px'
+                                        },
+                                        on: {
+                                            click: () => {
+                                                this.detailed(params.row)
+                                            }
+                                        }
+                                    }, '详细'),
+                                    h('Button', {
+                                        props: {
+                                            type: 'info',
+                                            size: 'small',
+                                            icon: 'ios-people'
+                                        },
+                                        on: {
+                                            click: () => {
+                                                this.jurisdiction(params.row)
+                                            }
+                                        }
+                                    }, '权限')
+                                ])
                         }
                     }
                 ],
-                data: [
-                    {
-                        name: '玻尿酸',
-                        creatUser: '李小龙',
-                        description: '公交广告'
-                    },
-                    {
-                        name: '肉毒素',
-                        creatUser: '李小龙',
-                        description: '222'
-                    },
-                    {
-                        name: '开发角',
-                        creatUser: '李小龙',
-                        description: '333'
-                    },
-                    {
-                        name: '术后回访',
-                        creatUser: '李小龙',
-                        description: '654654'
-                    },
-                    {
-                        name: '吸脂术后回访',
-                        creatUser: '李小龙',
-                        description: '6666'
-                    }
-                ],
-                modalEdit: false,
+                data: [],
+                modalRevise: false,
+                modalReviseTitle: '修改',
+                modalReviseType: 'edit',
+
+                modalMerge: false,
+
+
                 loading: true,
-                formValidate: {
+                modalReviseForm: {
                     name: '',
-                    description: ''
+                    remark: ''
                 },
-                ruleValidate: {
+                modalReviseRules: {
                     name: [
                         { required: true, message: '姓名不能为空', trigger: 'blur' }
                     ]
-                }
+                },
+                hideInputId: ''
             }
         },
         mounted () {
@@ -130,20 +186,32 @@
                 var _vm = this;
                 _vm.$http.get({
                     url: 'guard-webManager/customerFilter/list.jhtml',
-                    success: function(res){
-                        console.log(res);
+                    success: function(data){
+                        var data = data.data || {};
+                        if(data.code == 0){
+                           _vm.data = data.content || [];
+                        }else{
+                            _vm.data = [];
+                        }
                     }
                 });
             },
             add: function() {
-                this.formValidate.name = ''
-                this.formValidate.description = ''
-                this.modalEdit = true
+                this.modalReviseForm.name = ''
+                this.modalReviseForm.remark = ''
+                this.modalRevise = true;
+                this.modalReviseType = 'add';
+
             },
-            edit: function(index) {
-                this.formValidate.name = this.data[index].name
-                this.formValidate.description = this.data[index].description
-                this.modalEdit = true
+            edit: function(row) {
+                this.modalReviseForm.name = row.name;
+                this.modalReviseForm.remark = row.description;
+                this.hideInputId = row.id;
+                this.modalRevise = true;
+                this.modalReviseType = 'edit';
+            },
+            merge: function(){
+                this.modalMerge = true;
             },
             build: function(index) {
 
@@ -151,29 +219,55 @@
             stamp: function(index) {
 
             },
-            remove: function(index) {
-                this.$Modal.confirm({
+            remove: function(row) {
+                var _vm = this;
+                _vm.$Modal.confirm({
                     title: '系统提示',
-                    content: '确定删除'+ this.data[index].name +'?',
+                    content: '确定删除'+ row.name +'?',
                     onOk: () => {
-                        this.$Notice.success({
-                             title: '系统提示！',
-                             desc: '删除成功！'
+                        _vm.$http.post({
+                            url: 'guard-webManager/customerFilter/delete.jhtml',
+                            data: {id:row.id },
+                            success: function(data){
+                                var data = data.data || {};
+                            }
                         });
-                    },
-                    onCancel: () => {
-                        
                     }
                 });
             },
-            ok () {
-                setTimeout(() => {
-                    this.modalEdit = false;
-                    this.$Notice.success({
-                        title: '系统提示！',
-                        desc: '保存成功！'
-                    });
-                }, 1000);
+            modalReviseOk: function () {
+                var _vm = this,
+                    data = {},
+                    url = '';
+                if(_vm.modalReviseType == 'add'){
+                    url = 'guard-webManager/customerFilter/add.jhtml';
+                    data = {
+                        name: _vm.modalReviseForm.name,
+                        remark: _vm.modalReviseForm.remark
+                    };
+                }else{
+                    url = 'guard-webManager/customerFilter/update.jhtml';
+                    data = {
+                        id: _vm.hideInputId,
+                        name: _vm.modalReviseForm.name,
+                        remark: _vm.modalReviseForm.remark
+                    };
+                }
+                _vm.$http.post({
+                    url: url,
+                    data: data,
+                    success: function(res){
+                        var resData = res.data || {};
+                        if(resData.code == 0){
+
+                        }
+                        console.log(res);
+                    }
+                });
+                
+            },
+            modalMergeOk: function(){
+
             }
         }
     }

@@ -46,16 +46,6 @@ module.exports = {
           'window.jQuery': 'jquery',
           _: 'lodash',
           moment: 'moment'
-      }),
-      // 公共模块提取
-      new webpack.optimize.CommonsChunkPlugin({
-          name: 'vendor', // Specify the common bundle's name.
-          filename: 'commons.js', //output name
-          // minChunks: Infinity,
-          minChunks: function (module) {
-              // this assumes your vendor imports exist in the node_modules directory
-              return module.context && module.context.indexOf('node_modules') !== -1;
-          }
       })
       //extractSass
   ],
